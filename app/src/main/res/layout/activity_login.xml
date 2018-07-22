@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="64dp"
             android:backgroundTint="@color/icons"
-            android:text="Quotable"
+            android:text="Q          e"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textColor="@color/icons" />
