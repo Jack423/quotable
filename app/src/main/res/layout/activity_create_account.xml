@@ -18,16 +18,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textEmail"
+        <EditText
+            android:id="@+id/et_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="64dp"
-            android:backgroundTint="@color/icons"
-            android:text="Quotable"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:textColor="@color/icons" />
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@android:color/white"
+            android:ems="10"
+            android:hint="Name"
+            android:inputType="textPersonName"
+            android:textColor="@android:color/white" />
 
         <EditText
             android:id="@+id/et_email"
@@ -38,37 +38,46 @@
             android:ems="10"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:textColor="@color/icons"
-            tools:text="Email" />
+            android:textColor="@color/icons" />
 
         <EditText
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="16dp"
             android:backgroundTint="@color/icons"
             android:ems="10"
             android:hint="Password"
             android:inputType="textPassword"
-            android:textColor="@color/icons"
-            tools:text="Password" />
-
-        <Button
-            android:id="@+id/btn_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/primary_dark"
-            android:text="Login"
             android:textColor="@color/icons" />
 
-        <TextView
-            android:id="@+id/textview_no_account"
+        <EditText
+            android:id="@+id/et_confirm_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="No account yet? Create"
-            android:textAlignment="center"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@android:color/white"
+            android:ems="10"
+            android:hint="Confirm password"
+            android:inputType="textPassword"
             android:textColor="@android:color/white" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:minHeight="50dp"
+            android:minWidth="50dp" />
+
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/primary_dark"
+            android:text="Create Account"
+            android:textColor="@color/icons" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -5,4 +5,11 @@
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="card_vertical_margin">8dp</dimen>
+
+    <dimen name="post_user_height">72dp</dimen>
+    <dimen name="post_user_avatar_size">40dp</dimen>
+    <dimen name="post_sub_text_size">14sp</dimen>
+    <dimen name="post_action_icon_height">22dp</dimen>
+    <dimen name="post_action_margin">8dp</dimen>
 </resources>
