@@ -12,4 +12,6 @@
     <dimen name="post_sub_text_size">14sp</dimen>
     <dimen name="post_action_icon_height">22dp</dimen>
     <dimen name="post_action_margin">8dp</dimen>
+    <dimen name="user_profile_avatar_size">88dp</dimen>
+    <dimen name="btn_fab_margins">16dp</dimen>
 </resources>

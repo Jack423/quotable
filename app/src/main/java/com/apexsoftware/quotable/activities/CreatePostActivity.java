@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -29,41 +32,26 @@ public class CreatePostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_post);
 
         /*
-         * Find our fab by id and make on on click listener to listen for
-         * Button clicks
-         */
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.hide();
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendPost();
-            }
-        });
-
-
-        /*
          * Get our edit text by id
          * and a text changed listener so we can track when
          * text has changed
          */
         mText = (EditText) findViewById(R.id.et_post);
 
-
-
         //This is how we watch for when text has changed
         mText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //Check if it is valid if it is show the a send button
                 //if not hide the send button
                 if (Post.isValid(s.toString())) {
-                    fab.show();
+                    //fab.show();
                 } else {
-                    fab.hide();
+                    //fab.hide();
                 }
             }
 
@@ -73,6 +61,28 @@ public class CreatePostActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.create_post_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.post) {
+            sendPost();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /*

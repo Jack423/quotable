@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.apexsoftware.quotable_v3">
+    package="com.apexsoftware.quotable">
 
     <application
         android:allowBackup="true"
@@ -30,10 +30,12 @@
         </activity>
         <activity
             android:name="com.apexsoftware.quotable.activities.CreateAccountActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" >
         </activity>
         <activity android:name="com.apexsoftware.quotable.activities.BaseActivity" />
         <activity android:name="com.apexsoftware.quotable.activities.CreatePostActivity" />
+        <activity android:name=".activities.UserProfileActivity" />
     </application>
 
 

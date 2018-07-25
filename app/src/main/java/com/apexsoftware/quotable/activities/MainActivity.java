@@ -22,7 +22,7 @@ import android.view.MenuItem;
 import com.apexsoftware.quotable.adapter.PostAdapter;
 import com.apexsoftware.quotable.models.DataPost;
 import com.apexsoftware.quotable.models.User;
-import com.apexsoftware.quotable_v3.R;
+import com.apexsoftware.quotable.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
@@ -139,7 +139,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_sign_out) {
+            auth.signOut();
             return true;
         }
 
@@ -188,17 +189,15 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_feed) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_friends) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_bookmarks) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_about) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_report_bug) {
 
         }
 

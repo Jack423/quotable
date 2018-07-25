@@ -35,7 +35,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     //ProgressBar progressBar;
-
+    ProgressDialog progressDialog;
     ViewGroup baseView;
 
     @Override
@@ -60,7 +60,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         btnLogin.setOnClickListener(this);
         textRegister.setOnClickListener(this);
-        //progressBar.setActivated(false);
+        progressDialog = new ProgressDialog(LoginActivity.this);
+
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -118,6 +119,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         //Stop if form isn't valid
         if(!formIsValid()) return;
 
+        //progressDialog.setIndeterminate(true);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Creating Account...");
+        progressDialog.show();
+
         //Get important fields
         String email = etEmail.getText().toString();
         String password = etPass.getText().toString();
@@ -142,7 +148,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         hideProgress();
         Intent loginIntent = new Intent(this, MainActivity.class);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        //progressBar.setActivated(false);
+        progressDialog.dismiss();
         startActivity(loginIntent);
     }
 

@@ -1,5 +1,7 @@
 package com.apexsoftware.quotable.models;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 //Created By: Jack Butler
@@ -39,6 +41,19 @@ public class DataPost {
 
     public String getPostId() {
         return postId;
+    }
+
+    public Map<String, Object> toMap() {
+
+        HashMap<String, Object> result = new HashMap<>();
+
+        result.put("user", user);
+        result.put("text", text);
+        result.put("createdAt", createdAt);
+        result.put("postId", postId);
+        result.put("userId", userId);
+
+        return result;
     }
 
     @Override

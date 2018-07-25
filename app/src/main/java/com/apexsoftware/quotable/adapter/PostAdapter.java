@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apexsoftware.quotable.models.DataPost;
-import com.apexsoftware.quotable_v3.R;
+import com.apexsoftware.quotable.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
