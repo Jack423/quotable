@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.apexsoftware.quotable.util.AuthHelper;
-import com.apexsoftware.quotable_v3.R;
+import com.apexsoftware.quotable.R;
 import com.google.firebase.auth.FirebaseUser;
 
 public class CreateAccountActivity extends BaseActivity {

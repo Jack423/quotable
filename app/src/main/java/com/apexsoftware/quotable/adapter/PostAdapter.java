@@ -8,16 +8,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.apexsoftware.quotable.models.DataPost;
 import com.apexsoftware.quotable.R;
+import com.apexsoftware.quotable.models.Post;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder>{
-    List<DataPost> posts;
+public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder>{
+    List<Post> posts;
     SimpleDateFormat dateFormat;
 
     public PostAdapter() {
@@ -25,63 +25,39 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder>{
         dateFormat = new SimpleDateFormat("hh:mm a, MM/dd/yyyy", Locale.getDefault());
     }
 
-    /*
-     * This function is used to add a yak to the list.
-     * We then notify that the data has been changed on the last
-     * element of the list.
-     * */
-    public void addPost(DataPost post) {
+    public void addPost(Post post) {
         posts.add(post);
         notifyItemInserted(posts.size() - 1);
     }
 
-    /*
-     * In order to get the behavior we wanted we needed to
-     * use employ polymorphism and add a location argument
-     * to the addPost class so that we can have the yak be added
-     * to the top of the list.
-     */
-    public void addPost(DataPost post, int location)
+    public void addPost(Post post, int location)
     {
         posts.add(location, post);
         notifyItemInserted(location);
     }
-
-
 
     public void removePost(int index) {
         posts.remove(index);
         notifyItemRemoved(index);
     }
 
-    public void removePost(DataPost post) {
+    public void removePost(Post post) {
         int index = posts.indexOf(post);
         removePost(index);
     }
 
-
-    /*
-     * These next few methods are needed whenever you
-     * want a custom list like we're doing.
-     *
-     * If you're interested, you can read a little more at
-     * https://www.binpress.com/tutorial/android-l-recyclerview-and-cardview-tutorial/156
-     * and
-     * http://developer.android.com/training/material/lists-cards.html
-     * */
-
     @Override
-    public PostHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.
                 from(parent.getContext()).
                 inflate(R.layout.row_post, parent, false);
 
-        return new PostHolder(itemView);
+        return new PostViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(PostHolder holder, int position) {
-        DataPost post = posts.get(position);
+    public void onBindViewHolder(PostViewHolder holder, final int position) {
+        Post post = posts.get(position);
         holder.bind(post, dateFormat);
     }
 
@@ -90,22 +66,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder>{
         return posts.size();
     }
 
-
-    /*
-     * A ViewHolder is each cell or list item.
-     * it holds and inflates every element which can
-     * be bind to a "Yak"
-     *
-     * Edit: Part 4
-     * Yak has been changed to DataYak
-     * */
-    public class PostHolder extends RecyclerView.ViewHolder {
+    public class PostViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvQuote, tvUser, tvDate;
         ImageView ivProfile;
-        ImageButton bookmark, comment;
+        ImageButton ibBookmark, ibComment;
 
-        public PostHolder(View itemView) {
+        public PostViewHolder(View itemView) {
             super(itemView);
 
             tvQuote = itemView.findViewById(R.id.tv_quote);
@@ -114,11 +81,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder>{
 
             ivProfile = itemView.findViewById(R.id.iv_profile);
 
-            bookmark= itemView.findViewById(R.id.iv_bookmark);
-            comment = itemView.findViewById(R.id.iv_comment);
+            ibBookmark = itemView.findViewById(R.id.iv_bookmark);
+            ibComment = itemView.findViewById(R.id.iv_comment);
+
+            ivProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                }
+            });
         }
 
-        public void bind(DataPost post, SimpleDateFormat dateFormat) {
+        public void bind(Post post, SimpleDateFormat dateFormat) {
             tvQuote.setText(post.getText());
             tvUser.setText(post.getUser());
             tvDate.setText(dateFormat.format(post.getCreatedAt()));

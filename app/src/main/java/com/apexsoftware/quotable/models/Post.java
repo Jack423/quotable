@@ -1,41 +1,91 @@
 package com.apexsoftware.quotable.models;
 
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 //Created By: Jack Butler
 //Date: 7/22/2018
 
 public class Post {
-    User user;
-    String tweet;
-    Date createdAt;
-    String id;
+    private String user;
+    private String userId;
+    private String text;
+    private Long createdAt;
+    private String postId;
 
-    public Post(User user, String tweet, Date createdAt) {
-        this.user = user;
-        this.tweet = tweet;
-        this.createdAt = createdAt;
-        id = UUID.randomUUID().toString();
+    //We need an empty constructor for Firebase
+    public Post() {
+
     }
 
-    public User getUser() {
+    public Post(String user, String userId, String text, Long createdAt) {
+        this.user = user;
+        this.userId = userId;
+        this.text = text;
+        this.createdAt = createdAt;
+        this.postId = UUID.randomUUID().toString();
+    }
+
+    public String getUser() {
         return user;
     }
 
-    public String getTweet() {
-        return tweet;
+    public String getText() {
+        return text;
     }
 
-    public Date getCreatedAt() {
+    public Long getCreatedAt() {
         return createdAt;
     }
 
+    public String getPostId() {
+        return postId;
+    }
 
-    //Tells us weather a Yak is valid or not
-    //In this example we simply check the length.
-    public static boolean isValid(String text)
-    {
-        return text.length() > 0 && text.length() < 144;
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
+
+    public void setCreatedAt(Long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public Map<String, Object> toMap() {
+
+        HashMap<String, Object> result = new HashMap<>();
+
+        result.put("user", user);
+        result.put("text", text);
+        result.put("createdAt", createdAt);
+        result.put("postId", postId);
+        result.put("userId", userId);
+
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "DataYak{" +
+                "user='" + user + '\'' +
+                ", text='" + text + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

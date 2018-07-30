@@ -1,8 +1,10 @@
 package com.apexsoftware.quotable.activities;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,9 +20,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.apexsoftware.quotable.adapter.PostAdapter;
-import com.apexsoftware.quotable.models.DataPost;
+import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.User;
 import com.apexsoftware.quotable.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,7 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int CREATE_POST_REQUEST = 1;
@@ -82,13 +86,16 @@ public class MainActivity extends AppCompatActivity
         list.setLayoutManager(layoutManager);
         list.setAdapter(adapter);
 
-        //Setup listeners for new posts
-        reference.child("posts").addChildEventListener(new com.google.firebase.database.ChildEventListener() {
+        final ProgressBar progressBar = findViewById(R.id.progressBar);
+
+        //Setup listeners for new quotes
+        reference.child("quotes").addChildEventListener(new com.google.firebase.database.ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot, @Nullable String s) {
-                DataPost post = dataSnapshot.getValue(DataPost.class);
+                Post post = dataSnapshot.getValue(Post.class);
                 adapter.addPost(post, 0);
                 list.scrollToPosition(0);
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -98,7 +105,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onChildRemoved(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot) {
-                DataPost post = dataSnapshot.getValue(DataPost.class);
+                Post post = dataSnapshot.getValue(Post.class);
                 adapter.removePost(post);
             }
 
@@ -112,6 +119,23 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+    }
+
+    private void openProfileActivity(String userId, View view) {
+        Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+        intent.putExtra(UserProfileActivity.USER_ID_EXTRA_KEY, userId);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && view != null) {
+
+            View authorImageView = view.findViewById(R.id.iv_profile);
+
+            ActivityOptions options = ActivityOptions.
+                    makeSceneTransitionAnimation(MainActivity.this,
+                            new android.util.Pair<>(authorImageView, getString(R.string.post_author_image_transition_name)));
+            startActivityForResult(intent, UserProfileActivity.CREATE_POST_FROM_PROFILE_REQUEST, options.toBundle());
+        } else {
+            startActivityForResult(intent, UserProfileActivity.CREATE_POST_FROM_PROFILE_REQUEST);
+        }
     }
 
     @Override
@@ -170,8 +194,8 @@ public class MainActivity extends AppCompatActivity
                         String name = user.getName();
 
                         //Create our yak with the user data
-                        DataPost post = new DataPost(name, firebaseUser.getUid(), postText, c.getTimeInMillis());
-                        reference.child("posts").child(post.getPostId()).setValue(post);
+                        Post post = new Post(name, firebaseUser.getUid(), postText, c.getTimeInMillis());
+                        reference.child("quotes").child(post.getPostId()).setValue(post);
                     }
 
                     @Override

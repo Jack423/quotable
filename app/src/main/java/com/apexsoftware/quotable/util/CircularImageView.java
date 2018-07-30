@@ -15,7 +15,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import com.apexsoftware.quotable_v3.R;
+import com.apexsoftware.quotable.R;
 
 public class CircularImageView extends AppCompatImageView {
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;

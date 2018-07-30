@@ -1,146 +1,148 @@
 package com.apexsoftware.quotable.activities;
-//Created by Jack Butler on 7/24/2018.
+//Created by Jack Butler on 7/30/2018.
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
+import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.apexsoftware.quotable.R;
-import com.apexsoftware.quotable.adapter.PostByUserAdapter;
-import com.apexsoftware.quotable.util.CircleTransformation;
-import com.apexsoftware.quotable.view.RevealBackgroundView;
+import com.apexsoftware.quotable.adapter.PostAdapter;
+import com.apexsoftware.quotable.models.Post;
+import com.apexsoftware.quotable.models.User;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Picasso;
+import com.google.firebase.storage.FirebaseStorage;
 
-import butterknife.BindView;
+import java.util.Calendar;
 
-public class UserProfileActivity extends BaseActivity implements RevealBackgroundView.OnStateChangeListener {
-    public static final String ARG_REVEAL_START_LOCATION = "reveal_start_location";
+public class UserProfileActivity extends BaseActivity{
+    private static final String TAG = UserProfileActivity.class.getSimpleName();
+    private static final int CREATE_POST_REQUEST = 1;
+    public static final String USER_ID_EXTRA_KEY = "UserProfileActivity.USER_ID_EXTRA_KEY";
+    public static final int CREATE_POST_FROM_PROFILE_REQUEST = 22;
 
-    private static final int USER_OPTIONS_ANIMATION_DELAY = 300;
-    private static final Interpolator INTERPOLATOR = new DecelerateInterpolator();
+    PostAdapter adapter;
+    RecyclerView list;
+    Context context;
 
-    @BindView(R.id.vRevealBackground)
-    RevealBackgroundView vRevealBackground;
-    @BindView(R.id.rvUserProfile)
-    RecyclerView rvUserProfile;
-
-    @BindView(R.id.ivUserProfilePhoto)
-    ImageView ivUserProfilePhoto;
-    @BindView(R.id.vUserDetails)
-    View vUserDetails;
-    @BindView(R.id.btnFollow)
-    Button btnFollow;
-    @BindView(R.id.vUserStats)
-    View vUserStats;
-    @BindView(R.id.vUserProfileRoot)
-    View vUserProfileRoot;
-
-    private int avatarSize;
-    private String profilePhoto;
-    private PostByUserAdapter postByUserAdapter;
+    TextView name, userDescription, quotes, followers, following;
+    Button follow;
+    ImageView profilePicture;
+    FloatingActionButton fab;
 
     //Firebase shite
-    FirebaseUser user;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
-
-    public static void startUserProfileFromLocation(int[] startingLocation, Activity startingActivity) {
-        Intent intent = new Intent(startingActivity, UserProfileActivity.class);
-        intent.putExtra(ARG_REVEAL_START_LOCATION, startingLocation);
-        startingActivity.startActivity(intent);
-    }
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseUser firebaseUser = auth.getCurrentUser();
+    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
         setContentView(R.layout.activity_user_profile);
 
-        this.avatarSize = getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
-        this.profilePhoto = reference.child("users").child(user.getUid()).child("pictureUrl").getRef().toString();
+        name = findViewById(R.id.text_name);
+        userDescription = findViewById(R.id.text_user_details);
+        quotes = findViewById(R.id.text_quotes);
+        followers = findViewById(R.id.text_followers);
+        following = findViewById(R.id.text_following);
+        follow = findViewById(R.id.btnFollow);
+        fab = findViewById(R.id.btnCreate);
+        list = findViewById(R.id.profile_list);
+        profilePicture = findViewById(R.id.image_user_profile);
 
-        Picasso.with(this)
-                .load(profilePhoto)
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .resize(avatarSize, avatarSize)
-                .centerCrop()
-                .transform(new CircleTransformation())
-                .into(ivUserProfilePhoto);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        adapter = new PostAdapter();
 
-        //setupUserProfileGrid();
-        setupRevealBackground(savedInstanceState);
-    }
+        list.setHasFixedSize(true);
+        list.setLayoutManager(layoutManager);
+        list.setAdapter(adapter);
 
-    /*private void setupUserProfileGrid() {
-        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-        rvUserProfile.setLayoutManager(layoutManager);
-        rvUserProfile.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        //Setup listeners for new quotes
+        reference.child("quotes").addChildEventListener(new com.google.firebase.database.ChildEventListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                postByUserAdapter.setLockedAnimations(true);
+            public void onChildAdded(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot, @Nullable String s) {
+                Post post = dataSnapshot.getValue(Post.class);
+                adapter.addPost(post, 0);
+                list.scrollToPosition(0);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot) {
+                Post post = dataSnapshot.getValue(Post.class);
+                adapter.removePost(post);
+            }
+
+            @Override
+            public void onChildMoved(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
-    }*/
 
-    private void setupRevealBackground(Bundle savedInstanceState) {
-        vRevealBackground.setOnStateChangeListener(this);
-        if (savedInstanceState == null) {
-            final int[] startingLocation = getIntent().getIntArrayExtra(ARG_REVEAL_START_LOCATION);
-            vRevealBackground.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    vRevealBackground.getViewTreeObserver().removeOnPreDrawListener(this);
-                    vRevealBackground.startFromLocation(startingLocation);
-                    return true;
-                }
-            });
-        } else {
-            vRevealBackground.setToFinishedFrame();
-            //userPhotosAdapter.setLockedAnimations(true);
-        }
+        init();
     }
 
     @Override
-    public void onStateChange(int state) {
-        if (RevealBackgroundView.STATE_FINISHED == state) {
-            rvUserProfile.setVisibility(View.VISIBLE);
-            vUserProfileRoot.setVisibility(View.VISIBLE);
-            //userPhotosAdapter = new UserProfileAdapter(this);
-            rvUserProfile.setAdapter(userPhotosAdapter);
-            animateUserProfileOptions();
-            animateUserProfileHeader();
-        } else {
-            tlUserProfileTabs.setVisibility(View.INVISIBLE);
-            rvUserProfile.setVisibility(View.INVISIBLE);
-            vUserProfileRoot.setVisibility(View.INVISIBLE);
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(resultCode, resultCode, data);
+
+        if(requestCode == CREATE_POST_REQUEST) {
+            if(resultCode == RESULT_OK) {
+                final Calendar c = Calendar.getInstance();
+                final String postText = data.getStringExtra(CreatePostActivity.TEXT);
+//                String user = getUserAccount();
+
+                //Get the prefs we made earlier
+                SharedPreferences prefs = getSharedPreferences("Quotable", MODE_PRIVATE);
+                //Get our UUID from the store
+                String uuid = prefs.getString("uuid", "");
+
+                reference.child("users").child(firebaseUser.getUid()).addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot) {
+                        //Fill in our model
+                        User user = dataSnapshot.getValue(User.class);
+                        String name = user.getName();
+
+                        //Create our yak with the user data
+                        Post post = new Post(name, firebaseUser.getUid(), postText, c.getTimeInMillis());
+                        reference.child("quotes").child(post.getPostId()).setValue(post);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
         }
     }
 
-    private void animateUserProfileOptions() {
-        tlUserProfileTabs.setTranslationY(-tlUserProfileTabs.getHeight());
-        tlUserProfileTabs.animate().translationY(0).setDuration(300).setStartDelay(USER_OPTIONS_ANIMATION_DELAY).setInterpolator(INTERPOLATOR);
+    private void init() {
+
     }
-
-    private void animateUserProfileHeader() {
-        vUserProfileRoot.setTranslationY(-vUserProfileRoot.getHeight());
-        ivUserProfilePhoto.setTranslationY(-ivUserProfilePhoto.getHeight());
-        vUserDetails.setTranslationY(-vUserDetails.getHeight());
-        vUserStats.setAlpha(0);
-
-        vUserProfileRoot.animate().translationY(0).setDuration(300).setInterpolator(INTERPOLATOR);
-        ivUserProfilePhoto.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(INTERPOLATOR);
-        vUserDetails.animate().translationY(0).setDuration(300).setStartDelay(200).setInterpolator(INTERPOLATOR);
-        vUserStats.animate().alpha(1).setDuration(200).setStartDelay(400).setInterpolator(INTERPOLATOR).start();
-    }
-
 }

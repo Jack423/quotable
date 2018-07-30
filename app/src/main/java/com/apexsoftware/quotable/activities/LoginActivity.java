@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.apexsoftware.quotable.models.User;
 import com.apexsoftware.quotable.util.AuthHelper;
-import com.apexsoftware.quotable_v3.R;
+import com.apexsoftware.quotable.R;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
