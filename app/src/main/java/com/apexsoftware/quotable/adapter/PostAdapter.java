@@ -1,5 +1,7 @@
 package com.apexsoftware.quotable.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apexsoftware.quotable.R;
+import com.apexsoftware.quotable.activities.UserProfileActivity;
 import com.apexsoftware.quotable.models.Post;
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -71,6 +76,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         TextView tvQuote, tvUser, tvDate;
         ImageView ivProfile;
         ImageButton ibBookmark, ibComment;
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+
+
+        Context context;
 
         public PostViewHolder(View itemView) {
             super(itemView);
@@ -96,6 +105,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             tvQuote.setText(post.getText());
             tvUser.setText(post.getUser());
             tvDate.setText(dateFormat.format(post.getCreatedAt()));
+            String userImagePath = post.getUserImagePath();
+
+            Glide.with(context).load(userImagePath).into(ivProfile);
+        }
+
+        public ImageView getIvProfile() {
+            return ivProfile;
         }
     }
 }

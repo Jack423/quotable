@@ -11,6 +11,7 @@ public class Post {
     private String user;
     private String userId;
     private String text;
+    private String userImagePath;
     private Long createdAt;
     private String postId;
 
@@ -45,6 +46,14 @@ public class Post {
 
     public String getUserId() {
         return userId;
+    }
+
+    public String getUserImagePath() {
+        return userImagePath;
+    }
+
+    public void setUserImagePath(String userImagePath) {
+        this.userImagePath = userImagePath;
     }
 
     public void setUserId(String userId) {

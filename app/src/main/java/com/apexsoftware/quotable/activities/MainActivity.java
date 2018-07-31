@@ -44,6 +44,9 @@ public class MainActivity extends BaseActivity
     PostAdapter adapter;
     RecyclerView list;
     Context context;
+    View view;
+
+    String userImage;
 
     //Firebase references
     FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -78,6 +81,9 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //setup profile photo for posts
+        userImage = reference.child(firebaseUser.getUid()).child("pictureUrl").getKey();
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         adapter = new PostAdapter();
 
@@ -94,6 +100,7 @@ public class MainActivity extends BaseActivity
             public void onChildAdded(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot, @Nullable String s) {
                 Post post = dataSnapshot.getValue(Post.class);
                 adapter.addPost(post, 0);
+
                 list.scrollToPosition(0);
                 progressBar.setVisibility(View.GONE);
             }
@@ -195,6 +202,7 @@ public class MainActivity extends BaseActivity
 
                         //Create our yak with the user data
                         Post post = new Post(name, firebaseUser.getUid(), postText, c.getTimeInMillis());
+                        post.setUserImagePath(userImage);
                         reference.child("quotes").child(post.getPostId()).setValue(post);
                     }
 
