@@ -1,7 +1,6 @@
 package com.apexsoftware.quotable.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +11,7 @@ import android.widget.TextView;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.activities.MainActivity;
-import com.apexsoftware.quotable.activities.UserProfileActivity;
 import com.apexsoftware.quotable.models.Post;
-import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.text.SimpleDateFormat;
@@ -22,11 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder>{
+public class PostAdapterBackup extends RecyclerView.Adapter<PostAdapterBackup.PostViewHolder>{
     List<Post> posts;
     SimpleDateFormat dateFormat;
 
-    public PostAdapter() {
+    public PostAdapterBackup() {
         posts = new ArrayList<>();
         dateFormat = new SimpleDateFormat("hh:mm a, MM/dd/yyyy", Locale.getDefault());
     }
@@ -102,7 +99,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             ivProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PostAdapter postAdapter = new PostAdapter();
+                    PostAdapterBackup postAdapter = new PostAdapterBackup();
                     int position = getAdapterPosition();
                     mainActivity.onProfileClick(postAdapter.getPost(position), v);
                 }

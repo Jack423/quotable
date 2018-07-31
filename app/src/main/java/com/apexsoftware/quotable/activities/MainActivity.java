@@ -16,14 +16,12 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.apexsoftware.quotable.adapter.PostAdapter;
+import com.apexsoftware.quotable.adapter.PostAdapterBackup;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.User;
 import com.apexsoftware.quotable.R;
@@ -41,7 +39,7 @@ public class MainActivity extends BaseActivity
     private static final int CREATE_POST_REQUEST = 1;
 
     //Adapter and recycler view are member variables
-    PostAdapter adapter;
+    PostAdapterBackup adapter;
     RecyclerView list;
     Context context;
     View view;
@@ -85,7 +83,7 @@ public class MainActivity extends BaseActivity
         //userImage = reference.child(firebaseUser.getUid()).child("pictureUrl").getKey();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        adapter = new PostAdapter();
+        adapter = new PostAdapterBackup();
 
         list = findViewById(R.id.list);
         list.setHasFixedSize(true);

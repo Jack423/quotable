@@ -14,6 +14,7 @@ public class Post {
     private String userImagePath;
     private Long createdAt;
     private String postId;
+    private long bookmarkCount;
 
     //We need an empty constructor for Firebase
     public Post() {
@@ -50,6 +51,14 @@ public class Post {
 
     public String getUserImagePath() {
         return userImagePath;
+    }
+
+    public Long getBookmarkCount() {
+        return bookmarkCount;
+    }
+
+    public void setBookmarkCount(Long bookmarkCount) {
+        this.bookmarkCount = bookmarkCount;
     }
 
     public void setUserImagePath(String userImagePath) {

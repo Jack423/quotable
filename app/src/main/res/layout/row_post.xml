@@ -81,7 +81,7 @@
                     android:src="@drawable/ic_bookmark_black_24dp" />
 
                 <TextView
-                    android:id="@+id/bookmark_count"
+                    android:id="@+id/tv_bookmark_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />

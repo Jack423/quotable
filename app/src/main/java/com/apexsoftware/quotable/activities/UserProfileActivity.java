@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apexsoftware.quotable.R;
-import com.apexsoftware.quotable.adapter.PostAdapter;
+import com.apexsoftware.quotable.adapter.PostAdapterBackup;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,7 +34,7 @@ public class UserProfileActivity extends BaseActivity{
     public static final String USER_ID_EXTRA_KEY = "UserProfileActivity.USER_ID_EXTRA_KEY";
     public static final int CREATE_POST_FROM_PROFILE_REQUEST = 22;
 
-    PostAdapter adapter;
+    PostAdapterBackup adapter;
     RecyclerView list;
     Context context;
 
@@ -66,7 +66,7 @@ public class UserProfileActivity extends BaseActivity{
         profilePicture = findViewById(R.id.image_user_profile);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        adapter = new PostAdapter();
+        adapter = new PostAdapterBackup();
 
         list.setHasFixedSize(true);
         list.setLayoutManager(layoutManager);
