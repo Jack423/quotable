@@ -102,8 +102,6 @@ public class UserProfileActivity extends BaseActivity{
 
             }
         });
-
-        init();
     }
 
     @Override
@@ -140,9 +138,5 @@ public class UserProfileActivity extends BaseActivity{
                 });
             }
         }
-    }
-
-    private void init() {
-
     }
 }

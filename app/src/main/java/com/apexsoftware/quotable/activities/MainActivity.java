@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //setup profile photo for posts
-        userImage = reference.child(firebaseUser.getUid()).child("pictureUrl").getKey();
+        //userImage = reference.child(firebaseUser.getUid()).child("pictureUrl").getKey();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         adapter = new PostAdapter();
@@ -128,7 +128,11 @@ public class MainActivity extends BaseActivity
         });
     }
 
-    private void openProfileActivity(String userId, View view) {
+    public void onProfileClick(Post post, View v) {
+        openProfileActivity(post.getUserId(), v);
+    }
+
+    public void openProfileActivity(String userId, View view) {
         Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
         intent.putExtra(UserProfileActivity.USER_ID_EXTRA_KEY, userId);
 

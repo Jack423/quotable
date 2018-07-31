@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apexsoftware.quotable.R;
+import com.apexsoftware.quotable.activities.MainActivity;
 import com.apexsoftware.quotable.activities.UserProfileActivity;
 import com.apexsoftware.quotable.models.Post;
 import com.bumptech.glide.Glide;
@@ -51,6 +52,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         removePost(index);
     }
 
+    public Post getPost(int position) {
+        return posts.get(position);
+    }
+
     @Override
     public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.
@@ -77,6 +82,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         ImageView ivProfile;
         ImageButton ibBookmark, ibComment;
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        MainActivity mainActivity;
 
 
         Context context;
@@ -96,7 +102,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             ivProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    PostAdapter postAdapter = new PostAdapter();
                     int position = getAdapterPosition();
+                    mainActivity.onProfileClick(postAdapter.getPost(position), v);
                 }
             });
         }
@@ -107,7 +115,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             tvDate.setText(dateFormat.format(post.getCreatedAt()));
             String userImagePath = post.getUserImagePath();
 
-            Glide.with(context).load(userImagePath).into(ivProfile);
+            //Glide.with(context).load(userImagePath).into(ivProfile);
         }
 
         public ImageView getIvProfile() {
