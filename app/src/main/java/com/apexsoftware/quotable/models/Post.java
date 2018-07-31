@@ -15,6 +15,7 @@ public class Post {
     private Long createdAt;
     private String postId;
     private long bookmarkCount;
+    private int itemType;
 
     //We need an empty constructor for Firebase
     public Post() {

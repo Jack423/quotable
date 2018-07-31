@@ -11,6 +11,11 @@ import com.apexsoftware.quotable.activities.MainActivity;
 import com.apexsoftware.quotable.adapter.holders.LoadViewHolder;
 import com.apexsoftware.quotable.enums.ItemType;
 import com.apexsoftware.quotable.models.Post;
+import com.apexsoftware.quotable.util.PreferencesUtil;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Locale;
 
 public class PostsAdapter extends BasePostAdapter {
     public static final String TAG = PostsAdapter.class.getSimpleName();
@@ -20,11 +25,13 @@ public class PostsAdapter extends BasePostAdapter {
     private boolean isMoreDataAvailable = true;
     private long lastLoadedItemCreatedDate;
     private MainActivity mainActivity;
+    private SimpleDateFormat dateFormat;
 
     public PostsAdapter(final MainActivity activity) {
         super(activity);
         this.mainActivity = activity;
         setHasStableIds(true);
+        dateFormat = new SimpleDateFormat("hh:mm a, MM/dd/yyyy", Locale.getDefault());
     }
 
     public void setCallback(Callback callback) {
@@ -51,7 +58,7 @@ public class PostsAdapter extends BasePostAdapter {
                     //change adapter contents
                     if (activity.hasInternetConnection()) {
                         isLoading = true;
-                        postList.add(new Post(ItemType.LOAD));
+                        postList.add(new Post());
                         notifyItemInserted(postList.size());
                         loadNext(lastLoadedItemCreatedDate - 1);
                     } else {
@@ -64,7 +71,7 @@ public class PostsAdapter extends BasePostAdapter {
         }
 
         if (getItemViewType(position) != ItemType.LOAD.getTypeCode()) {
-            ((PostViewHolder) holder).bindData(postList.get(position));
+            ((PostViewHolder) holder).bindData(postList.get(position), dateFormat);
         }
     }
 
@@ -91,6 +98,75 @@ public class PostsAdapter extends BasePostAdapter {
                 }
             }
         };
+    }
+
+    private void addList(List<Post> list) {
+        this.postList.addAll(list);
+        notifyDataSetChanged();
+        isLoading = false;
+    }
+
+    public void loadFirstPage() {
+        loadNext(0);
+        //PostManager.getInstance(mainActivity.getApplicationContext()).clearNewPostsCounter();
+    }
+
+    private void loadNext(final long nextItemCreatedDate) {
+
+        if (!PreferencesUtil.isPostWasLoadedAtLeastOnce(mainActivity) && !activity.hasInternetConnection()) {
+            mainActivity.showFloatButtonRelatedSnackBar(R.string.internet_connection_failed);
+            hideProgress();
+            callback.onListLoadingFinished();
+            return;
+        }
+
+        /*OnPostListChangedListener<Post> onPostsDataChangedListener = new OnPostListChangedListener<Post>() {
+            @Override
+            public void onListChanged(PostListResult result) {
+                lastLoadedItemCreatedDate = result.getLastItemCreatedDate();
+                isMoreDataAvailable = result.isMoreDataAvailable();
+                List<Post> list = result.getPosts();
+
+                if (nextItemCreatedDate == 0) {
+                    postList.clear();
+                    notifyDataSetChanged();
+                    swipeContainer.setRefreshing(false);
+                }
+
+                hideProgress();
+
+                if (!list.isEmpty()) {
+                    addList(list);
+
+                    if (!PreferencesUtil.isPostWasLoadedAtLeastOnce(mainActivity)) {
+                        PreferencesUtil.setPostWasLoadedAtLeastOnce(mainActivity, true);
+                    }
+                } else {
+                    isLoading = false;
+                }
+
+                callback.onListLoadingFinished();
+            }
+
+            @Override
+            public void onCanceled(String message) {
+                callback.onCanceled(message);
+            }
+        };*/
+
+        //PostManager.getInstance(activity).getPostsList(onPostsDataChangedListener, nextItemCreatedDate);
+    }
+
+    public void removeSelectedPost() {
+        postList.remove(selectedPostPosition);
+        notifyItemRemoved(selectedPostPosition);
+    }
+
+    private void hideProgress() {
+        if (!postList.isEmpty() && getItemViewType(postList.size() - 1) == ItemType.LOAD.getTypeCode()) {
+            postList.remove(postList.size() - 1);
+            notifyItemRemoved(postList.size() - 1);
+        }
     }
 
     public interface Callback {

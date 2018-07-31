@@ -9,24 +9,22 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 
-import com.apexsoftware.quotable.adapter.PostAdapterBackup;
+import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.adapter.PostsAdapter;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.User;
-import com.apexsoftware.quotable.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
@@ -35,7 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 
-public class MainActivity extends BaseActivity
+public class MainActivityBackup extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int CREATE_POST_REQUEST = 1;
@@ -63,6 +61,15 @@ public class MainActivity extends BaseActivity
         setSupportActionBar(toolbar);
 
         context = this;
+
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CreatePostActivity.class);
+                startActivityForResult(intent, CREATE_POST_REQUEST);
+            }
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -129,43 +136,19 @@ public class MainActivity extends BaseActivity
     }
 
     public void openProfileActivity(String userId, View view) {
-        Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+        Intent intent = new Intent(MainActivityBackup.this, UserProfileActivity.class);
         intent.putExtra(UserProfileActivity.USER_ID_EXTRA_KEY, userId);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && view != null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && view != null) {
 
             View authorImageView = view.findViewById(R.id.iv_profile);
 
             ActivityOptions options = ActivityOptions.
-                    makeSceneTransitionAnimation(MainActivity.this,
+                    makeSceneTransitionAnimation(MainActivityBackup.this,
                             new android.util.Pair<>(authorImageView, getString(R.string.post_author_image_transition_name)));
             startActivityForResult(intent, UserProfileActivity.CREATE_POST_FROM_PROFILE_REQUEST, options.toBundle());
         } else {
             startActivityForResult(intent, UserProfileActivity.CREATE_POST_FROM_PROFILE_REQUEST);
-        }
-    }
-
-    private void initContentView() {
-        if(list == null) {
-            fab = findViewById(R.id.fab);
-
-            if(fab != null) {
-                fab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(hasInternetConnection()) {
-                            Intent intent = new Intent(MainActivity.this, CreatePostActivity.class);
-                            startActivity(intent);
-                        } else {
-                            showFloatButtonRelatedSnackBar(R.string.no_internet_connection);
-                        }
-                    }
-                });
-            }
-
-            final ProgressBar progressBar = findViewById(R.id.progressBar);
-            list = findViewById(R.id.list);
-            adapter = new PostsAdapter(this, list);
         }
     }
 

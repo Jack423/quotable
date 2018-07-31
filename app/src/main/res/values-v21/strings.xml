@@ -3,4 +3,6 @@
     <string name="sign_out">Sign out</string>
 
     <string name="post_author_image_transition_name" translatable="false">post_author_image_transition_name</string>
+    <string name="internet_connection_failed">Internet connection failed</string>
+    <string name="no_internet_connection">No internet connection</string>
 </resources>
