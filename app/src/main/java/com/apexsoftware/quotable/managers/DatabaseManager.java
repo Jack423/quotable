@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.apexsoftware.quotable.Constants;
-import com.apexsoftware.quotable.adapter.PostListResult;
+import com.apexsoftware.quotable.models.PostListResult;
 import com.apexsoftware.quotable.models.Post;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;

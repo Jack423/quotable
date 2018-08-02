@@ -9,8 +9,12 @@ import android.view.ViewGroup;
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.activities.MainActivity;
 import com.apexsoftware.quotable.adapter.holders.LoadViewHolder;
+import com.apexsoftware.quotable.adapter.holders.PostViewHolder;
 import com.apexsoftware.quotable.enums.ItemType;
+import com.apexsoftware.quotable.managers.PostManager;
+import com.apexsoftware.quotable.managers.listeners.OnPostListChangedListener;
 import com.apexsoftware.quotable.models.Post;
+import com.apexsoftware.quotable.models.PostListResult;
 import com.apexsoftware.quotable.util.PreferencesUtil;
 
 import java.text.SimpleDateFormat;
@@ -49,14 +53,39 @@ public class PostsAdapter extends BasePostAdapter {
         }
     }
 
+    private PostViewHolder.OnClickListener createOnClickListener() {
+        return new PostViewHolder.OnClickListener() {
+            /*@Override
+            public void onItemClick(int position, View view) {
+                if (callback != null) {
+                    selectedPostPosition = position;
+                    callback.onItemClick(getItemByPosition(position), view);
+                }
+            }
+
+            @Override
+            public void onLikeClick(LikeController likeController, int position) {
+                Post post = getItemByPosition(position);
+                likeController.handleLikeClickAction(mainActivity, post);
+            }*/
+
+            @Override
+            public void onAuthorClick(int position, View view) {
+                if (callback != null) {
+                    callback.onAuthorClick(getItemByPosition(position).getUserId(), view);
+                }
+            }
+        };
+    }
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position >= getItemCount() - 1 && isMoreDataAvailable && !isLoading) {
-            android.os.Handler mHandler = activity.getWindow().getDecorView().getHandler();
+            android.os.Handler mHandler = mainActivity.getWindow().getDecorView().getHandler();
             mHandler.post(new Runnable() {
                 public void run() {
                     //change adapter contents
-                    if (activity.hasInternetConnection()) {
+                    if (mainActivity.hasInternetConnection()) {
                         isLoading = true;
                         postList.add(new Post());
                         notifyItemInserted(postList.size());
@@ -71,33 +100,8 @@ public class PostsAdapter extends BasePostAdapter {
         }
 
         if (getItemViewType(position) != ItemType.LOAD.getTypeCode()) {
-            ((PostViewHolder) holder).bindData(postList.get(position), dateFormat);
+            ((PostViewHolder) holder).bindData(postList.get(position));
         }
-    }
-
-    private PostViewHolder.OnClickListener createOnClickListener() {
-        return new PostViewHolder.OnClickListener() {
-            /*@Override
-            public void onItemClick(int position, View view) {
-                if (callback != null) {
-                    selectedPostPosition = position;
-                    callback.onItemClick(getItemByPosition(position), view);
-                }
-            }
-
-            @Override
-            public void onLikeClick(LikeController likeController, int position) {
-                Post post = getItemByPosition(position);
-                likeController.handleLikeClickAction(activity, post);
-            }*/
-
-            @Override
-            public void onAuthorClick(int position, View view) {
-                if (callback != null) {
-                    callback.onAuthorClick(getItemByPosition(position).getUserId(), view);
-                }
-            }
-        };
     }
 
     private void addList(List<Post> list) {
@@ -113,14 +117,14 @@ public class PostsAdapter extends BasePostAdapter {
 
     private void loadNext(final long nextItemCreatedDate) {
 
-        if (!PreferencesUtil.isPostWasLoadedAtLeastOnce(mainActivity) && !activity.hasInternetConnection()) {
+        if (!PreferencesUtil.isPostWasLoadedAtLeastOnce(mainActivity) && !mainActivity.hasInternetConnection()) {
             mainActivity.showFloatButtonRelatedSnackBar(R.string.internet_connection_failed);
             hideProgress();
             callback.onListLoadingFinished();
             return;
         }
 
-        /*OnPostListChangedListener<Post> onPostsDataChangedListener = new OnPostListChangedListener<Post>() {
+        OnPostListChangedListener<Post> onPostsDataChangedListener = new OnPostListChangedListener<Post>() {
             @Override
             public void onListChanged(PostListResult result) {
                 lastLoadedItemCreatedDate = result.getLastItemCreatedDate();
@@ -130,7 +134,7 @@ public class PostsAdapter extends BasePostAdapter {
                 if (nextItemCreatedDate == 0) {
                     postList.clear();
                     notifyDataSetChanged();
-                    swipeContainer.setRefreshing(false);
+                    //swipeContainer.setRefreshing(false);
                 }
 
                 hideProgress();
@@ -152,9 +156,9 @@ public class PostsAdapter extends BasePostAdapter {
             public void onCanceled(String message) {
                 callback.onCanceled(message);
             }
-        };*/
+        };
 
-        //PostManager.getInstance(activity).getPostsList(onPostsDataChangedListener, nextItemCreatedDate);
+        PostManager.getInstance(mainActivity).getPostsList(onPostsDataChangedListener, nextItemCreatedDate);
     }
 
     public void removeSelectedPost() {

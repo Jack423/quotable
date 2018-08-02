@@ -1,18 +1,17 @@
-package com.apexsoftware.quotable.adapter;
+package com.apexsoftware.quotable.adapter.holders;
 // Created by Jack Butler on 7/30/2018.
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apexsoftware.quotable.R;
+import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.models.Post;
+import com.apexsoftware.quotable.util.FormatterUtil;
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.text.SimpleDateFormat;
 
@@ -27,6 +26,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private TextView dateTextView;
     private ImageView authorImageView;
     private ImageView bookmarkImageView;
+
+    private PostManager postManager;
 
     public PostViewHolder(View view, final OnClickListener onClickListener) {
         this(view, onClickListener, true);
@@ -46,7 +47,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         authorImageView.setVisibility(isAuthorNeeded ? View.VISIBLE : View.GONE);
 
         //profileManager = ProfileManager.getInstance(context.getApplicationContext());
-        //postManager = PostManager.getInstance(context.getApplicationContext());
+        postManager = PostManager.getInstance(context.getApplicationContext());
 
         /*view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,19 +80,26 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void bindData(Post post, SimpleDateFormat dateFormat) {
+    public void bindData(Post post) {
         String user = post.getUser();
         String quote = post.getText();
 
         userTextView.setText(user);
         quoteTextView.setText(quote);
         bookmarkCounterTextView.setText(String.valueOf(post.getBookmarkCount()));
-        dateTextView.setText(dateFormat.format(post.getCreatedAt()));
+
+        CharSequence date = FormatterUtil.getRelativeTimeSpanStringShort(context, post.getCreatedAt());
+        dateTextView.setText(date);
 
         String imageUri = post.getUserImagePath();
 
         Glide.with(context)
                 .load(imageUri).into(authorImageView);
+
+        /*FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            postManager.hasCurrentUserLikeSingleValue(post.getId(), firebaseUser.getUid(), createOnLikeObjectExistListener());
+        }*/
     }
 
     public interface OnClickListener {

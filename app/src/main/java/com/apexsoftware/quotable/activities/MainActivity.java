@@ -12,6 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,9 +22,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import com.apexsoftware.quotable.adapter.PostAdapterBackup;
+import com.apexsoftware.quotable.ApplicationHelper;
 import com.apexsoftware.quotable.adapter.PostsAdapter;
+import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.User;
 import com.apexsoftware.quotable.R;
@@ -41,13 +44,10 @@ public class MainActivity extends BaseActivity
     private static final int CREATE_POST_REQUEST = 1;
 
     //Adapter and recycler view are member variables
-    PostsAdapter adapter;
-    RecyclerView list;
-    Context context;
-    View view;
-    FloatingActionButton fab;
-
-    String userImage;
+    private PostsAdapter postsAdapter;
+    private PostManager postManager;
+    private RecyclerView recyclerView;
+    private FloatingActionButton floatingActionButton;
 
     //Firebase references
     FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -62,8 +62,6 @@ public class MainActivity extends BaseActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        context = this;
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -73,51 +71,9 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //setup profile photo for posts
-        //userImage = reference.child(firebaseUser.getUid()).child("pictureUrl").getKey();
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        adapter = new PostsAdapter(this);
-
-        list = findViewById(R.id.list);
-        list.setHasFixedSize(true);
-        list.setLayoutManager(layoutManager);
-        list.setAdapter(adapter);
-
-        final ProgressBar progressBar = findViewById(R.id.progressBar);
-
-        //Setup listeners for new quotes
-        reference.child("quotes").addChildEventListener(new com.google.firebase.database.ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot, @Nullable String s) {
-                Post post = dataSnapshot.getValue(Post.class);
-                adapter.loadFirstPage();
-
-                list.scrollToPosition(0);
-                progressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot) {
-                Post post = dataSnapshot.getValue(Post.class);
-                adapter.removeSelectedPost();
-            }
-
-            @Override
-            public void onChildMoved(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        postManager = PostManager.getInstance(this);
+        ApplicationHelper.initDatabaseHelper(getApplication());
+        initContentView();
     }
 
     public void onProfileClick(Post post, View v) {
@@ -125,7 +81,7 @@ public class MainActivity extends BaseActivity
     }
 
     public void showFloatButtonRelatedSnackBar(int stringId) {
-        showSnackBar(fab, stringId);
+        showSnackBar(floatingActionButton, stringId);
     }
 
     public void openProfileActivity(String userId, View view) {
@@ -146,11 +102,11 @@ public class MainActivity extends BaseActivity
     }
 
     private void initContentView() {
-        if(list == null) {
-            fab = findViewById(R.id.fab);
+        if(recyclerView == null) {
+            floatingActionButton = findViewById(R.id.fab);
 
-            if(fab != null) {
-                fab.setOnClickListener(new View.OnClickListener() {
+            if(floatingActionButton != null) {
+                floatingActionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if(hasInternetConnection()) {
@@ -164,8 +120,35 @@ public class MainActivity extends BaseActivity
             }
 
             final ProgressBar progressBar = findViewById(R.id.progressBar);
-            list = findViewById(R.id.list);
-            adapter = new PostsAdapter(this, list);
+            recyclerView = findViewById(R.id.list);
+            postsAdapter = new PostsAdapter(this);
+            postsAdapter.setCallback(new PostsAdapter.Callback() {
+                @Override
+                public void onItemClick(Post post, View view) {
+                    //Implement singular post view later
+                }
+
+                @Override
+                public void onListLoadingFinished() {
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAuthorClick(String authorId, View view) {
+                    openProfileActivity(authorId, view);
+                }
+
+                @Override
+                public void onCanceled(String message) {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+                }
+            });
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+            recyclerView.setAdapter(postsAdapter);
+            postsAdapter.loadFirstPage();
         }
     }
 
@@ -196,6 +179,8 @@ public class MainActivity extends BaseActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sign_out) {
             auth.signOut();
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -226,7 +211,7 @@ public class MainActivity extends BaseActivity
 
                         //Create our yak with the user data
                         Post post = new Post(name, firebaseUser.getUid(), postText, c.getTimeInMillis());
-                        post.setUserImagePath(userImage);
+                        //post.setUserImagePath(userImage);
                         reference.child("quotes").child(post.getPostId()).setValue(post);
                     }
 

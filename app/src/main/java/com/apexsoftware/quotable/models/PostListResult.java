@@ -1,4 +1,4 @@
-package com.apexsoftware.quotable.adapter;
+package com.apexsoftware.quotable.models;
 //Created by Jack Butler on 7/25/2018.
 
 import com.apexsoftware.quotable.models.Post;

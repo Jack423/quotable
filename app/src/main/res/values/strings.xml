@@ -22,4 +22,10 @@
     <string name="post_author_image_transition_name" translatable="false">post_author_image_transition_name</string>
     <string name="internet_connection_failed">Internet connection failed</string>
     <string name="no_internet_connection">No internet connection</string>
+    <string name="permission_denied_error">Permission denied</string>
+    <string name="now_time_range">now</string>
+    <string name="duration_week_shortest">%1$d w</string>
+    <string name="duration_days_shortest">%1$d d</string>
+    <string name="duration_hours_shortest">%1$d h</string>
+    <string name="duration_minutes_shortest">%1$d m</string>
 </resources>

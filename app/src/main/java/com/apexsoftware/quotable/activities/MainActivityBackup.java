@@ -84,7 +84,7 @@ public class MainActivityBackup extends BaseActivity
         //userImage = reference.child(firebaseUser.getUid()).child("pictureUrl").getKey();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        adapter = new PostsAdapter(this);
+        //adapter = new PostsAdapter(this);
 
         list = findViewById(R.id.list);
         list.setHasFixedSize(true);
