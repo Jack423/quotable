@@ -14,4 +14,11 @@
     <dimen name="post_action_margin">8dp</dimen>
     <dimen name="user_profile_avatar_size">88dp</dimen>
     <dimen name="btn_fab_margins">16dp</dimen>
+    <dimen name="intrinsic_padding">8dp</dimen>
+    <dimen name="profile_screen_avatar_size">100dp</dimen>
+    <dimen name="progress_bar_size">50dp</dimen>
+    <dimen name="profile_screen_avatar_right_margin">24dp</dimen>
+    <dimen name="large_intrinsic_padding">16dp</dimen>
+    <dimen name="profile_screen_margin_between_counters">32dp</dimen>
+    <dimen name="post_card_content_padding_left">11dp</dimen>
 </resources>

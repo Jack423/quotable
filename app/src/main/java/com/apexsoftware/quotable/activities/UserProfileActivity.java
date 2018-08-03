@@ -28,7 +28,7 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.Calendar;
 
-public class UserProfileActivity extends BaseActivity{
+public class UserProfileActivity extends BaseActivity {
     private static final String TAG = UserProfileActivity.class.getSimpleName();
     private static final int CREATE_POST_REQUEST = 1;
     public static final String USER_ID_EXTRA_KEY = "UserProfileActivity.USER_ID_EXTRA_KEY";
@@ -108,8 +108,8 @@ public class UserProfileActivity extends BaseActivity{
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(resultCode, resultCode, data);
 
-        if(requestCode == CREATE_POST_REQUEST) {
-            if(resultCode == RESULT_OK) {
+        if (requestCode == CREATE_POST_REQUEST) {
+            if (resultCode == RESULT_OK) {
                 final Calendar c = Calendar.getInstance();
                 final String postText = data.getStringExtra(CreatePostActivity.TEXT);
 //                String user = getUserAccount();

@@ -175,8 +175,11 @@ public class PostsAdapter extends BasePostAdapter {
 
     public interface Callback {
         void onItemClick(Post post, View view);
+
         void onListLoadingFinished();
+
         void onAuthorClick(String authorId, View view);
+
         void onCanceled(String message);
     }
 }

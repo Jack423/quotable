@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.apexsoftware.quotable.activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.apexsoftware.quotable.activities.LoginActivity"
+            android:name=".activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,14 +29,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.apexsoftware.quotable.activities.CreateAccountActivity"
+            android:name=".activities.CreateAccountActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustResize">
         </activity>
-        <activity android:name="com.apexsoftware.quotable.activities.BaseActivity" />
-        <activity android:name="com.apexsoftware.quotable.activities.CreatePostActivity" />
+        <activity android:name=".activities.BaseActivity" />
+        <activity android:name=".activities.CreatePostActivity" />
         <activity android:name=".activities.UserProfileActivity" />
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
-
 
 </manifest>

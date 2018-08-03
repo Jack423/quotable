@@ -13,8 +13,6 @@ import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.util.FormatterUtil;
 import com.bumptech.glide.Glide;
 
-import java.text.SimpleDateFormat;
-
 public class PostViewHolder extends RecyclerView.ViewHolder {
     public static final String TAG = PostViewHolder.class.getSimpleName();
 

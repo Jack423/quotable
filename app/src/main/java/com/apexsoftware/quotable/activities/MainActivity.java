@@ -234,6 +234,9 @@ public class MainActivity extends BaseActivity
             // Handle the camera action
         } else if (id == R.id.nav_friends) {
 
+        } else if (id == R.id.nav_profile) {
+            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_bookmarks) {
 
         } else if (id == R.id.nav_about) {

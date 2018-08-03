@@ -1,5 +1,8 @@
 package com.apexsoftware.quotable.models;
 
+import com.apexsoftware.quotable.enums.ItemType;
+
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -7,7 +10,7 @@ import java.util.UUID;
 //Created By: Jack Butler
 //Date: 7/22/2018
 
-public class Post {
+public class Post implements Serializable, LazyLoading{
     private String user;
     private String userId;
     private String text;
@@ -15,11 +18,11 @@ public class Post {
     private Long createdAt;
     private String postId;
     private long bookmarkCount;
-    private int itemType;
+    private ItemType itemType;
 
     //We need an empty constructor for Firebase
     public Post() {
-
+        itemType = ItemType.ITEM;
     }
 
     public Post(String user, String userId, String text, Long createdAt) {
@@ -28,6 +31,7 @@ public class Post {
         this.text = text;
         this.createdAt = createdAt;
         this.postId = UUID.randomUUID().toString();
+        itemType = ItemType.ITEM;
     }
 
     public String getUser() {
@@ -97,6 +101,16 @@ public class Post {
         result.put("userId", userId);
 
         return result;
+    }
+
+    @Override
+    public ItemType getItemType() {
+        return itemType;
+    }
+
+    @Override
+    public void setItemType(ItemType itemType) {
+
     }
 
     @Override

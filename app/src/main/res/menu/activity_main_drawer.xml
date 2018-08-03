@@ -16,6 +16,10 @@
             android:id="@+id/nav_bookmarks"
             android:icon="@drawable/ic_collections_bookmark_black_24dp"
             android:title="Bookmarks" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="Profile" />
     </group>
 
     <item android:title="Communicate">
