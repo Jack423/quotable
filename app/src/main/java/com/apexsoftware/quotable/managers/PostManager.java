@@ -2,12 +2,18 @@ package com.apexsoftware.quotable.managers;
 //Created by Jack Butler on 8/1/2018.
 
 import android.content.Context;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.apexsoftware.quotable.ApplicationHelper;
 import com.apexsoftware.quotable.managers.listeners.OnDataChangedListener;
+import com.apexsoftware.quotable.managers.listeners.OnPostCreatedListener;
 import com.apexsoftware.quotable.managers.listeners.OnPostListChangedListener;
 import com.apexsoftware.quotable.models.Post;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.UploadTask;
 
 public class PostManager extends FirebaseListenersManager{
     private static final String TAG = PostManager.class.getSimpleName();
@@ -26,6 +32,21 @@ public class PostManager extends FirebaseListenersManager{
 
     private PostManager(Context context) {
         this.context = context;
+    }
+
+    public void createOrUpdatePost(final OnPostCreatedListener onPostCreatedListener, Post post) {
+        DatabaseHelper databaseHelper = ApplicationHelper.getDatabaseHelper();
+
+        if (post.getPostId() == null) {
+            post.setPostId(databaseHelper.generatePostId());
+        }
+
+        try {
+            ApplicationHelper.getDatabaseHelper().createOrUpdatePost(post);
+            onPostCreatedListener.onPostSaved(true);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     public void getPostsList(OnPostListChangedListener<Post> onDataChangedListener, long date) {

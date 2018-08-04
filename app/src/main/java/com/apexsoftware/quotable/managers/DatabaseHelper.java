@@ -7,11 +7,13 @@ import android.util.Log;
 import com.apexsoftware.quotable.Constants;
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.managers.listeners.OnDataChangedListener;
+import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnPostListChangedListener;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.PostListResult;
+import com.apexsoftware.quotable.models.User;
 import com.firebase.client.Firebase;
-import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -61,6 +63,24 @@ public class DatabaseHelper {
         return database.getReference();
     }
 
+    public ValueEventListener getProfile(String id, final OnObjectChangedListener<User> listener) {
+        DatabaseReference databaseReference = getDatabaseReference().child("users").child(id);
+        com.google.firebase.database.ValueEventListener valueEventListener = databaseReference.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                listener.onObjectChanged(user);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, "getProfile(), onCancelled", new Exception(databaseError.getMessage()));
+            }
+        });
+        activeListeners.put(valueEventListener, databaseReference);
+        return valueEventListener;
+    }
+
     public void closeListener(com.google.firebase.database.ValueEventListener listener) {
         if (activeListeners.containsKey(listener)) {
             DatabaseReference reference = activeListeners.get(listener);
@@ -70,6 +90,25 @@ public class DatabaseHelper {
         } else {
             Log.d(TAG, "closeListener(), listener not found :" + listener);
         }
+    }
+
+    public void createOrUpdatePost(Post post) {
+        try {
+            DatabaseReference databaseReference = database.getReference();
+
+            Map<String, Object> postValues = post.toMap();
+            Map<String, Object> childUpdates = new HashMap<>();
+            childUpdates.put("/quotes/" + post.getPostId(), postValues);
+
+            databaseReference.updateChildren(childUpdates);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
+    public String generatePostId() {
+        DatabaseReference databaseReference = database.getReference();
+        return databaseReference.child("posts").push().getKey();
     }
 
     public void getPostList(final OnPostListChangedListener<Post> onDataChangedListener, long date) {

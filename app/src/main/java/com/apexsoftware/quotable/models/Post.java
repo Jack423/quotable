@@ -1,8 +1,10 @@
 package com.apexsoftware.quotable.models;
 
 import com.apexsoftware.quotable.enums.ItemType;
+import com.apexsoftware.quotable.util.FormatterUtil;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -96,7 +98,7 @@ public class Post implements Serializable, LazyLoading{
 
         result.put("user", user);
         result.put("text", text);
-        result.put("createdAt", createdAt);
+        result.put("createdAt", FormatterUtil.getFirebaseDateFormat().format(new Date(createdAt)));
         result.put("postId", postId);
         result.put("userId", userId);
 
@@ -111,14 +113,5 @@ public class Post implements Serializable, LazyLoading{
     @Override
     public void setItemType(ItemType itemType) {
 
-    }
-
-    @Override
-    public String toString() {
-        return "DataYak{" +
-                "user='" + user + '\'' +
-                ", text='" + text + '\'' +
-                ", createdAt=" + createdAt +
-                '}';
     }
 }
