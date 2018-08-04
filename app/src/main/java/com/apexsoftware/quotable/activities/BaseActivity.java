@@ -38,6 +38,12 @@ public class BaseActivity extends AppCompatActivity {
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
+    public void showSnackBar(int messageId) {
+        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                messageId, Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
+
     public void showSnackBar(View view, int messageId) {
         Snackbar snackbar = Snackbar.make(view, messageId, Snackbar.LENGTH_LONG);
         snackbar.show();

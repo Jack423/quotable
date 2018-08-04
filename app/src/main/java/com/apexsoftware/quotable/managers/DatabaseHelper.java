@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.apexsoftware.quotable.Constants;
 import com.apexsoftware.quotable.R;
+import com.apexsoftware.quotable.managers.listeners.OnDataChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnPostListChangedListener;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.PostListResult;
@@ -174,6 +175,27 @@ public class DatabaseHelper {
 
         return result;
     }
+
+    public void getPostListByUser(final OnDataChangedListener<Post> onDataChangedListener, String userId) {
+        DatabaseReference databaseReference = database.getReference("posts");
+        Query postsQuery;
+        postsQuery = databaseReference.orderByChild("userId").equalTo(userId);
+
+        postsQuery.keepSynced(true);
+        postsQuery.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                PostListResult result = parsePostList((Map<String, Object>) dataSnapshot.getValue());
+                onDataChangedListener.onListChanged(result.getPosts());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, "getPostListByUser(), onCancelled", new Exception(databaseError.getMessage()));
+            }
+        });
+    }
+
 
     private boolean isPostValid(Map<String, Object> post) {
         return post.containsKey("postId")

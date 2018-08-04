@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.apexsoftware.quotable.ApplicationHelper;
+import com.apexsoftware.quotable.managers.listeners.OnDataChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnPostListChangedListener;
 import com.apexsoftware.quotable.models.Post;
 
@@ -29,5 +30,9 @@ public class PostManager extends FirebaseListenersManager{
 
     public void getPostsList(OnPostListChangedListener<Post> onDataChangedListener, long date) {
         ApplicationHelper.getDatabaseHelper().getPostList(onDataChangedListener, date);
+    }
+
+    public void getPostsListByUser(OnDataChangedListener<Post> onDataChangedListener, String userId) {
+        ApplicationHelper.getDatabaseHelper().getPostListByUser(onDataChangedListener, userId);
     }
 }

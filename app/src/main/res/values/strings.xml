@@ -29,4 +29,6 @@
     <string name="duration_hours_shortest">%1$d h</string>
     <string name="duration_minutes_shortest">%1$d m</string>
     <string name="posts_label">Quotes:</string>
+    <string name="error_fail_create_post">Failed to create post</string>
+    <string name="message_post_was_created">Post was created</string>
 </resources>

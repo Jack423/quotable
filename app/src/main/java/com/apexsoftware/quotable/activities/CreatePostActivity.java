@@ -3,18 +3,23 @@ package com.apexsoftware.quotable.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.apexsoftware.quotable.R;
+import com.apexsoftware.quotable.managers.listeners.OnPostCreatedListener;
 
-public class CreatePostActivity extends AppCompatActivity {
+public class CreatePostActivity extends BaseActivity implements OnPostCreatedListener{
+    private static final String TAG = CreatePostActivity.class.getSimpleName();
     public static final String TEXT = "text";
+    public static final int CREATE_NEW_POST_REQUEST = 11;
+
+    private boolean creatingPost = true;
 
     /*
      * Our fields to be used in the class
@@ -52,6 +57,21 @@ public class CreatePostActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    @Override
+    public void onPostSaved(boolean success) {
+        hideProgress();
+
+        if (success) {
+            setResult(RESULT_OK);
+            CreatePostActivity.this.finish();
+            Log.d(TAG, "Post was created");
+        } else {
+            creatingPost = false;
+            showSnackBar(R.string.error_fail_create_post);
+            Log.d(TAG, "Failed to create a post");
+        }
     }
 
     @Override
