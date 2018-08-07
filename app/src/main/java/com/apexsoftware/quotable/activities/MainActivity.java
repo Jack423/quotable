@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -120,8 +121,9 @@ public class MainActivity extends BaseActivity
             }
 
             final ProgressBar progressBar = findViewById(R.id.progressBar);
+            SwipeRefreshLayout swipeContainer = findViewById(R.id.swipeContainer);
             recyclerView = findViewById(R.id.list);
-            postsAdapter = new PostsAdapter(this);
+            postsAdapter = new PostsAdapter(this, swipeContainer);
             postsAdapter.setCallback(new PostsAdapter.Callback() {
                 @Override
                 public void onItemClick(Post post, View view) {
@@ -210,7 +212,7 @@ public class MainActivity extends BaseActivity
                         String name = user.getName();
 
                         //Create our yak with the user data
-                        Post post = new Post(name, firebaseUser.getUid(), postText, c.getTimeInMillis());
+                        Post post = new Post(name, firebaseUser.getUid(), postText);
                         //post.setUserImagePath(userImage);
                         reference.child("quotes").child(post.getPostId()).setValue(post);
                     }

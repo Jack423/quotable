@@ -9,9 +9,15 @@ import android.widget.TextView;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.managers.PostManager;
+import com.apexsoftware.quotable.managers.UserManager;
+import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.models.Post;
+import com.apexsoftware.quotable.models.User;
 import com.apexsoftware.quotable.util.FormatterUtil;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.module.AppGlideModule;
+import com.google.firebase.storage.FirebaseStorage;
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
     public static final String TAG = PostViewHolder.class.getSimpleName();
@@ -26,6 +32,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private ImageView bookmarkImageView;
 
     private PostManager postManager;
+    private UserManager userManager;
 
     public PostViewHolder(View view, final OnClickListener onClickListener) {
         this(view, onClickListener, true);
@@ -46,6 +53,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
         //profileManager = ProfileManager.getInstance(context.getApplicationContext());
         postManager = PostManager.getInstance(context.getApplicationContext());
+        userManager = UserManager.getInstance(context.getApplicationContext());
 
         /*view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +98,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         dateTextView.setText(date);
 
         String imageUri = post.getUserImagePath();
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance(imageUri);
 
         Glide.with(context)
                 .load(imageUri).into(authorImageView);
@@ -98,6 +107,23 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         if (firebaseUser != null) {
             postManager.hasCurrentUserLikeSingleValue(post.getId(), firebaseUser.getUid(), createOnLikeObjectExistListener());
         }*/
+        if(post.getUserId() != null) {
+            userManager.getProfileSingleValue(post.getUserId(), createProfileChangeListener(authorImageView));
+        }
+    }
+
+    private OnObjectChangedListener<User> createProfileChangeListener(final ImageView authorImageView) {
+        return new OnObjectChangedListener<User>() {
+            @Override
+            public void onObjectChanged(final User obj) {
+                if (obj.getPictureUrl() != null) {
+
+                    Glide.with(context)
+                            .load(obj.getPictureUrl())
+                            .into(authorImageView);
+                }
+            }
+        };
     }
 
     public interface OnClickListener {

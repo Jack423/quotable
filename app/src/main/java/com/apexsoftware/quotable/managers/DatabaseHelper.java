@@ -81,6 +81,22 @@ public class DatabaseHelper {
         return valueEventListener;
     }
 
+    public void getProfileSingleValue(String id, final OnObjectChangedListener<User> listener) {
+        DatabaseReference databaseReference = getDatabaseReference().child("users").child(id);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                listener.onObjectChanged(user);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, "getProfileSingleValue(), onCancelled", new Exception(databaseError.getMessage()));
+            }
+        });
+    }
+
     public void closeListener(com.google.firebase.database.ValueEventListener listener) {
         if (activeListeners.containsKey(listener)) {
             DatabaseReference reference = activeListeners.get(listener);

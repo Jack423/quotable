@@ -41,7 +41,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void onStart() {
         super.onStart();
-        auth.addAuthStateListener(authStateListener);
+        //auth.addAuthStateListener(authStateListener);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         progressDialog = new ProgressDialog(LoginActivity.this);
 
 
-        authStateListener = new FirebaseAuth.AuthStateListener() {
+        /*authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = firebaseAuth.getInstance().getCurrentUser();
@@ -74,20 +74,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     finish();
                 }
             }
-        };
+        };*/
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        auth.addAuthStateListener(authStateListener);
+        //auth.addAuthStateListener(authStateListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        auth.removeAuthStateListener(authStateListener);
+        //auth.removeAuthStateListener(authStateListener);
     }
 
     @Override

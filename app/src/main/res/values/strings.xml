@@ -19,6 +19,8 @@
     <string name="type_post">Type a post</string>
     <string name="sign_out">Sign out</string>
 
+    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+
     <string name="post_author_image_transition_name" translatable="false">post_author_image_transition_name</string>
     <string name="internet_connection_failed">Internet connection failed</string>
     <string name="no_internet_connection">No internet connection</string>

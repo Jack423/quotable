@@ -208,7 +208,7 @@ public class MainActivityBackup extends BaseActivity
                         String name = user.getName();
 
                         //Create our yak with the user data
-                        Post post = new Post(name, firebaseUser.getUid(), postText, c.getTimeInMillis());
+                        Post post = new Post(name, firebaseUser.getUid(), postText);
                         post.setUserImagePath(userImage);
                         reference.child("quotes").child(post.getPostId()).setValue(post);
                     }

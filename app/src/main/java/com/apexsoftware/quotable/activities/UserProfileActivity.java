@@ -127,7 +127,7 @@ public class UserProfileActivity extends BaseActivity {
                         String name = user.getName();
 
                         //Create our yak with the user data
-                        Post post = new Post(name, firebaseUser.getUid(), postText, c.getTimeInMillis());
+                        Post post = new Post(name, firebaseUser.getUid(), postText);
                         reference.child("quotes").child(post.getPostId()).setValue(post);
                     }
 

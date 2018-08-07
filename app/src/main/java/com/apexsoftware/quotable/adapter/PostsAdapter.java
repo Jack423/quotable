@@ -1,7 +1,9 @@
 package com.apexsoftware.quotable.adapter;
 // Created by Jack Butler on 7/30/2018.
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,18 +30,46 @@ public class PostsAdapter extends BasePostAdapter {
     private boolean isLoading = false;
     private boolean isMoreDataAvailable = true;
     private long lastLoadedItemCreatedDate;
+    private SwipeRefreshLayout swipeContainer;
     private MainActivity mainActivity;
     private SimpleDateFormat dateFormat;
 
-    public PostsAdapter(final MainActivity activity) {
+    public PostsAdapter(final MainActivity activity, SwipeRefreshLayout swipeContainer) {
         super(activity);
         this.mainActivity = activity;
+        this.swipeContainer = swipeContainer;
         setHasStableIds(true);
+        initRefreshLayout();
         dateFormat = new SimpleDateFormat("hh:mm a, MM/dd/yyyy", Locale.getDefault());
     }
 
     public void setCallback(Callback callback) {
         this.callback = callback;
+    }
+
+    private void initRefreshLayout() {
+        if(swipeContainer != null) {
+            swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    onRefreshAction();
+                }
+            });
+        }
+    }
+
+    private void onRefreshAction() {
+        if (activity.hasInternetConnection()) {
+            loadFirstPage();
+            Log.d(TAG, "--------Loaded first page");
+            cleanSelectedPostInformation();
+            Log.d(TAG, "--------Cleaned selected post information");
+            swipeContainer.setRefreshing(false);
+            Log.d(TAG, "--------Set refreshing to false");
+        } else {
+            swipeContainer.setRefreshing(false);
+            mainActivity.showFloatButtonRelatedSnackBar(R.string.internet_connection_failed);
+        }
     }
 
     @Override

@@ -4,6 +4,8 @@ import com.apexsoftware.quotable.enums.ItemType;
 import com.apexsoftware.quotable.util.FormatterUtil;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,17 +23,18 @@ public class Post implements Serializable, LazyLoading{
     private String postId;
     private long bookmarkCount;
     private ItemType itemType;
+    private Calendar calendar = Calendar.getInstance();
 
     //We need an empty constructor for Firebase
     public Post() {
+        this.createdAt = calendar.getTimeInMillis();
         itemType = ItemType.ITEM;
     }
 
-    public Post(String user, String userId, String text, Long createdAt) {
+    public Post(String user, String userId, String text) {
         this.user = user;
         this.userId = userId;
         this.text = text;
-        this.createdAt = createdAt;
         this.postId = UUID.randomUUID().toString();
         itemType = ItemType.ITEM;
     }
@@ -98,7 +101,7 @@ public class Post implements Serializable, LazyLoading{
 
         result.put("user", user);
         result.put("text", text);
-        result.put("createdAt", FormatterUtil.getFirebaseDateFormat().format(new Date(createdAt)));
+        result.put("createdAt", createdAt);
         result.put("postId", postId);
         result.put("userId", userId);
 
