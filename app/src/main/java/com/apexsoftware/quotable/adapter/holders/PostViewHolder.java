@@ -2,6 +2,8 @@ package com.apexsoftware.quotable.adapter.holders;
 // Created by Jack Butler on 7/30/2018.
 
 import android.content.Context;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,7 +19,11 @@ import com.apexsoftware.quotable.util.FormatterUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.module.AppGlideModule;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
     public static final String TAG = PostViewHolder.class.getSimpleName();
@@ -98,10 +104,22 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         dateTextView.setText(date);
 
         String imageUri = post.getUserImagePath();
-        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance(imageUri);
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference reference = firebaseStorage.getReference();
 
-        Glide.with(context)
-                .load(imageUri).into(authorImageView);
+        reference.child("profile_pictures/roury_icon.PNG").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(context).load(uri).into(authorImageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Glide.with(context).load(R.drawable.ic_stub).into(authorImageView);
+            }
+        });
+
+        //Glide.with(context).load(reference).into(authorImageView);
 
         /*FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
