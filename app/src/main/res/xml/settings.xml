@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:defaultValue="Default value"
+        android:icon="@drawable/ic_display_name"
+        android:key="edit_text_name"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="Display name"
+        android:title="Some Display Name here" />
+    <EditTextPreference
+        android:defaultValue="Default value"
+        android:icon="@drawable/ic_info_black_24dp"
+        android:key="edit_text_bio"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="Bio"
+        android:title="Edit text preference" />
+</PreferenceScreen>

@@ -8,6 +8,7 @@ import com.apexsoftware.quotable.Constants;
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.managers.listeners.OnDataChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
+import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
 import com.apexsoftware.quotable.managers.listeners.OnPostListChangedListener;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.PostListResult;
@@ -158,6 +159,21 @@ public class DatabaseHelper {
         });
     }
 
+    public void isPostExistSingleValue(String postId, final OnObjectExistListener<Post> onObjectExistListener) {
+        DatabaseReference databaseReference = database.getReference("quotes").child(postId);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                onObjectExistListener.onDataChanged(dataSnapshot.exists());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, "isPostExistSingleValue(), onCancelled", new Exception(databaseError.getMessage()));
+            }
+        });
+    }
+
     private PostListResult parsePostList(Map<String, Object> objectMap) {
         PostListResult result = new PostListResult();
         List<Post> list = new ArrayList<Post>();
@@ -210,6 +226,7 @@ public class DatabaseHelper {
                         post.setText((String) mapObj.get("text"));
                         post.setCreatedAt(createdDate);
                         post.setUserId((String) mapObj.get(("userId")));
+                        post.setUserImagePath((String) mapObj.get("userImagePath"));
 
                         list.add(post);
                     }
@@ -232,7 +249,7 @@ public class DatabaseHelper {
     }
 
     public void getPostListByUser(final OnDataChangedListener<Post> onDataChangedListener, String userId) {
-        DatabaseReference databaseReference = database.getReference("posts");
+        DatabaseReference databaseReference = database.getReference("quotes");
         Query postsQuery;
         postsQuery = databaseReference.orderByChild("userId").equalTo(userId);
 

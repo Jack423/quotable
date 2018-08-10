@@ -68,7 +68,7 @@ public class CreatePostActivity extends BaseActivity implements OnPostCreatedLis
         post.setUser(user.getName());
         post.setText(quote);
         post.setUserId(firebaseUser.getUid());
-        //post.setCreatedAt(calendar.getTimeInMillis());
+        post.setUserImagePath(user.getPictureUrl());
         postManager.createOrUpdatePost(CreatePostActivity.this, post);
     }
 

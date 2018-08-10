@@ -103,11 +103,10 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         CharSequence date = FormatterUtil.getRelativeTimeSpanStringShort(context, post.getCreatedAt());
         dateTextView.setText(date);
 
-        String imageUri = post.getUserImagePath();
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        StorageReference reference = firebaseStorage.getReference();
+        StorageReference reference = firebaseStorage.getReferenceFromUrl("gs://quotable-c70b9.appspot.com/profile_pictures/roury_icon.PNG");
 
-        reference.child("profile_pictures/roury_icon.PNG").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Glide.with(context).load(uri).into(authorImageView);
@@ -118,8 +117,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 Glide.with(context).load(R.drawable.ic_stub).into(authorImageView);
             }
         });
-
-        //Glide.with(context).load(reference).into(authorImageView);
 
         /*FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {

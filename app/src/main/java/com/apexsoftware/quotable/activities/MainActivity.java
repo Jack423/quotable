@@ -93,10 +93,10 @@ public class MainActivity extends BaseActivity
 
             View authorImageView = view.findViewById(R.id.iv_profile);
 
-            ActivityOptions options = ActivityOptions.
+            /*ActivityOptions options = ActivityOptions.
                     makeSceneTransitionAnimation(MainActivity.this,
-                            new android.util.Pair<>(authorImageView, getString(R.string.post_author_image_transition_name)));
-            startActivityForResult(intent, UserProfileActivity.CREATE_POST_FROM_PROFILE_REQUEST, options.toBundle());
+                            new android.util.Pair<>(authorImageView, getString(R.string.post_author_image_transition_name)));*/
+            startActivityForResult(intent, UserProfileActivity.CREATE_POST_FROM_PROFILE_REQUEST);
         } else {
             startActivityForResult(intent, UserProfileActivity.CREATE_POST_FROM_PROFILE_REQUEST);
         }
@@ -233,14 +233,17 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_feed) {
-            // Handle the camera action
+            //Main Feed
         } else if (id == R.id.nav_friends) {
-
+            //TODO Implement friends view
         } else if (id == R.id.nav_profile) {
             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_bookmarks) {
-
+            //TODO Implement bookmarks viewer
+        } else if (id == R.id.nav_settings) {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_about) {
 
         } else if (id == R.id.nav_report_bug) {

@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.apexsoftware.quotable.ApplicationHelper;
 import com.apexsoftware.quotable.managers.listeners.OnDataChangedListener;
+import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
 import com.apexsoftware.quotable.managers.listeners.OnPostCreatedListener;
 import com.apexsoftware.quotable.managers.listeners.OnPostListChangedListener;
 import com.apexsoftware.quotable.models.Post;
@@ -55,5 +56,10 @@ public class PostManager extends FirebaseListenersManager{
 
     public void getPostsListByUser(OnDataChangedListener<Post> onDataChangedListener, String userId) {
         ApplicationHelper.getDatabaseHelper().getPostListByUser(onDataChangedListener, userId);
+    }
+
+    public void isPostExistSingleValue(String postId, final OnObjectExistListener<Post> onObjectExistListener) {
+        DatabaseHelper databaseHelper = ApplicationHelper.getDatabaseHelper();
+        databaseHelper.isPostExistSingleValue(postId, onObjectExistListener);
     }
 }

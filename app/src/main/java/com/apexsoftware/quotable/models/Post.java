@@ -104,6 +104,7 @@ public class Post implements Serializable, LazyLoading{
         result.put("createdAt", createdAt);
         result.put("postId", postId);
         result.put("userId", userId);
+        result.put("userImagePath", userImagePath);
 
         return result;
     }

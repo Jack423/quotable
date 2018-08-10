@@ -25,5 +25,10 @@
         <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/icons</item>
     </style>
+    <style name="AppTheme.Text.ProfileCounter" parent="AlertDialog.AppCompat.Light">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
 </resources>
