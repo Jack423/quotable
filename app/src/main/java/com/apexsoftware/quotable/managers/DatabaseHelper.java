@@ -2,10 +2,12 @@ package com.apexsoftware.quotable.managers;
 //Created by Jack Butler on 8/1/2018.
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.apexsoftware.quotable.Constants;
 import com.apexsoftware.quotable.R;
+import com.apexsoftware.quotable.adapter.holders.PostViewHolder;
 import com.apexsoftware.quotable.managers.listeners.OnDataChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
@@ -14,6 +16,7 @@ import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.PostListResult;
 import com.apexsoftware.quotable.models.User;
 import com.firebase.client.Firebase;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -131,11 +134,32 @@ public class DatabaseHelper {
     public void getPostList(final OnPostListChangedListener<Post> onDataChangedListener, long date) {
         DatabaseReference databaseReference = database.getReference("quotes");
         Query postsQuery;
-        if (date == 0) {
-            postsQuery = databaseReference.limitToLast(Constants.Post.POST_AMOUNT_ON_PAGE).orderByChild("createdAt");
+        /*if (date == 0) {
+            postsQuery = databaseReference.orderByChild("createdAt");
         } else {
-            postsQuery = databaseReference.limitToLast(Constants.Post.POST_AMOUNT_ON_PAGE).endAt(date).orderByChild("createdAt");
-        }
+            postsQuery = databaseReference.endAt(date).orderByChild("createdAt");
+        }*/
+
+        postsQuery = databaseReference.orderByChild("createdAt");
+        /*databaseReference.child("quotes").orderByChild("createdAt").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Map<String, Object> objectMap = (Map<String, Object>) dataSnapshot.getValue();
+                PostListResult result = parsePostList(objectMap);
+
+                if(result.getPosts().isEmpty() && result.isMoreDataAvailable()) {
+                    getPostList(onDataChangedListener, result.getLastItemCreatedDate() - 1);
+                } else {
+                    onDataChangedListener.onListChanged(parsePostList(objectMap));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "getPostList(), onCancelled", new Exception(databaseError.getMessage()));
+                onDataChangedListener.onCanceled("Permission Denied");
+            }
+        });*/
 
         postsQuery.keepSynced(true);
         postsQuery.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {

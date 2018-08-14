@@ -8,6 +8,7 @@ public class User {
     String name;
     String email;
     String pictureUrl;
+    String bio;
 
     public User() {
     }
@@ -48,5 +49,13 @@ public class User {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getBio() {
+        return bio;
     }
 }

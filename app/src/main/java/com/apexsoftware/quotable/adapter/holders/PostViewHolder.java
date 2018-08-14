@@ -104,7 +104,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         dateTextView.setText(date);
 
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        StorageReference reference = firebaseStorage.getReferenceFromUrl("gs://quotable-c70b9.appspot.com/profile_pictures/roury_icon.PNG");
+        StorageReference reference = firebaseStorage.getReferenceFromUrl(post.getUserImagePath());
 
         reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override

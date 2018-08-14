@@ -51,7 +51,7 @@ public class UserProfileActivity extends BaseActivity {
     RecyclerView recyclerView;
     Context context;
 
-    TextView name, userDescription, quotes, followers, following;
+    TextView name, quotes, followers, following, bio;
     Button follow;
     ImageView profilePicture;
     FloatingActionButton fab;
@@ -75,7 +75,7 @@ public class UserProfileActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.settings_toolbar);
         setSupportActionBar(toolbar);
 
         userID = getIntent().getStringExtra(USER_ID_EXTRA_KEY);
@@ -84,7 +84,7 @@ public class UserProfileActivity extends BaseActivity {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         name = findViewById(R.id.text_name);
-        userDescription = findViewById(R.id.text_user_details);
+        bio = findViewById(R.id.text_user_details);
         quotes = findViewById(R.id.text_quotes);
         followers = findViewById(R.id.text_followers);
         following = findViewById(R.id.text_following);
@@ -164,6 +164,7 @@ public class UserProfileActivity extends BaseActivity {
     private void fillUIFields(User user) {
         if (user != null) {
             name.setText(user.getName());
+            bio.setText(user.getBio());
 
             if (user.getId().equals(userID)) {
                 follow.setVisibility(View.GONE);
