@@ -2,7 +2,10 @@ package com.apexsoftware.quotable.activities;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +32,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.List;
+
 import io.grpc.Context;
 
 public class SettingsActivity2 extends AppCompatPreferenceActivity {
@@ -39,6 +44,26 @@ public class SettingsActivity2 extends AppCompatPreferenceActivity {
     private FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+
+    private Preference.OnPreferenceChangeListener onPreferenceChangeListener = new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            String stringValue = newValue.toString();
+
+            if (preference instanceof ListPreference) {
+                ListPreference listPreference = (ListPreference) preference;
+                int index = listPreference.findIndexOfValue(stringValue);
+
+                preference.setSummary(
+                        index >= 0
+                                ? listPreference.getEntries() [index]
+                                : null);
+            } else {
+                //something
+            }
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +113,18 @@ public class SettingsActivity2 extends AppCompatPreferenceActivity {
 
             }
         });
+    }
+
+    private void bindPreferenceSummaryToValue(Preference preference) {
+        // Set the listener to watch for value changes.
+        preference.setOnPreferenceChangeListener(onPreferenceChangeListener);
+
+        // Trigger the listener immediately with the preference's
+        // current value.
+        onPreferenceChangeListener.onPreferenceChange(preference,
+                PreferenceManager
+                        .getDefaultSharedPreferences(preference.getContext())
+                        .getString(preference.getKey(), ""));
     }
 
     @Override
