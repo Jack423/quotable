@@ -2,18 +2,22 @@ package com.apexsoftware.quotable.activities;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.models.User;
@@ -45,33 +49,13 @@ public class SettingsActivity2 extends AppCompatPreferenceActivity {
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
-    private Preference.OnPreferenceChangeListener onPreferenceChangeListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue) {
-            String stringValue = newValue.toString();
-
-            if (preference instanceof ListPreference) {
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
-
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries() [index]
-                                : null);
-            } else {
-                //something
-            }
-            return false;
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings3);
+        addPreferencesFromResource(R.xml.settings);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        //collapsingToolbarLayout.setTitle("some title");
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.icons));
 
         profilePhoto = findViewById(R.id.iv_profile_photo);
@@ -80,14 +64,55 @@ public class SettingsActivity2 extends AppCompatPreferenceActivity {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        addPreferencesFromResource(R.xml.settings);
+        bindPreferenceSummaryToValue(findPreference("setting_name"));
+        bindPreferenceSummaryToValue(findPreference("setting_bio"));
 
-        initUiValues();
+        //updatePreferenceValues();
+        //initUiValues();
     }
 
-    private void initUiValues() {
-        String displayName;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
 
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void bindPreferenceSummaryToValue(Preference preference) {
+        // Set the listener to watch for value changes.
+        preference.setOnPreferenceChangeListener(onPreferenceChangeListener);
+
+        // Trigger the listener immediately with the preference's
+        // current value.
+        onPreferenceChangeListener.onPreferenceChange(preference,
+                PreferenceManager
+                        .getDefaultSharedPreferences(preference.getContext())
+                        .getString(preference.getKey(), ""));
+    }
+
+    private Preference.OnPreferenceChangeListener onPreferenceChangeListener = new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            String stringValue = newValue.toString();
+
+            if(preference instanceof EditTextPreference) {
+                if (preference.getKey().equals("setting_name")) {
+                    // update the changed name to summary filed
+                    preference.setSummary(stringValue);
+                    Toast.makeText(SettingsActivity2.this, "onPreferenceChangedListener Called", Toast.LENGTH_LONG).show();
+                } else {
+                    preference.setSummary(stringValue);
+                    Toast.makeText(SettingsActivity2.this, "onPreferenceChangedListener 2 Called", Toast.LENGTH_LONG).show();
+                }
+            }
+            //preference.setSummary(stringValue);
+            return false;
+        }
+    };
+
+    private void initUiValues() {
         final DatabaseReference reference = firebaseDatabase.getReference("users").child(firebaseUser.getUid());
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -110,46 +135,20 @@ public class SettingsActivity2 extends AppCompatPreferenceActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Snackbar.make(collapsingToolbarLayout, "Database read canceled, please log in", Snackbar.LENGTH_LONG);
             }
         });
     }
 
-    private void bindPreferenceSummaryToValue(Preference preference) {
-        // Set the listener to watch for value changes.
-        preference.setOnPreferenceChangeListener(onPreferenceChangeListener);
+    private void updatePreferenceValues(String newValue) {
+        DatabaseReference reference = firebaseDatabase.getReference();
 
-        // Trigger the listener immediately with the preference's
-        // current value.
-        onPreferenceChangeListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.settings_menu, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.nav_log_out) {
-            firebaseAuth.signOut();
-            Intent intent = new Intent(SettingsActivity2.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        } else if (id == android.R.id.home) {
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 
