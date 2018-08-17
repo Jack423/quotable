@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.apexsoftware.quotable.R;
@@ -69,6 +70,13 @@ public class SettingsActivity2 extends AppCompatPreferenceActivity {
 
         //updatePreferenceValues();
         //initUiValues();
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+
     }
 
     @Override
@@ -142,7 +150,6 @@ public class SettingsActivity2 extends AppCompatPreferenceActivity {
 
     private void updatePreferenceValues(String newValue) {
         DatabaseReference reference = firebaseDatabase.getReference();
-
     }
 
     @Override

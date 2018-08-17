@@ -1,6 +1,7 @@
 package com.apexsoftware.quotable.activities;
 //Created by Jack Butler on 7/30/2018.
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.adapter.PostsByUserAdapter;
+import com.apexsoftware.quotable.managers.DatabaseHelper;
 import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.managers.UserManager;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
@@ -39,6 +41,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -69,6 +76,8 @@ public class UserProfileActivity extends BaseActivity {
 
     //Firebase shite
     FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,9 +88,9 @@ public class UserProfileActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         userID = getIntent().getStringExtra(USER_ID_EXTRA_KEY);
+        currentUserId = firebaseUser.getUid();
 
         auth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         name = findViewById(R.id.text_name);
         bio = findViewById(R.id.text_user_details);
@@ -161,12 +170,12 @@ public class UserProfileActivity extends BaseActivity {
         };
     }
 
-    private void fillUIFields(User user) {
+    private void fillUIFields(final User user) {
         if (user != null) {
             name.setText(user.getName());
             bio.setText(user.getBio());
 
-            if (user.getId().equals(userID)) {
+            if (user.getId().equals(currentUserId)) {
                 follow.setVisibility(View.GONE);
             }
 
@@ -186,12 +195,18 @@ public class UserProfileActivity extends BaseActivity {
                     }
                 });
             }
+
+            follow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DatabaseHelper databaseHelper = DatabaseHelper.getInstance(v.getContext());
+                    databaseHelper.addFollower(user);
+                }
+            });
         } else {
             progressBar.setVisibility(View.GONE);
             profilePicture.setImageResource(R.drawable.ic_stub);
         }
-
-
     }
 
     private void loadPostsList() {
@@ -215,11 +230,24 @@ public class UserProfileActivity extends BaseActivity {
 
                 @Override
                 public void onPostsListChanged(int postsCount) {
-                    quotes.setText(buildCounterSpannable(postsCount));
+                    DatabaseReference databaseReference = firebaseDatabase.getReference("users").child(firebaseUser.getUid());
+                    databaseReference.addValueEventListener(new ValueEventListener() {
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+                            if (user != null) {
+                                quotes.setText(Integer.toString(user.getPostCount()));
+                                followers.setText(Integer.toString(user.getFollowers()));
+                                following.setText(Integer.toString(user.getFollowing()));
+                            }
+                        }
 
-                    if (postsCount > 0) {
-                        quotes.setText("0");
-                    }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
 
                     swipeContainer.setRefreshing(false);
                     hideLoadingPostsProgressBar();

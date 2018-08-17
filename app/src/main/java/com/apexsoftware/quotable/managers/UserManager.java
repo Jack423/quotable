@@ -41,4 +41,19 @@ public class UserManager extends FirebaseListenersManager{
     public void getProfileSingleValue(String id, final OnObjectChangedListener<User> listener) {
         databaseHelper.getProfileSingleValue(id, listener);
     }
+
+    public void incrementPostCount(User user) {
+        int val = user.getPostCount() + 1;
+        databaseHelper.updatePostCount(user, val);
+    }
+
+    public void incrementFollowingCount(User user) {
+        int val = user.getFollowing() + 1;
+        databaseHelper.updateFollowingCount(user, val);
+    }
+
+    public void incrementFollowersCount(User user) {
+        int val = user.getFollowers() + 1;
+        databaseHelper.updateFollowerCount(user, val);
+    }
 }

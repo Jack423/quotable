@@ -17,6 +17,7 @@ import com.apexsoftware.quotable.models.PostListResult;
 import com.apexsoftware.quotable.models.User;
 import com.firebase.client.Firebase;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -109,6 +110,33 @@ public class DatabaseHelper {
             Log.d(TAG, "closeListener(), listener was removed: " + listener);
         } else {
             Log.d(TAG, "closeListener(), listener not found :" + listener);
+        }
+    }
+
+    public void updatePostCount(User user, int newPostsValue) {
+        DatabaseReference reference = database.getReference("users").child(user.getId()).child("postCount");
+        reference.setValue(newPostsValue);
+    }
+
+    public void updateFollowingCount(User user, int newPostsValue) {
+        DatabaseReference reference = database.getReference("users").child(user.getId()).child("following");
+        reference.setValue(newPostsValue);
+    }
+
+    public void updateFollowerCount(User user, int newPostsValue) {
+        DatabaseReference reference = database.getReference("users").child(user.getId()).child("followers");
+        reference.setValue(newPostsValue);
+    }
+
+    public void addFollower(User user) {
+        try {
+            DatabaseReference reference = database.getReference();
+            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+            updateFollowerCount(user, user.getFollowers() + 1);
+
+            reference.child("users").child(firebaseUser.getUid()).child("friends").child(user.getId()).setValue(user);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
         }
     }
 

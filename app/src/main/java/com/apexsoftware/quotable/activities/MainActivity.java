@@ -1,5 +1,6 @@
 package com.apexsoftware.quotable.activities;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import com.apexsoftware.quotable.ApplicationHelper;
 import com.apexsoftware.quotable.adapter.PostsAdapter;
+import com.apexsoftware.quotable.fragment.FriendsFragment;
 import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.User;
@@ -231,11 +233,12 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_feed) {
             //Main Feed
         } else if (id == R.id.nav_friends) {
-            //TODO Implement friends view
+            getSupportFragmentManager().beginTransaction()
+                    .add(android.R.id.content, new FriendsFragment()).commit();
         } else if (id == R.id.nav_bookmarks) {
             //TODO Implement bookmarks viewer
         } else if (id == R.id.nav_settings) {
-            Intent intent = new Intent(MainActivity.this, SettingsActivity2.class);
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_about) {
 

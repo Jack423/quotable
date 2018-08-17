@@ -35,8 +35,11 @@ public class AuthHelper {
                     user.setId(firebaseUser.getUid());
                     user.setEmail(email);
                     user.setName(name);
-                    user.setPictureUrl("http://www.foodvisionusa.com/wp-content/uploads/2014/12/speaker-placeholder-male.png");
-                    user.setBio("");
+                    user.setPictureUrl("gs://quotable-c70b9.appspot.com/profile_pictures/493873a2-a182-11e8-98d0-529269fb1459.png");
+                    user.setBio("Change me");
+                    user.setFollowers(0);
+                    user.setFollowing(0);
+                    user.setPostCount(0);
 
                     DatabaseReference reference = database.getReference().child("users");
                     reference.child(firebaseUser.getUid()).setValue(user);

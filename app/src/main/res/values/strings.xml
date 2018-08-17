@@ -108,4 +108,7 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="preference_called">onPreferenceChangedListener Called</string>
+    <string name="summary_about">Me (or Roury) is the developer of this app. I specialize in the development of Android apps that may possibly create new trends and make using your phone more enjoyable and fun. Hope you enjoy this app!</string>
+    <string name="app_version">1.3</string>
+    <string name="title_version">Version</string>
 </resources>
