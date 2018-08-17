@@ -1,12 +1,14 @@
 package com.apexsoftware.quotable.activities;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -233,8 +235,7 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_feed) {
             //Main Feed
         } else if (id == R.id.nav_friends) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(android.R.id.content, new FriendsFragment()).commit();
+            startActivity(new Intent(this, FriendsFragment.class));
         } else if (id == R.id.nav_bookmarks) {
             //TODO Implement bookmarks viewer
         } else if (id == R.id.nav_settings) {

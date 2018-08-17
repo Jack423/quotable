@@ -2,6 +2,8 @@ package com.apexsoftware.quotable.adapter;
 //Created by Jack Butler on 8/16/2018.
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,9 @@ import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.models.Friend;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class FriendsAdapter extends ArrayAdapter<Friend> implements View.OnClickListener{
+public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> implements View.OnClickListener{
 
     private ArrayList<Friend> friendsList;
     Context context;
@@ -41,6 +44,11 @@ public class FriendsAdapter extends ArrayAdapter<Friend> implements View.OnClick
     }
 
     @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List<Object> payloads) {
+        super.onBindViewHolder(holder, position, payloads);
+    }
+
+    /*@Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //get the data item for this position
         Friend friend = getItem(position);
@@ -64,5 +72,5 @@ public class FriendsAdapter extends ArrayAdapter<Friend> implements View.OnClick
         }
 
         return convertView;
-    }
+    }*/
 }

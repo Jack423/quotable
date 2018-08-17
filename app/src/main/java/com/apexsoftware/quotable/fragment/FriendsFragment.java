@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.apexsoftware.quotable.R;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 public class FriendsFragment extends FragmentActivity {
 
     ArrayList<Friend> friends;
-    ListView listView;
+    RecyclerView listView;
     private static FriendsAdapter friendsAdapter;
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -43,11 +44,16 @@ public class FriendsFragment extends FragmentActivity {
 
         friends = new ArrayList<>();
 
+        listView.setAdapter(friendsAdapter);
+        friendsAdapter = new FriendsAdapter(friends, getApplicationContext());
+
         DatabaseReference reference = database.getReference("users").child(firebaseUser.getUid()).child("friends");
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                Friend friend = dataSnapshot.getValue(Friend.class);
+                friendsAdapter.add(friend);
+                listView.smoothScrollToPosition(0);
             }
 
             @Override
@@ -70,13 +76,9 @@ public class FriendsFragment extends FragmentActivity {
 
             }
         });
-
-        friendsAdapter = new FriendsAdapter(friends, getApplicationContext());
-
-        listView.setAdapter(friendsAdapter);
-        listView.setOnClickListener(new View.OnClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
             }
         });

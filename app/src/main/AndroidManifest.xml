@@ -42,6 +42,7 @@
             android:name=".activities.SettingsActivity2"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".fragment.FriendsFragment" />
     </application>
 
 </manifest>
