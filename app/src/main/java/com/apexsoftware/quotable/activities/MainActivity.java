@@ -6,9 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +23,6 @@ import android.widget.Toast;
 
 import com.apexsoftware.quotable.ApplicationHelper;
 import com.apexsoftware.quotable.adapter.PostsAdapter;
-import com.apexsoftware.quotable.fragment.FriendsFragment;
 import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.User;
@@ -39,8 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 
-public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int CREATE_POST_REQUEST = 1;
 
@@ -235,7 +230,7 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_feed) {
             //Main Feed
         } else if (id == R.id.nav_friends) {
-            startActivity(new Intent(this, FriendsFragment.class));
+            startActivity(new Intent(this, FriendsActivity.class));
         } else if (id == R.id.nav_bookmarks) {
             //TODO Implement bookmarks viewer
         } else if (id == R.id.nav_settings) {

@@ -21,4 +21,5 @@
     <dimen name="large_intrinsic_padding">16dp</dimen>
     <dimen name="profile_screen_margin_between_counters">32dp</dimen>
     <dimen name="post_card_content_padding_left">11dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

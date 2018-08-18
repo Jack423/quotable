@@ -1,19 +1,15 @@
-package com.apexsoftware.quotable.fragment;
+package com.apexsoftware.quotable.activities;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.adapter.FriendsAdapter;
 import com.apexsoftware.quotable.models.Friend;
-import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -21,39 +17,46 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-//Created by Jack Butler on 8/16/2018.
+import butterknife.ButterKnife;
 
-public class FriendsFragment extends FragmentActivity {
+public class FriendsActivity extends AppCompatActivity {
+    public static final String TAG = FriendsActivity.class.getSimpleName();
 
-    ArrayList<Friend> friends;
-    RecyclerView listView;
-    private static FriendsAdapter friendsAdapter;
+    private RecyclerView recyclerView;
+    private ArrayList friends = new ArrayList<>();
+    private FriendsAdapter friendsAdapter;
 
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_friends);
+        setContentView(R.layout.activity_friends);
 
-        listView = findViewById(R.id.friends_list);
+        recyclerView = findViewById(R.id.friends_list);
 
-        friends = new ArrayList<>();
+        initContent();
+    }
 
-        listView.setAdapter(friendsAdapter);
-        friendsAdapter = new FriendsAdapter(friends, getApplicationContext());
+    private void initContent() {
+        friendsAdapter = new FriendsAdapter(getApplicationContext(), friends);
+        recyclerView.setAdapter(friendsAdapter);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FriendsActivity.this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
 
-        DatabaseReference reference = database.getReference("users").child(firebaseUser.getUid()).child("friends");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).child("friends");
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Friend friend = dataSnapshot.getValue(Friend.class);
-                friendsAdapter.add(friend);
-                listView.smoothScrollToPosition(0);
+                friendsAdapter.addFriend(friend, 0);
+                recyclerView.scrollToPosition(0);
             }
 
             @Override
@@ -76,12 +79,5 @@ public class FriendsFragment extends FragmentActivity {
 
             }
         });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
-
     }
 }
