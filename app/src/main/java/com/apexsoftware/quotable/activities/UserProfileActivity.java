@@ -25,20 +25,25 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.adapter.PostsByUserAdapter;
 import com.apexsoftware.quotable.managers.DatabaseHelper;
+import com.apexsoftware.quotable.managers.FriendManager;
 import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.managers.UserManager;
+import com.apexsoftware.quotable.managers.listeners.OnFriendChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.User;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -48,6 +53,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 public class UserProfileActivity extends BaseActivity {
     private static final String TAG = UserProfileActivity.class.getSimpleName();
@@ -65,10 +73,12 @@ public class UserProfileActivity extends BaseActivity {
 
     private String currentUserId;
     private String userID;
+    private String currentState = "not_friends";
 
     private PostsByUserAdapter postsAdapter;
     private SwipeRefreshLayout swipeContainer;
     private UserManager userManager;
+    private FriendManager friendManager;
     private ProgressBar progressBar;
     private GoogleApiClient mGoogleApiClient;
 
@@ -109,6 +119,47 @@ public class UserProfileActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 onRefreshAction();
+            }
+        });
+
+        friendManager = FriendManager.getInstance(this);
+
+        final DatabaseReference reference = firebaseDatabase.getReference().child(firebaseUser.getUid());
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(firebaseUser.getUid())) {
+                    String requestType = dataSnapshot.child(firebaseUser.getUid()).child("request_type").getValue().toString();
+
+                    if (requestType.equals("received")) {
+                        currentState = "request_received";
+                        follow.setText("Accept friend request");
+                    } else if (requestType.equals("sent")) {
+                        currentState = "request_sent";
+                        follow.setText("Cancel Friend Request");
+                    }
+                } else {
+                    reference.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.hasChild(userID)) {
+                                currentState = "friends";
+                                follow.setText("Unfriend");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
 
@@ -199,8 +250,73 @@ public class UserProfileActivity extends BaseActivity {
             follow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DatabaseHelper databaseHelper = DatabaseHelper.getInstance(v.getContext());
-                    databaseHelper.addFollower(user);
+                    follow.setEnabled(false);
+
+                    final DatabaseReference reference = firebaseDatabase.getReference().child("friend_requests");
+
+                    //Not friends state
+                    if (currentState.equals("not_friends")) {
+                        reference.child(firebaseUser.getUid()).child(user.getId()).child("request_type").setValue("sent").addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    reference.child(user.getId()).child(firebaseUser.getUid()).child("request_type").setValue("received").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            currentState = "request_sent";
+                                            follow.setText(R.string.cancel_follow_request);
+                                            Toast.makeText(context, "Request sent", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } else {
+                                    Toast.makeText(context, "Failed sending request", Toast.LENGTH_SHORT).show();
+                                }
+
+                                follow.setEnabled(true);
+                            }
+                        });
+                    } else if (currentState.equals("request_sent")) {
+                        reference.child(firebaseUser.getUid()).child(user.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                reference.child(user.getId()).child(firebaseUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        follow.setEnabled(true);
+                                        currentState = "not_friends";
+                                        follow.setText("Follow");
+                                    }
+                                });
+                            }
+                        });
+                    } else if (currentState.equals("request_received")) {
+                        final DatabaseReference friendsReference = firebaseDatabase.getReference().child("friends");
+                        final String currentDate = DateFormat.getDateInstance().format(new Date());
+
+                        friendsReference.child(firebaseUser.getUid()).child(user.getId()).setValue(currentDate).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                friendsReference.child(user.getId()).child(firebaseUser.getUid()).setValue(currentDate).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        reference.child(firebaseUser.getUid()).child(user.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                reference.child(user.getId()).child(firebaseUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        follow.setEnabled(true);
+                                                        currentState = "friends";
+                                                        follow.setText("Unfriend");
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
             });
         } else {

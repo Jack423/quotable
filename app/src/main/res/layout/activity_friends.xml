@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.FriendsActivity">
 
-    <android.support.v7.widget.RecyclerView
+    <ListView
         android:id="@+id/friends_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

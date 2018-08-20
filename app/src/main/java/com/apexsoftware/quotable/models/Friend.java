@@ -1,19 +1,13 @@
 package com.apexsoftware.quotable.models;
-//Created by Jack Butler on 8/16/2018.
+//Created by Jack Butler on 8/20/2018.
 
 public class Friend {
     String name;
     String bio;
-    String profilePictureUrl;
-    String userId;
+    String profilePhotoUrl;
+    String id;
 
     public Friend() {
-    }
-
-    public Friend(String name, String bio, String profilePictureUrl) {
-        this.name = name;
-        this.bio = bio;
-        this.profilePictureUrl = profilePictureUrl;
     }
 
     public String getName() {
@@ -32,19 +26,19 @@ public class Friend {
         this.bio = bio;
     }
 
-    public String getProfilePictureUrl() {
-        return profilePictureUrl;
+    public String getProfilePhotoUrl() {
+        return profilePhotoUrl;
     }
 
-    public void setProfilePictureUrl(String profilePictureUrl) {
-        this.profilePictureUrl = profilePictureUrl;
+    public void setProfilePhotoUrl(String profilePhotoUrl) {
+        this.profilePhotoUrl = profilePhotoUrl;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getId() {
+        return id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 }

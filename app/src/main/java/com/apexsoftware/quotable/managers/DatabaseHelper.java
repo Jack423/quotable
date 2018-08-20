@@ -3,20 +3,25 @@ package com.apexsoftware.quotable.managers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.apexsoftware.quotable.Constants;
 import com.apexsoftware.quotable.R;
-import com.apexsoftware.quotable.adapter.holders.PostViewHolder;
+import com.apexsoftware.quotable.activities.UserProfileActivity;
 import com.apexsoftware.quotable.managers.listeners.OnDataChangedListener;
+import com.apexsoftware.quotable.managers.listeners.OnFriendChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
 import com.apexsoftware.quotable.managers.listeners.OnPostListChangedListener;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.PostListResult;
 import com.apexsoftware.quotable.models.User;
-import com.firebase.client.Firebase;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,7 +51,7 @@ public class DatabaseHelper {
     private Map<ValueEventListener, DatabaseReference> activeListeners = new HashMap<>();
 
     public static DatabaseHelper getInstance(Context context) {
-        if(instance == null) {
+        if (instance == null) {
             instance = new DatabaseHelper(context);
         }
 
@@ -70,7 +75,7 @@ public class DatabaseHelper {
 
     public ValueEventListener getProfile(String id, final OnObjectChangedListener<User> listener) {
         DatabaseReference databaseReference = getDatabaseReference().child("users").child(id);
-        com.google.firebase.database.ValueEventListener valueEventListener = databaseReference.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+        ValueEventListener valueEventListener = databaseReference.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -128,15 +133,28 @@ public class DatabaseHelper {
         reference.setValue(newPostsValue);
     }
 
-    public void addFollower(User user) {
-        try {
-            DatabaseReference reference = database.getReference();
-            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-            updateFollowerCount(user, user.getFollowers() + 1);
+    public void addFollower(final String friendId, String currentState) {
 
-            reference.child("users").child(firebaseUser.getUid()).child("friends").child(user.getId()).setValue(user);
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+        final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        final DatabaseReference reference = database.getReference().child("friend_requests");
+
+        if (currentState.equals("not_friends")) {
+            reference.child(firebaseUser.getUid()).child(friendId).child("request_type").setValue("sent").addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        reference.child(friendId).child(firebaseUser.getUid()).child("request_type").setValue("received").addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                //onFriendChangedListener.onFriendStateChanged("request_sent");
+                                Toast.makeText(context, "Request sent", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(context, "Failed sending request", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 

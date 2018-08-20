@@ -18,10 +18,6 @@ package com.apexsoftware.quotable;
 
 import com.apexsoftware.quotable.managers.DatabaseHelper;
 
-/**
- * Created by Kristina on 10/28/16.
- */
-
 public class ApplicationHelper {
 
     private static final String TAG = ApplicationHelper.class.getSimpleName();
