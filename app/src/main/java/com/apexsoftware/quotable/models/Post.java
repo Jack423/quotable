@@ -19,9 +19,9 @@ public class Post implements Serializable, LazyLoading{
     private String userId;
     private String text;
     private String userImagePath;
-    private Long createdAt;
+    private long createdAt;
+    private long likesCount;
     private String postId;
-    private long bookmarkCount;
     private ItemType itemType;
     private Calendar calendar = Calendar.getInstance();
 
@@ -39,6 +39,14 @@ public class Post implements Serializable, LazyLoading{
         itemType = ItemType.ITEM;
     }
 
+    public long getLikesCount() {
+        return likesCount;
+    }
+
+    public void setLikesCount(Long likesCount) {
+        this.likesCount = likesCount;
+    }
+
     public String getUser() {
         return user;
     }
@@ -47,7 +55,7 @@ public class Post implements Serializable, LazyLoading{
         return text;
     }
 
-    public Long getCreatedAt() {
+    public long getCreatedAt() {
         return createdAt;
     }
 
@@ -61,14 +69,6 @@ public class Post implements Serializable, LazyLoading{
 
     public String getUserImagePath() {
         return userImagePath;
-    }
-
-    public Long getBookmarkCount() {
-        return bookmarkCount;
-    }
-
-    public void setBookmarkCount(Long bookmarkCount) {
-        this.bookmarkCount = bookmarkCount;
     }
 
     public void setUserImagePath(String userImagePath) {
@@ -96,7 +96,6 @@ public class Post implements Serializable, LazyLoading{
     }
 
     public Map<String, Object> toMap() {
-
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("user", user);
@@ -105,6 +104,7 @@ public class Post implements Serializable, LazyLoading{
         result.put("postId", postId);
         result.put("userId", userId);
         result.put("userImagePath", userImagePath);
+        result.put("likesCount", likesCount);
 
         return result;
     }

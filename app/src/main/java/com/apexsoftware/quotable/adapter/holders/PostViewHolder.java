@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.activities.MainActivity;
+import com.apexsoftware.quotable.controllers.LikeController;
 import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.managers.UserManager;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
@@ -122,7 +123,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
         //userTextView.setText(user);
         quoteTextView.setText(quote);
-        bookmarkCounterTextView.setText(String.valueOf(post.getBookmarkCount()));
+        bookmarkCounterTextView.setText(String.valueOf(post.getLikesCount()));
 
         CharSequence date = FormatterUtil.getRelativeTimeSpanStringShort(context, post.getCreatedAt());
         dateTextView.setText(date);
@@ -168,7 +169,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public interface OnClickListener {
         //void onItemClick(int position, View view);
 
-        //void onLikeClick(LikeController likeController, int position);
+        void onLikeClick(LikeController likeController, int position);
 
         void onAuthorClick(int position, View view);
     }

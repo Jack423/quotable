@@ -4,8 +4,12 @@ package com.apexsoftware.quotable.managers;
 import android.content.Context;
 
 import com.apexsoftware.quotable.ApplicationHelper;
+import com.apexsoftware.quotable.enums.ProfileStatus;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.models.User;
+import com.apexsoftware.quotable.util.PreferencesUtil;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -55,5 +59,17 @@ public class UserManager extends FirebaseListenersManager{
     public void incrementFollowersCount(User user) {
         int val = user.getFollowers() + 1;
         databaseHelper.updateFollowerCount(user, val);
+    }
+
+    public ProfileStatus checkProfile() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
+            return ProfileStatus.NOT_AUTHORIZED;
+        } else if (!PreferencesUtil.isProfileCreated(context)){
+            return ProfileStatus.NO_PROFILE;
+        } else {
+            return ProfileStatus.PROFILE_CREATED;
+        }
     }
 }

@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,8 +24,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 public class LoginActivity2 extends BaseActivity {
+    private static final String TAG = LoginActivity2.class.getSimpleName();
+
     private Toolbar toolbar;
 
     private EditText email;
@@ -78,17 +82,23 @@ public class LoginActivity2 extends BaseActivity {
     }
 
     private void finishSignIn() {
-        String deviceToken = FirebaseInstanceId.getInstance().getId();
-
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("users");
-        reference.child(firebaseAuth.getUid()).child("device_token").setValue(deviceToken).addOnSuccessListener(new OnSuccessListener<Void>() {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override
-            public void onSuccess(Void aVoid) {
-                Intent loginIntent = new Intent(LoginActivity2.this, MainActivity.class);
-                loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                progressDialog.hide();
-                startActivity(loginIntent);
-                finish();
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "New notification token created: " + task.getResult().getToken());
+                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("users");
+                    reference.child(firebaseAuth.getUid()).child("device_token").setValue(task.getResult().getToken()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Intent loginIntent = new Intent(LoginActivity2.this, MainActivity.class);
+                            loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            progressDialog.hide();
+                            startActivity(loginIntent);
+                            finish();
+                        }
+                    });
+                }
             }
         });
     }

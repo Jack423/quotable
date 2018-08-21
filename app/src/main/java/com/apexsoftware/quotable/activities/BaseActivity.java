@@ -2,6 +2,7 @@ package com.apexsoftware.quotable.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
@@ -9,12 +10,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.apexsoftware.quotable.R;
+import com.apexsoftware.quotable.enums.ProfileStatus;
 
 public class BaseActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
 
     public void showProgress() {
         showProgress("Loading...");
+    }
+
+    public void doAuthorization(ProfileStatus status) {
+        if (status.equals(ProfileStatus.NOT_AUTHORIZED) || status.equals(ProfileStatus.NO_PROFILE)) {
+            startLoginActivity();
+        }
+    }
+
+    private void startLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity2.class);
+        startActivity(intent);
     }
 
     public void showProgress(String message) {
