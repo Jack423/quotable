@@ -5,12 +5,14 @@ import android.util.Log;
 
 import com.apexsoftware.quotable.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 //Created By: Jack Butler
 //Date: 7/22/2018
@@ -19,7 +21,7 @@ public class AuthHelper {
     public static final String TAG = "LoginHelper";
 
     private static FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private static FirebaseUser firebaseUser;
+    private static FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
     private static FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     public static void registerNewUser2(final String name, final String email, final String password) {
@@ -62,6 +64,9 @@ public class AuthHelper {
                 if(task.isSuccessful()) {
                     firebaseUser = firebaseAuth.getCurrentUser();
                     Log.d(TAG, "Logged in " + firebaseUser.getUid());
+                    String deviceToken = FirebaseInstanceId.getInstance().getId();
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(firebaseUser.getUid()).child("device_token");
+                    databaseReference.setValue(deviceToken);
                 } else {
                     Log.w(TAG, "Sign in failed: " + task.getException());
                 }

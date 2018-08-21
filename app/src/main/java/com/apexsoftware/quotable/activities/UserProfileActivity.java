@@ -56,6 +56,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class UserProfileActivity extends BaseActivity {
     private static final String TAG = UserProfileActivity.class.getSimpleName();
@@ -81,6 +82,8 @@ public class UserProfileActivity extends BaseActivity {
     private FriendManager friendManager;
     private ProgressBar progressBar;
     private GoogleApiClient mGoogleApiClient;
+
+    private DatabaseReference notificationReference;
 
     private boolean isCurrentUser = false;
 
@@ -125,6 +128,7 @@ public class UserProfileActivity extends BaseActivity {
         friendManager = FriendManager.getInstance(this);
 
         final DatabaseReference reference = firebaseDatabase.getReference().child(firebaseUser.getUid());
+        notificationReference = FirebaseDatabase.getInstance().getReference().child("notifications");
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -263,8 +267,19 @@ public class UserProfileActivity extends BaseActivity {
                                     reference.child(user.getId()).child(firebaseUser.getUid()).child("request_type").setValue("received").addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
+                                            HashMap<String, String> notificationData = new HashMap<>();
+                                            notificationData.put("from", userID);
+                                            notificationData.put("type", "request");
+
+                                            notificationReference.child(userID).push().setValue(notificationData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+
+                                                }
+                                            });
+
                                             currentState = "request_sent";
-                                            follow.setText(R.string.cancel_follow_request);
+                                            follow.setText("Cancel Request");
                                             Toast.makeText(context, "Request sent", Toast.LENGTH_SHORT).show();
                                         }
                                     });

@@ -18,16 +18,20 @@ import com.apexsoftware.quotable.models.User;
 import com.apexsoftware.quotable.util.AuthHelper;
 import com.apexsoftware.quotable.R;
 import com.fasterxml.jackson.databind.ser.Serializers;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessagingService;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = LoginActivity.class.getSimpleName();
+    private static final int SIGN_IN_EMAIL = 9001;
 
     EditText etEmail, etPass;
     TextView textRegister;
@@ -41,7 +45,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void onStart() {
         super.onStart();
-        //auth.addAuthStateListener(authStateListener);
+        auth.addAuthStateListener(authStateListener);
     }
 
     @Override
@@ -63,7 +67,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         progressDialog = new ProgressDialog(LoginActivity.this);
 
 
-        /*authStateListener = new FirebaseAuth.AuthStateListener() {
+        authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = firebaseAuth.getInstance().getCurrentUser();
@@ -74,20 +78,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     finish();
                 }
             }
-        };*/
+        };
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //auth.addAuthStateListener(authStateListener);
+        auth.addAuthStateListener(authStateListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        //auth.removeAuthStateListener(authStateListener);
+        auth.removeAuthStateListener(authStateListener);
     }
 
     @Override
@@ -146,10 +150,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * */
     private void finishLogin() {
         hideProgress();
-        Intent loginIntent = new Intent(this, MainActivity.class);
-        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        progressDialog.dismiss();
-        startActivity(loginIntent);
+        String deviceToken = FirebaseInstanceId.getInstance().getId();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("users");
+        reference.child(auth.getUid()).child("device_token").setValue(deviceToken).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
+                loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                progressDialog.dismiss();
+                startActivity(loginIntent);
+            }
+        });
     }
 
     private boolean formIsValid() {
@@ -158,5 +170,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         Snackbar.make(baseView, "All fields are required", Snackbar.LENGTH_SHORT).show();
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == SIGN_IN_EMAIL) {
+
+        }
     }
 }

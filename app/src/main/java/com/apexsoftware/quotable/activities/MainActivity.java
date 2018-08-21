@@ -12,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -43,11 +44,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
-
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static final int CREATE_POST_REQUEST = 1;
 
     //Adapter and recycler view are member variables
@@ -69,7 +73,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(firebaseUser == null) {
+            startActivity(new Intent(MainActivity.this, LoginActivity2.class));
+            finish();
+        } else {
+            firebaseUser = auth.getCurrentUser();
+        }
+
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
         setSupportActionBar(toolbar);
 
@@ -120,27 +133,48 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void initContentView() {
+        Log.d(TAG, "---Firebase User ID: " + auth.getUid());
+        if (firebaseUser != null && auth != null) {
+            userManager.getProfileValue(MainActivity.this, auth.getUid(), new OnObjectChangedListener<User>() {
+                @Override
+                public void onObjectChanged(User obj) {
+                    name.setText(obj.getName());
+                    bio.setText(obj.getBio());
 
-        userManager.getProfileValue(MainActivity.this, firebaseUser.getUid(), new OnObjectChangedListener<User>() {
-            @Override
-            public void onObjectChanged(User obj) {
-                name.setText(obj.getName());
-                bio.setText(obj.getBio());
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(obj.getPictureUrl());
+                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            //Glide.with(MainActivity.this).load(uri).into(profilePhoto);
+                            Picasso.get()
+                                    .load(uri)
+                                    .networkPolicy(NetworkPolicy.OFFLINE)
+                                    .placeholder(R.drawable.ic_stub)
+                                    .into(profilePhoto, new Callback() {
+                                        @Override
+                                        public void onSuccess() {
 
-                StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(obj.getPictureUrl());
-                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Glide.with(MainActivity.this).load(uri).into(profilePhoto);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Glide.with(MainActivity.this).load(R.drawable.ic_stub).into(profilePhoto);
-                    }
-                });
-            }
-        });
+                                        }
+
+                                        @Override
+                                        public void onError(Exception e) {
+                                            Picasso.get().load(R.drawable.ic_stub).into(profilePhoto);
+                                        }
+                                    });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Glide.with(MainActivity.this).load(R.drawable.ic_stub).into(profilePhoto);
+                        }
+                    });
+                }
+            });
+        } else {
+            Intent intent = new Intent(this, LoginActivity2.class);
+            startActivity(intent);
+            finish();
+        }
 
         if(recyclerView == null) {
             floatingActionButton = findViewById(R.id.fab);
@@ -220,7 +254,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sign_out) {
             auth.signOut();
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            Intent intent = new Intent(MainActivity.this, LoginActivity2.class);
             startActivity(intent);
             return true;
         }
