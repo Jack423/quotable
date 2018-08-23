@@ -16,6 +16,7 @@ import com.apexsoftware.quotable.managers.listeners.OnFriendChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
 import com.apexsoftware.quotable.managers.listeners.OnPostListChangedListener;
+import com.apexsoftware.quotable.models.Like;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.PostListResult;
 import com.apexsoftware.quotable.models.User;
@@ -23,6 +24,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -156,6 +160,135 @@ public class DatabaseHelper {
                 }
             });
         }
+    }
+
+    public ValueEventListener hasCurrentUserLike(String postId, String userId, final OnObjectExistListener<Like> onObjectExistListener) {
+        DatabaseReference databaseReference = database.getReference("post-likes").child(postId).child(userId);
+        ValueEventListener valueEventListener = databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                onObjectExistListener.onDataChanged(dataSnapshot.exists());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, "hasCurrentUserLike(), onCancelled", new Exception(databaseError.getMessage()));
+            }
+        });
+
+        activeListeners.put(valueEventListener, databaseReference);
+        return valueEventListener;
+    }
+
+    public void hasCurrentUserLikeSingleValue(String postId, String userId, final OnObjectExistListener<Like> onObjectExistListener) {
+        DatabaseReference databaseReference = database.getReference("post-likes").child(postId).child(userId);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                onObjectExistListener.onDataChanged(dataSnapshot.exists());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, "hasCurrentUserLikeSingleValue(), onCancelled", new Exception(databaseError.getMessage()));
+            }
+        });
+    }
+
+    public void onNewLikeAddedListener(ChildEventListener childEventListener) {
+        DatabaseReference mLikesReference = database.getReference().child("post-likes");
+        mLikesReference.addChildEventListener(childEventListener);
+    }
+
+    public void createOrUpdateLike(final String postId, final String postAuthorId) {
+        try {
+            String authorId = firebaseAuth.getCurrentUser().getUid();
+            DatabaseReference mLikesReference = database.getReference().child("post-likes").child(postId).child(authorId);
+            mLikesReference.push();
+            String id = mLikesReference.push().getKey();
+            Like like = new Like(authorId);
+            like.setId(id);
+
+            mLikesReference.child(id).setValue(like, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    if (databaseError == null) {
+                        DatabaseReference postRef = database.getReference("posts/" + postId + "/likesCount");
+                        incrementLikesCount(postRef);
+
+                        DatabaseReference profileRef = database.getReference("profiles/" + postAuthorId + "/likesCount");
+                        incrementLikesCount(profileRef);
+                    } else {
+                        Log.d(TAG, databaseError.getMessage(), databaseError.toException());
+                    }
+                }
+
+                private void incrementLikesCount(DatabaseReference postRef) {
+                    postRef.runTransaction(new Transaction.Handler() {
+                        @Override
+                        public Transaction.Result doTransaction(MutableData mutableData) {
+                            Integer currentValue = mutableData.getValue(Integer.class);
+                            if (currentValue == null) {
+                                mutableData.setValue(1);
+                            } else {
+                                mutableData.setValue(currentValue + 1);
+                            }
+
+                            return Transaction.success(mutableData);
+                        }
+
+                        @Override
+                        public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                            Log.d(TAG, "Updating likes count transaction is completed.");
+                        }
+                    });
+                }
+
+            });
+        } catch (Exception e) {
+            Log.d(TAG, "createOrUpdateLike()", e);
+        }
+
+    }
+
+    public void removeLike(final String postId, final String postAuthorId) {
+        String authorId = firebaseAuth.getCurrentUser().getUid();
+        DatabaseReference mLikesReference = database.getReference().child("post-likes").child(postId).child(authorId);
+        mLikesReference.removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    DatabaseReference postRef = database.getReference("posts/" + postId + "/likesCount");
+                    decrementLikesCount(postRef);
+
+                    DatabaseReference profileRef = database.getReference("profiles/" + postAuthorId + "/likesCount");
+                    decrementLikesCount(profileRef);
+                } else {
+                    Log.d(TAG, databaseError.getMessage(), databaseError.toException());
+                }
+            }
+
+            private void decrementLikesCount(DatabaseReference postRef) {
+                postRef.runTransaction(new Transaction.Handler() {
+                    @Override
+                    public Transaction.Result doTransaction(MutableData mutableData) {
+                        Long currentValue = mutableData.getValue(Long.class);
+                        if (currentValue == null) {
+                            mutableData.setValue(0);
+                        } else {
+                            mutableData.setValue(currentValue - 1);
+                        }
+
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                        Log.d(TAG, "Updating likes count transaction is completed.");
+                    }
+                });
+            }
+        });
     }
 
     public void createOrUpdatePost(Post post) {

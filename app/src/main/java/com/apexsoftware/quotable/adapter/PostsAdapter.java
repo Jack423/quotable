@@ -12,6 +12,7 @@ import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.activities.MainActivity;
 import com.apexsoftware.quotable.adapter.holders.LoadViewHolder;
 import com.apexsoftware.quotable.adapter.holders.PostViewHolder;
+import com.apexsoftware.quotable.controllers.LikeController;
 import com.apexsoftware.quotable.enums.ItemType;
 import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.managers.listeners.OnPostListChangedListener;
@@ -91,13 +92,13 @@ public class PostsAdapter extends BasePostAdapter {
                     selectedPostPosition = position;
                     callback.onItemClick(getItemByPosition(position), view);
                 }
-            }
+            }*/
 
             @Override
             public void onLikeClick(LikeController likeController, int position) {
                 Post post = getItemByPosition(position);
                 likeController.handleLikeClickAction(mainActivity, post);
-            }*/
+            }
 
             @Override
             public void onAuthorClick(int position, View view) {

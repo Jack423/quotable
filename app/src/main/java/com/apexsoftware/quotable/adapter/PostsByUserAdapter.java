@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.activities.BaseActivity;
 import com.apexsoftware.quotable.adapter.holders.PostViewHolder;
+import com.apexsoftware.quotable.controllers.LikeController;
 import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.managers.listeners.OnDataChangedListener;
 import com.apexsoftware.quotable.models.Post;
@@ -45,13 +46,13 @@ public class PostsByUserAdapter extends BasePostAdapter {
                     selectedPostPosition = position;
                     callBack.onItemClick(getItemByPosition(position), view);
                 }
-            }
+            }*/
 
             @Override
             public void onLikeClick(LikeController likeController, int position) {
                 Post post = getItemByPosition(position);
                 likeController.handleLikeClickAction(activity, post);
-            }*/
+            }
 
             @Override
             public void onAuthorClick(int position, View view) {

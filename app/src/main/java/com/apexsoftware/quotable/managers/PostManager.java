@@ -11,9 +11,11 @@ import com.apexsoftware.quotable.managers.listeners.OnDataChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
 import com.apexsoftware.quotable.managers.listeners.OnPostCreatedListener;
 import com.apexsoftware.quotable.managers.listeners.OnPostListChangedListener;
+import com.apexsoftware.quotable.models.Like;
 import com.apexsoftware.quotable.models.Post;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.UploadTask;
 
 public class PostManager extends FirebaseListenersManager{
@@ -61,5 +63,16 @@ public class PostManager extends FirebaseListenersManager{
     public void isPostExistSingleValue(String postId, final OnObjectExistListener<Post> onObjectExistListener) {
         DatabaseHelper databaseHelper = ApplicationHelper.getDatabaseHelper();
         databaseHelper.isPostExistSingleValue(postId, onObjectExistListener);
+    }
+
+    public void hasCurrentUserLike(Context activityContext, String postId, String userId, final OnObjectExistListener<Like> onObjectExistListener) {
+        DatabaseHelper databaseHelper = ApplicationHelper.getDatabaseHelper();
+        ValueEventListener valueEventListener = databaseHelper.hasCurrentUserLike(postId, userId, onObjectExistListener);
+        addListenerToMap(activityContext, valueEventListener);
+    }
+
+    public void hasCurrentUserLikeSingleValue(String postId, String userId, final OnObjectExistListener<Like> onObjectExistListener) {
+        DatabaseHelper databaseHelper = ApplicationHelper.getDatabaseHelper();
+        databaseHelper.hasCurrentUserLikeSingleValue(postId, userId, onObjectExistListener);
     }
 }

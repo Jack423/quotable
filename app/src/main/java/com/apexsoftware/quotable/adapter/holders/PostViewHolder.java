@@ -18,12 +18,16 @@ import com.apexsoftware.quotable.controllers.LikeController;
 import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.managers.UserManager;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
+import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
+import com.apexsoftware.quotable.models.Like;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.User;
 import com.apexsoftware.quotable.util.FormatterUtil;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,10 +46,12 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private TextView bookmarkCounterTextView;
     private TextView dateTextView;
     private ImageView authorImageView;
-    private ImageView bookmarkImageView;
+    private ImageView likesImageView;
 
     private PostManager postManager;
     private UserManager userManager;
+
+    private LikeController likeController;
 
     public PostViewHolder(View view, final OnClickListener onClickListener) {
         this(view, onClickListener, true);
@@ -56,7 +62,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         this.context = view.getContext();
 
         bookmarkCounterTextView = (TextView) view.findViewById(R.id.tv_bookmark_count);
-        bookmarkImageView = (ImageView) view.findViewById(R.id.iv_bookmark);
+        likesImageView = (ImageView) view.findViewById(R.id.iv_bookmark);
         dateTextView = (TextView) view.findViewById(R.id.tv_date);
         userTextView = (TextView) view.findViewById(R.id.tv_user);
         quoteTextView = (TextView) view.findViewById(R.id.tv_quote);
@@ -78,7 +84,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             }
         });*/
 
-        /*bookmarkImageView.setOnClickListener(new View.OnClickListener() {
+        likesImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int position = getAdapterPosition();
@@ -86,7 +92,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     onClickListener.onLikeClick(likeController, position);
                 }
             }
-        });*/
+        });
 
         authorImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,10 +149,10 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
-        /*FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
-            postManager.hasCurrentUserLikeSingleValue(post.getId(), firebaseUser.getUid(), createOnLikeObjectExistListener());
-        }*/
+            postManager.hasCurrentUserLikeSingleValue(post.getPostId(), firebaseUser.getUid(), createOnLikeObjectExistListener());
+        }
         if(post.getUserId() != null) {
             userManager.getProfileSingleValue(post.getUserId(), createProfileChangeListener(authorImageView));
         }
@@ -162,6 +168,15 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                             .load(obj.getPictureUrl())
                             .into(authorImageView);
                 }
+            }
+        };
+    }
+
+    private OnObjectExistListener<Like> createOnLikeObjectExistListener() {
+        return new OnObjectExistListener<Like>() {
+            @Override
+            public void onDataChanged(boolean exist) {
+                likeController.initLike(exist);
             }
         };
     }
