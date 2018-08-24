@@ -57,7 +57,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         baseView = (ViewGroup) ((ViewGroup) this.findViewById(android.R.id.content)).getChildAt(0);
 
         btnLogin = findViewById(R.id.btn_login);
-        textRegister = findViewById(R.id.textview_no_account);
+        textRegister = findViewById(R.id.tv_create_account);
         etEmail = findViewById(R.id.et_email);
         etPass = findViewById(R.id.et_password);
         //progressBar = findViewById(R.id.progressBar);
@@ -101,7 +101,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 login();
                 break;
 
-            case R.id.textview_no_account:
+            case R.id.tv_create_account:
                 navigateToRegister();
                 break;
         }

@@ -74,7 +74,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(firebaseUser == null) {
+        if(firebaseUser == null || auth == null) {
             startActivity(new Intent(MainActivity.this, LoginActivity2.class));
             finish();
         } else {
@@ -308,7 +308,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (id == R.id.nav_feed) {
             //Main Feed
         } else if (id == R.id.nav_friends) {
-            startActivity(new Intent(this, FriendsActivity.class));
+            //startActivity(new Intent(this, FriendsActivity.class));
         } else if (id == R.id.nav_bookmarks) {
             //TODO Implement bookmarks viewer
         } else if (id == R.id.nav_settings) {

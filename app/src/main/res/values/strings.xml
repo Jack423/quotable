@@ -116,4 +116,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="cancel_follow_request">Cancel Request</string>
     <string name="message_post_was_removed">Sorry, this post was removed.</string>
+    <string name="error_fail_create_profile">Failed to create user</string>
 </resources>

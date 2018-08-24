@@ -43,7 +43,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private TextView userTextView;
     private TextView quoteTextView;
     private TextView commentsCountTextView;
-    private TextView bookmarkCounterTextView;
+    private TextView likesCounterTextView;
     private TextView dateTextView;
     private ImageView authorImageView;
     private ImageView likesImageView;
@@ -61,7 +61,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         super(view);
         this.context = view.getContext();
 
-        bookmarkCounterTextView = (TextView) view.findViewById(R.id.tv_bookmark_count);
+        likesCounterTextView = (TextView) view.findViewById(R.id.tv_bookmark_count);
         likesImageView = (ImageView) view.findViewById(R.id.iv_bookmark);
         dateTextView = (TextView) view.findViewById(R.id.tv_date);
         userTextView = (TextView) view.findViewById(R.id.tv_user);
@@ -109,6 +109,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         final String displayName;
         String quote = post.getText();
 
+        likeController = new LikeController(context, post, likesCounterTextView, likesImageView, true);
+
         DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("users").child(post.getUserId());
         reference2.addValueEventListener(new ValueEventListener() {
             @Override
@@ -129,7 +131,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
         //userTextView.setText(user);
         quoteTextView.setText(quote);
-        bookmarkCounterTextView.setText(String.valueOf(post.getLikesCount()));
+        likesCounterTextView.setText(String.valueOf(post.getLikesCount()));
 
         CharSequence date = FormatterUtil.getRelativeTimeSpanStringShort(context, post.getCreatedAt());
         dateTextView.setText(date);

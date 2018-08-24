@@ -1,8 +1,11 @@
 package com.apexsoftware.quotable.util;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.apexsoftware.quotable.activities.CreateAccountActivity;
+import com.apexsoftware.quotable.managers.DatabaseHelper;
 import com.apexsoftware.quotable.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,12 +27,13 @@ public class AuthHelper {
     private static FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
     private static FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-    public static void registerNewUser2(final String name, final String email, final String password) {
+    public static void registerNewUser(final String name, final String email, final String password) {
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
                     Log.d(TAG, "createUserWithEmail: Success");
+                    login(email, password);
                     firebaseUser = firebaseAuth.getCurrentUser();
 
                     User user = new User();
@@ -47,8 +51,6 @@ public class AuthHelper {
                     reference.child(firebaseUser.getUid()).setValue(user);
 
                     Log.d(TAG, "User Created with id" + firebaseUser.getUid());
-
-                    login(email, password);
 
                 } else {
                     Log.w(TAG, "createUserWithEmail: failure", task.getException());

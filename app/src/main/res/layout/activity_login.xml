@@ -62,7 +62,7 @@
             android:textColor="@color/icons" />
 
         <TextView
-            android:id="@+id/textview_no_account"
+            android:id="@+id/tv_create_account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"

@@ -44,6 +44,8 @@
         </activity>
         <activity android:name=".activities.FriendsActivity"></activity>
         <activity android:name=".activities.LoginActivity2" />
+        <activity android:name=".activities.SettingsActivity" />
+        <activity android:name=".activities.CreateAccountActivity2" />
     </application>
 
 </manifest>

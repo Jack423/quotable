@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.apexsoftware.quotable.ApplicationHelper;
 import com.apexsoftware.quotable.Constants;
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.activities.UserProfileActivity;
@@ -16,6 +17,7 @@ import com.apexsoftware.quotable.managers.listeners.OnFriendChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
 import com.apexsoftware.quotable.managers.listeners.OnPostListChangedListener;
+import com.apexsoftware.quotable.managers.listeners.OnProfileCreatedListener;
 import com.apexsoftware.quotable.models.Like;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.PostListResult;
@@ -34,6 +36,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
@@ -51,7 +54,7 @@ public class DatabaseHelper {
     private Context context;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    FirebaseAuth firebaseAuth;
     private Map<ValueEventListener, DatabaseReference> activeListeners = new HashMap<>();
 
     public static DatabaseHelper getInstance(Context context) {
@@ -69,12 +72,26 @@ public class DatabaseHelper {
 
     public void init() {
         database = FirebaseDatabase.getInstance();
-        //database.setPersistenceEnabled(true);
+        database.setPersistenceEnabled(true);
         storage = FirebaseStorage.getInstance();
     }
 
     public DatabaseReference getDatabaseReference() {
         return database.getReference();
+    }
+
+    public void createOrUpdateUser(final User user, final OnProfileCreatedListener onProfileCreatedListener) {
+        DatabaseReference databaseReference = ApplicationHelper.getDatabaseHelper().getDatabaseReference();
+
+        Task<Void> task = databaseReference.child("users").child(user.getId()).setValue(user);
+        task.addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                onProfileCreatedListener.onProfileCreated(task.isSuccessful());
+                addRegistrationToken(FirebaseInstanceId.getInstance().getId(), user.getId());
+                Log.d(TAG, "createOrUpdateProfile, success: " + task.isSuccessful());
+            }
+        });
     }
 
     public ValueEventListener getProfile(String id, final OnObjectChangedListener<User> listener) {
@@ -287,6 +304,29 @@ public class DatabaseHelper {
                         Log.d(TAG, "Updating likes count transaction is completed.");
                     }
                 });
+            }
+        });
+    }
+
+    public void addRegistrationToken(String token, String userId) {
+        DatabaseReference databaseReference = ApplicationHelper.getDatabaseHelper().getDatabaseReference();
+        Task<Void> task = databaseReference.child("users").child(userId).child("notificationTokens").child(token).setValue(true);
+        task.addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d(TAG, "addRegistrationToken, success: " + task.isSuccessful());
+            }
+        });
+    }
+
+    public void removeRegistrationToken(String token, String userId) {
+        DatabaseReference databaseReference = ApplicationHelper.getDatabaseHelper().getDatabaseReference();
+        DatabaseReference tokenRef = databaseReference.child("profiles").child(userId).child("notificationTokens").child(token);
+        Task<Void> task = tokenRef.removeValue();
+        task.addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d(TAG, "removeRegistrationToken, success: " + task.isSuccessful());
             }
         });
     }
