@@ -72,7 +72,7 @@ public class DatabaseHelper {
 
     public void init() {
         database = FirebaseDatabase.getInstance();
-        database.setPersistenceEnabled(true);
+        //database.setPersistenceEnabled(true);
         storage = FirebaseStorage.getInstance();
     }
 
@@ -88,7 +88,7 @@ public class DatabaseHelper {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 onProfileCreatedListener.onProfileCreated(task.isSuccessful());
-                addRegistrationToken(FirebaseInstanceId.getInstance().getId(), user.getId());
+                addRegistrationToken(FirebaseInstanceId.getInstance().getInstanceId().toString(), user.getId());
                 Log.d(TAG, "createOrUpdateProfile, success: " + task.isSuccessful());
             }
         });
@@ -381,7 +381,7 @@ public class DatabaseHelper {
         });*/
 
         postsQuery.keepSynced(true);
-        postsQuery.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+        postsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> objectMap = (Map<String, Object>) dataSnapshot.getValue();

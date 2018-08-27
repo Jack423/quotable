@@ -11,7 +11,7 @@
         android:layout_height="wrap_content">
 
         <com.apexsoftware.quotable.util.CircularImageView
-            android:id="@+id/profile_picture"
+            android:id="@+id/iv_profile_photo"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="8dp"
@@ -33,7 +33,7 @@
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/profile_picture"
+            app:layout_constraintStart_toEndOf="@+id/iv_profile_photo"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -45,7 +45,7 @@
                 android:textAppearance="@android:style/TextAppearance.Material.Widget.TextView" />
 
             <TextView
-                android:id="@+id/tv_bio"
+                android:id="@+id/tv_friend_since"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

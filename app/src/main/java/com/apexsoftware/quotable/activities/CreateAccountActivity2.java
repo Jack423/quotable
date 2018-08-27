@@ -1,6 +1,7 @@
 package com.apexsoftware.quotable.activities;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -84,6 +85,7 @@ public class CreateAccountActivity2 extends AppCompatActivity implements OnProfi
                         firebaseAuth.signInWithEmailAndPassword(emailText, passwordText);
                         firebaseUser = firebaseAuth.getCurrentUser();
                         buildProfile();
+                        finishLogin();
                     }
                 }
             });
@@ -139,6 +141,12 @@ public class CreateAccountActivity2 extends AppCompatActivity implements OnProfi
 
         /*DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users");
         databaseReference.child(firebaseUser.getUid()).setValue(user);*/
+    }
+
+    private void finishLogin() {
+        progressDialog.dismiss();
+        startActivity(new Intent(CreateAccountActivity2.this, MainActivity.class));
+        finish();
     }
 
     @Override

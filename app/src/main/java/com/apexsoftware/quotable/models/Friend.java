@@ -3,11 +3,18 @@ package com.apexsoftware.quotable.models;
 
 public class Friend {
     String name;
-    String bio;
     String profilePhotoUrl;
+    String friendSince;
     String id;
 
     public Friend() {
+    }
+
+    public Friend(String name, String profilePhotoUrl, String friendSince, String id) {
+        this.name = name;
+        this.profilePhotoUrl = profilePhotoUrl;
+        this.friendSince = friendSince;
+        this.id = id;
     }
 
     public String getName() {
@@ -18,20 +25,20 @@ public class Friend {
         this.name = name;
     }
 
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
     public String getProfilePhotoUrl() {
         return profilePhotoUrl;
     }
 
     public void setProfilePhotoUrl(String profilePhotoUrl) {
         this.profilePhotoUrl = profilePhotoUrl;
+    }
+
+    public String getFriendSince() {
+        return friendSince;
+    }
+
+    public void setFriendSince(String bio) {
+        this.friendSince = bio;
     }
 
     public String getId() {

@@ -90,7 +90,7 @@ public class LoginActivity2 extends BaseActivity {
                     checkIsProfileExist(firebaseAuth.getCurrentUser().getUid());
                     finishSignIn();
                 } else {
-                    progressDialog.hide();
+                    progressDialog.dismiss();
                     Toast.makeText(LoginActivity2.this, "Cannot sign in, please check the form and try again", Toast.LENGTH_LONG).show();
                 }
             }
@@ -108,7 +108,7 @@ public class LoginActivity2 extends BaseActivity {
                     DatabaseHelper.getInstance(LoginActivity2.this.getApplicationContext())
                             .addRegistrationToken(FirebaseInstanceId.getInstance().getToken(), userId);
                 }
-                hideProgress();
+                progressDialog.dismiss();
                 finish();
             }
         });
@@ -126,7 +126,7 @@ public class LoginActivity2 extends BaseActivity {
                         public void onSuccess(Void aVoid) {
                             Intent loginIntent = new Intent(LoginActivity2.this, MainActivity.class);
                             loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            progressDialog.hide();
+                            progressDialog.dismiss();
                             startActivity(loginIntent);
                             finish();
                         }
