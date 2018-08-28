@@ -117,4 +117,8 @@
     <string name="cancel_follow_request">Cancel Request</string>
     <string name="message_post_was_removed">Sorry, this post was removed.</string>
     <string name="error_fail_create_profile">Failed to create user</string>
+    <string name="title_activity_friends">FriendsActivity</string>
+    <string name="friends_tab_1">Friends</string>
+    <string name="friends_tab_2">Requests</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

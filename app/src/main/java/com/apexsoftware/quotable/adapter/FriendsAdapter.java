@@ -36,7 +36,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     private static final String TAG = FriendsAdapter.class.getSimpleName();
 
     private List<Friend> friendsList;
-    private FriendsActivity friendsActivity;
 
     public class FriendsViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
@@ -47,7 +46,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
         public FriendsViewHolder(View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.tv_name);
-            friendSince = itemView.findViewById(R.id.tv_bio);
+            friendSince = itemView.findViewById(R.id.tv_friends_since);
             profilePhoto =itemView.findViewById(R.id.iv_profile_photo);
 
             this.context = itemView.getContext();
@@ -56,7 +55,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
 
     public FriendsAdapter(List<Friend> friendsList) {
         this.friendsList = friendsList;
-        friendsActivity = new FriendsActivity();
     }
 
     @NonNull
@@ -67,7 +65,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     }
 
     @Override
-    public void onBindViewHolder(final FriendsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final FriendsViewHolder holder, int position) {
         Friend friend = friendsList.get(position);
         holder.nameTextView.setText(friend.getName());
         holder.friendSince.setText(friend.getFriendSince());

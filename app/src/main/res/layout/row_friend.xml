@@ -8,16 +8,16 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="72dp">
 
         <com.apexsoftware.quotable.util.CircularImageView
             android:id="@+id/iv_profile_photo"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_margin="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            app:border="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -42,10 +42,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="TextView"
-                android:textAppearance="@android:style/TextAppearance.Material.Widget.TextView" />
+                android:textAppearance="@android:style/TextAppearance.Material.Widget.TextView"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_friend_since"
+                android:id="@+id/tv_friends_since"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

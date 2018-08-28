@@ -1,21 +1,17 @@
-package com.apexsoftware.quotable.activities;
+package com.apexsoftware.quotable;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
+import android.view.ViewGroup;
 
-import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.adapter.FriendsAdapter;
 import com.apexsoftware.quotable.models.Friend;
 import com.apexsoftware.quotable.models.User;
@@ -31,8 +27,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FriendsActivity extends AppCompatActivity {
-    public static final String TAG = FriendsActivity.class.getSimpleName();
+public class FriendsFragment extends Fragment {
+    public static final String TAG = FriendsFragment.class.getSimpleName();
 
     private List<Friend> friendList = new ArrayList<>();
 
@@ -40,25 +36,33 @@ public class FriendsActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private DatabaseReference friendReference;
 
+    public FriendsFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_friends);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_friends, container, false);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         friendReference = FirebaseDatabase.getInstance().getReference();
 
-        RecyclerView recyclerView = findViewById(R.id.friends_list);
+        RecyclerView recyclerView = view.findViewById(R.id.friends_list);
 
         FriendsAdapter friendsAdapter = new FriendsAdapter(friendList);
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(friendsAdapter);
 
         initView();
+
+        // Inflate the layout for this fragment
+        return view;
     }
 
     private void initView() {
@@ -101,16 +105,9 @@ public class FriendsActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                View view = findViewById(android.R.id.content);
-                Snackbar.make(view, "Oops, something went wrong", Snackbar.LENGTH_LONG);
+
             }
         });
-
-        /*Friend newFriend = new Friend(
-                "Roury",
-                "gs://quotable-c70b9.appspot.com/profile_pictures/493873a2-a182-11e8-98d0-529269fb1459.png",
-                "Aug 24, 2018 8:20:33 PM",
-                "G12ds4owNDNeulmnMNV2skwqzt93");
-        friendList.add(newFriend);*/
     }
+
 }

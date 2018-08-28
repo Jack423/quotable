@@ -7,6 +7,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apexsoftware.quotable.ApplicationHelper;
+import com.apexsoftware.quotable.FriendsFragment;
 import com.apexsoftware.quotable.adapter.PostsAdapter;
 import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.managers.UserManager;
@@ -56,13 +60,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     //Adapter and recycler view are member variables
     private PostsAdapter postsAdapter;
-    private PostManager postManager;
     private UserManager userManager;
     private RecyclerView recyclerView;
     private FloatingActionButton floatingActionButton;
     private TextView name;
     private TextView bio;
     private ImageView profilePhoto;
+    private FragmentManager fragmentManager;
+
+    Fragment fragment = null;
 
     //Firebase references
     FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -96,9 +102,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
 
-        postManager = PostManager.getInstance(this);
         userManager = UserManager.getInstance(this);
         ApplicationHelper.initDatabaseHelper(getApplication());
+
+        Class fragmentClass = null;
+        fragmentClass = FriendsFragment.class;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        fragmentManager = getSupportFragmentManager();
 
         name = headerView.findViewById(R.id.tv_name);
         bio = headerView.findViewById(R.id.tv_bio);
@@ -145,8 +159,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            //Glide.with(MainActivity.this).load(uri).into(profilePhoto);
-                            Picasso.get()
+                            Glide.with(MainActivity.this).load(uri).into(profilePhoto);
+                            /*Picasso.get()
                                     .load(uri)
                                     .networkPolicy(NetworkPolicy.OFFLINE)
                                     .placeholder(R.drawable.ic_stub)
@@ -160,7 +174,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                         public void onError(Exception e) {
                                             Picasso.get().load(R.drawable.ic_stub).into(profilePhoto);
                                         }
-                                    });
+                                    });*/
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -309,6 +323,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             //Main Feed
         } else if (id == R.id.nav_friends) {
             startActivity(new Intent(this, FriendsActivity.class));
+            //fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         } else if (id == R.id.nav_bookmarks) {
             //TODO Implement bookmarks viewer
         } else if (id == R.id.nav_settings) {
