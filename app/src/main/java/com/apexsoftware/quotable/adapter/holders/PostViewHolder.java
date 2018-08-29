@@ -2,10 +2,15 @@ package com.apexsoftware.quotable.adapter.holders;
 // Created by Jack Butler on 7/30/2018.
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -47,6 +52,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private TextView dateTextView;
     private ImageView authorImageView;
     private ImageView likesImageView;
+    private Toolbar postToolbar;
 
     private PostManager postManager;
     private UserManager userManager;
@@ -61,14 +67,17 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         super(view);
         this.context = view.getContext();
 
-        likesCounterTextView = (TextView) view.findViewById(R.id.tv_bookmark_count);
+        likesCounterTextView = (TextView) view.findViewById(R.id.tv_like_count);
         likesImageView = (ImageView) view.findViewById(R.id.iv_like);
         dateTextView = (TextView) view.findViewById(R.id.tv_date);
         userTextView = (TextView) view.findViewById(R.id.tv_user);
         quoteTextView = (TextView) view.findViewById(R.id.tv_quote);
         authorImageView = (ImageView) view.findViewById(R.id.iv_profile);
+        postToolbar = view.findViewById(R.id.post_toolbar);
 
         authorImageView.setVisibility(isAuthorNeeded ? View.VISIBLE : View.GONE);
+
+        postToolbar.inflateMenu(R.menu.menu_post);
 
         //profileManager = ProfileManager.getInstance(context.getApplicationContext());
         postManager = PostManager.getInstance(context.getApplicationContext());
@@ -105,7 +114,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void bindData(Post post) {
+    public void bindData(final Post post) {
         final String displayName;
         String quote = post.getText();
 
@@ -119,18 +128,21 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 User user = dataSnapshot.getValue(User.class);
                 if (user != null) {
                     userTextView.setText(user.getName());
+                    //postToolbar.setTitle(user.getName());
+                    //postToolbar.setTitleTextColor(Color.BLACK);
                     FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
                     StorageReference reference = firebaseStorage.getReferenceFromUrl(user.getPictureUrl());
 
                     reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
+                            //postToolbar.setLogo(R.drawable.ic_stub);
                             Glide.with(context).load(uri).into(authorImageView);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Glide.with(context).load(R.drawable.ic_stub).into(authorImageView);
+                            //Glide.with(context).load(R.drawable.ic_stub).into(authorImageView);
                         }
                     });
                 } else {
@@ -149,6 +161,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
         CharSequence date = FormatterUtil.getRelativeTimeSpanStringShort(context, post.getCreatedAt());
         dateTextView.setText(date);
+        //postToolbar.setSubtitle(date);
+        //postToolbar.setSubtitleTextColor(Color.BLACK);
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {

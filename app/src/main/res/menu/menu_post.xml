@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Edit post" />
+    <item android:title="Remove post" />
+    <item android:title="Report post" />
+</menu>

@@ -1,6 +1,7 @@
 package com.apexsoftware.quotable.activities;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +26,8 @@ public class CreatePostActivity extends BaseActivity implements OnPostCreatedLis
     public static final String TEXT = "text";
     public static final int CREATE_NEW_POST_REQUEST = 11;
 
+    Toolbar toolbar;
+
     private boolean creatingPost = true;
     private UserManager userManager;
     private String userID;
@@ -41,6 +44,9 @@ public class CreatePostActivity extends BaseActivity implements OnPostCreatedLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
+
+        getSupportActionBar().setTitle("Create Quote");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mText = (EditText) findViewById(R.id.et_post);
         userID = firebaseUser.getUid();
@@ -107,6 +113,8 @@ public class CreatePostActivity extends BaseActivity implements OnPostCreatedLis
         //noinspection SimplifiableIfStatement
         if (id == R.id.post) {
             sendPost(user, mText.getText().toString());
+        } else if (id == android.R.id.home) {
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
@@ -9,7 +9,10 @@
         <item name="android:textColorSecondary">@color/secondary_text</item>
         <item name="android:textColorPrimary">@color/primary_text</item>
         <item name="android:colorForeground">@android:color/black</item>
-        <item name="cardViewStyle">@style/AppTheme</item>
+        <item name="actionMenuTextColor">@android:color/white</item>
+        <item name="actionOverflowButtonStyle">@style/ActionButtonOverflowStyle</item>
+        <item name="drawerArrowStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
+        <item name="cardViewStyle">@style/Theme.AppCompat.Light</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -18,7 +21,7 @@
         <item name="android:statusBarColor">@color/primary_dark</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 

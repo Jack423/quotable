@@ -1,6 +1,7 @@
 package com.apexsoftware.quotable.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class PostsByUserAdapter extends BasePostAdapter {
 
     private String userId;
     private CallBack callBack;
+    private Toolbar toolbar;
 
     public PostsByUserAdapter(final BaseActivity activity, String userId) {
         super(activity);
@@ -34,6 +36,7 @@ public class PostsByUserAdapter extends BasePostAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.row_post, parent, false);
+        toolbar = view.findViewById(R.id.post_toolbar);
 
         return new PostViewHolder(view, createOnClickListener(), false);
     }
