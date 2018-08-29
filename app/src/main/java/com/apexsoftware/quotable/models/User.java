@@ -10,6 +10,7 @@ public class User {
     String pictureUrl;
     String bio;
     int postCount;
+    int likesCount;
     int followers;
     int following;
 
@@ -68,6 +69,14 @@ public class User {
 
     public  void setPostCount(int postCount) {
         this.postCount = postCount;
+    }
+
+    public int getLikesCount() {
+        return likesCount;
+    }
+
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
     }
 
     public int getFollowers() {

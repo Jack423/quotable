@@ -180,7 +180,7 @@ public class DatabaseHelper {
     }
 
     public ValueEventListener hasCurrentUserLike(String postId, String userId, final OnObjectExistListener<Like> onObjectExistListener) {
-        DatabaseReference databaseReference = database.getReference("post-likes").child(postId).child(userId);
+        DatabaseReference databaseReference = database.getReference("quote-likes").child(postId).child(userId);
         ValueEventListener valueEventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -198,7 +198,7 @@ public class DatabaseHelper {
     }
 
     public void hasCurrentUserLikeSingleValue(String postId, String userId, final OnObjectExistListener<Like> onObjectExistListener) {
-        DatabaseReference databaseReference = database.getReference("post-likes").child(postId).child(userId);
+        DatabaseReference databaseReference = database.getReference("quote-likes").child(postId).child(userId);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -213,14 +213,14 @@ public class DatabaseHelper {
     }
 
     public void onNewLikeAddedListener(ChildEventListener childEventListener) {
-        DatabaseReference mLikesReference = database.getReference().child("post-likes");
+        DatabaseReference mLikesReference = database.getReference().child("quote-likes");
         mLikesReference.addChildEventListener(childEventListener);
     }
 
     public void createOrUpdateLike(final String postId, final String postAuthorId) {
         try {
             String authorId = firebaseAuth.getCurrentUser().getUid();
-            DatabaseReference mLikesReference = database.getReference().child("post-likes").child(postId).child(authorId);
+            DatabaseReference mLikesReference = database.getReference().child("quote-likes").child(postId).child(authorId);
             mLikesReference.push();
             String id = mLikesReference.push().getKey();
             Like like = new Like(authorId);
@@ -230,10 +230,10 @@ public class DatabaseHelper {
                 @Override
                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                     if (databaseError == null) {
-                        DatabaseReference postRef = database.getReference("posts/" + postId + "/likesCount");
+                        DatabaseReference postRef = database.getReference("quotes/" + postId + "/likesCount");
                         incrementLikesCount(postRef);
 
-                        DatabaseReference profileRef = database.getReference("profiles/" + postAuthorId + "/likesCount");
+                        DatabaseReference profileRef = database.getReference("users/" + postAuthorId + "/likesCount");
                         incrementLikesCount(profileRef);
                     } else {
                         Log.d(TAG, databaseError.getMessage(), databaseError.toException());
@@ -270,15 +270,15 @@ public class DatabaseHelper {
 
     public void removeLike(final String postId, final String postAuthorId) {
         String authorId = firebaseAuth.getCurrentUser().getUid();
-        DatabaseReference mLikesReference = database.getReference().child("post-likes").child(postId).child(authorId);
+        DatabaseReference mLikesReference = database.getReference().child("quote-likes").child(postId).child(authorId);
         mLikesReference.removeValue(new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError == null) {
-                    DatabaseReference postRef = database.getReference("posts/" + postId + "/likesCount");
+                    DatabaseReference postRef = database.getReference("quotes/" + postId + "/likesCount");
                     decrementLikesCount(postRef);
 
-                    DatabaseReference profileRef = database.getReference("profiles/" + postAuthorId + "/likesCount");
+                    DatabaseReference profileRef = database.getReference("users/" + postAuthorId + "/likesCount");
                     decrementLikesCount(profileRef);
                 } else {
                     Log.d(TAG, databaseError.getMessage(), databaseError.toException());
@@ -347,7 +347,7 @@ public class DatabaseHelper {
 
     public String generatePostId() {
         DatabaseReference databaseReference = database.getReference();
-        return databaseReference.child("posts").push().getKey();
+        return databaseReference.child("quotes").push().getKey();
     }
 
     public void getPostList(final OnPostListChangedListener<Post> onDataChangedListener, long date) {

@@ -9,6 +9,7 @@
         <item name="android:textColorSecondary">@color/secondary_text</item>
         <item name="android:textColorPrimary">@color/primary_text</item>
         <item name="android:colorForeground">@android:color/black</item>
+        <item name="cardViewStyle">@style/AppTheme</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
