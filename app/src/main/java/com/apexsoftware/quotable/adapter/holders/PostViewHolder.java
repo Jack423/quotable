@@ -67,7 +67,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         super(view);
         this.context = view.getContext();
 
-        likesCounterTextView = (TextView) view.findViewById(R.id.tv_like_count);
+        likesCounterTextView = (TextView) view.findViewById(R.id.tv_bookmark_count);
         likesImageView = (ImageView) view.findViewById(R.id.iv_like);
         dateTextView = (TextView) view.findViewById(R.id.tv_date);
         userTextView = (TextView) view.findViewById(R.id.tv_user);
@@ -76,8 +76,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         postToolbar = view.findViewById(R.id.post_toolbar);
 
         authorImageView.setVisibility(isAuthorNeeded ? View.VISIBLE : View.GONE);
-
-        postToolbar.inflateMenu(R.menu.menu_post);
 
         //profileManager = ProfileManager.getInstance(context.getApplicationContext());
         postManager = PostManager.getInstance(context.getApplicationContext());
@@ -117,6 +115,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public void bindData(final Post post) {
         final String displayName;
         String quote = post.getText();
+
+        postToolbar.inflateMenu(R.menu.menu_post);
 
         likeController = new LikeController(context, post, likesCounterTextView, likesImageView, true);
         likesCounterTextView.setText(String.valueOf(post.getLikesCount()));

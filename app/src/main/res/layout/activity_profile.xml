@@ -55,7 +55,7 @@
                                 android:textAlignment="center" />
 
                             <TextView
-                                android:id="@+id/tv_bookmarks_counter"
+                                android:id="@+id/tv_like_counter"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -172,8 +172,7 @@
                 android:id="@+id/profile_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay">
+                android:background="?attr/colorPrimary">
 
             </android.support.v7.widget.Toolbar>
 
