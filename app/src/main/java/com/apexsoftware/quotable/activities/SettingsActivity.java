@@ -43,12 +43,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //setContentView(R.layout.activity_settings3);
+
+        //toolbar.inflateMenu(R.menu.settings_menu);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // load settings fragment
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();

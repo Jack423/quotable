@@ -105,12 +105,5 @@ public class FriendsActivity extends AppCompatActivity {
                 Snackbar.make(view, "Oops, something went wrong", Snackbar.LENGTH_LONG);
             }
         });
-
-        /*Friend newFriend = new Friend(
-                "Roury",
-                "gs://quotable-c70b9.appspot.com/profile_pictures/493873a2-a182-11e8-98d0-529269fb1459.png",
-                "Aug 24, 2018 8:20:33 PM",
-                "G12ds4owNDNeulmnMNV2skwqzt93");
-        friendList.add(newFriend);*/
     }
 }

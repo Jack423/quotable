@@ -34,7 +34,7 @@ public class PostsByUserAdapter extends BasePostAdapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.row_post_new, parent, false);
+        View view = inflater.inflate(R.layout.row_post_2, parent, false);
 
         return new PostViewHolder(view, createOnClickListener(), false);
     }
