@@ -1,5 +1,7 @@
 package com.apexsoftware.quotable.activities;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -45,8 +47,13 @@ public class CreatePostActivity extends BaseActivity implements OnPostCreatedLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
 
+        toolbar = findViewById(R.id.create_post_toolbar);
+        setSupportActionBar(toolbar);
+
         getSupportActionBar().setTitle("Create Quote");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
 
         mText = (EditText) findViewById(R.id.et_post);
         userID = firebaseUser.getUid();

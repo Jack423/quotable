@@ -179,6 +179,20 @@ public class DatabaseHelper {
         }
     }
 
+    public void addFriend(User user) {
+        /*String req_type = dataSnapshot.child(user_id).child("request_type").getValue().toString();
+
+        if(req_type.equals("received")){
+            currentState = "req_received";
+            follow.setText("Accept Friend Request");
+        } else if(req_type.equals("sent")) {
+            currentState = "req_sent";
+            follow.setText("Cancel Friend Request");
+        }
+
+        progressDialog.dismiss();*/
+    }
+
     public ValueEventListener hasCurrentUserLike(String postId, String userId, final OnObjectExistListener<Like> onObjectExistListener) {
         DatabaseReference databaseReference = database.getReference("quote-likes").child(postId).child(userId);
         ValueEventListener valueEventListener = databaseReference.addValueEventListener(new ValueEventListener() {

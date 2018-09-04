@@ -6,8 +6,11 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatCallback;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.view.ActionMode;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -41,7 +44,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class PostViewHolder extends RecyclerView.ViewHolder {
+public class PostViewHolder extends RecyclerView.ViewHolder implements AppCompatCallback{
     public static final String TAG = PostViewHolder.class.getSimpleName();
 
     private Context context;
@@ -53,6 +56,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private ImageView authorImageView;
     private ImageView likesImageView;
     private Toolbar postToolbar;
+
+    private AppCompatDelegate delegate;
 
     private PostManager postManager;
     private UserManager userManager;
@@ -74,6 +79,21 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         quoteTextView = (TextView) view.findViewById(R.id.tv_quote);
         authorImageView = (ImageView) view.findViewById(R.id.iv_profile);
         postToolbar = view.findViewById(R.id.post_toolbar);
+
+        postToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int id = view.getId();
+
+                if (id == R.id.menu_edit_post) {
+                    Snackbar.make(view, "Menu edit post", Snackbar.LENGTH_SHORT);
+                } else if (id == R.id.menu_remove_post) {
+                    Snackbar.make(view, "Menu remove post", Snackbar.LENGTH_SHORT);
+                } else if (id == R.id.menu_report_post) {
+                    Snackbar.make(view, "Menu report post", Snackbar.LENGTH_SHORT);
+                }
+            }
+        });
 
         authorImageView.setVisibility(isAuthorNeeded ? View.VISIBLE : View.GONE);
 
@@ -128,8 +148,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 User user = dataSnapshot.getValue(User.class);
                 if (user != null) {
                     userTextView.setText(user.getName());
-                    //postToolbar.setTitle(user.getName());
-                    //postToolbar.setTitleTextColor(Color.BLACK);
                     FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
                     StorageReference reference = firebaseStorage.getReferenceFromUrl(user.getPictureUrl());
 
@@ -194,6 +212,22 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 likeController.initLike(exist);
             }
         };
+    }
+
+    @Override
+    public void onSupportActionModeStarted(ActionMode mode) {
+
+    }
+
+    @Override
+    public void onSupportActionModeFinished(ActionMode mode) {
+
+    }
+
+    @Nullable
+    @Override
+    public ActionMode onWindowStartingSupportActionMode(ActionMode.Callback callback) {
+        return null;
     }
 
     public interface OnClickListener {
