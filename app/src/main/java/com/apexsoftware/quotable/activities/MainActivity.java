@@ -325,9 +325,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             //Main Feed
         } else if (id == R.id.nav_friends) {
             startActivity(new Intent(this, FriendsActivity.class));
-            //fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-        } else if (id == R.id.nav_bookmarks) {
-            //TODO Implement bookmarks viewer
+        } else if (id == R.id.nav_friend_requests) {
+            startActivity(new Intent(this, FriendRequestsActivity.class));
+        } else if (id == R.id.nav_likes) {
+            //TODO Implement likes viewer
         } else if (id == R.id.nav_settings) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);

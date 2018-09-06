@@ -18,6 +18,7 @@ import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
 import com.apexsoftware.quotable.managers.listeners.OnPostListChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnProfileCreatedListener;
+import com.apexsoftware.quotable.models.Friend;
 import com.apexsoftware.quotable.models.Like;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.PostListResult;
@@ -39,9 +40,12 @@ import com.google.firebase.database.Query;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -179,18 +183,23 @@ public class DatabaseHelper {
         }
     }
 
-    public void addFriend(User user) {
-        /*String req_type = dataSnapshot.child(user_id).child("request_type").getValue().toString();
+    public void addFriend(String friendId, String currentUserId, final View view) {
+        String currentDate = DateFormat.getDateTimeInstance().format(new Date());
+        Friend friend = new Friend();
+        friend.setId(friendId);
+        friend.setFriendSince(currentDate);
 
-        if(req_type.equals("received")){
-            currentState = "req_received";
-            follow.setText("Accept Friend Request");
-        } else if(req_type.equals("sent")) {
-            currentState = "req_sent";
-            follow.setText("Cancel Friend Request");
-        }
-
-        progressDialog.dismiss();*/
+        DatabaseReference reference = database.getReference();
+        reference.child("friends").child(currentUserId).child(friendId).setValue(friend).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()) {
+                    Snackbar.make(view, "Added friend", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(view, "Unable to add friend: " + task.getException(), Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     public ValueEventListener hasCurrentUserLike(String postId, String userId, final OnObjectExistListener<Like> onObjectExistListener) {

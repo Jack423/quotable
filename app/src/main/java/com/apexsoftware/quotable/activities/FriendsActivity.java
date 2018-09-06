@@ -73,6 +73,7 @@ public class FriendsActivity extends AppCompatActivity {
                         User user = dataSnapshot.getValue(User.class);
                         friend.setName(user.getName());
                         friend.setProfilePhotoUrl(user.getPictureUrl());
+                        friend.setFriendSince(user.getBio());
                         friendList.add(friend);
                         Log.d(TAG, "----ADDED FRIEND TO LIST----" + friend.getName());
                     }

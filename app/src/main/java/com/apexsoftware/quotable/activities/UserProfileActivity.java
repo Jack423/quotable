@@ -37,6 +37,7 @@ import com.apexsoftware.quotable.managers.UserManager;
 import com.apexsoftware.quotable.managers.listeners.OnFriendChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
+import com.apexsoftware.quotable.models.FriendRequest;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.User;
 import com.bumptech.glide.Glide;
@@ -310,10 +311,13 @@ public class UserProfileActivity extends BaseActivity {
                         notificationData.put("from", currentUserId);
                         notificationData.put("type", "request");
 
+                        FriendRequest friendRequest = new FriendRequest(user_id, "received");
                         Map requestMap = new HashMap();
                         requestMap.put("Friend_req/" + currentUserId + "/" + user_id + "/request_type", "sent");
-                        requestMap.put("Friend_req/" + user_id + "/" + currentUserId + "/request_type", "received");
+                        //requestMap.put("Friend_req/" + user_id + "/" + currentUserId + "/request_type", "received");
                         requestMap.put("notifications/" + user_id + "/" + newNotificationId, notificationData);
+
+                        mRootRef.child("Friend_req").child(user_id).child(currentUserId).setValue(friendRequest);
 
                         mRootRef.updateChildren(requestMap, new DatabaseReference.CompletionListener() {
                             @Override

@@ -17,9 +17,11 @@ import android.widget.Toast;
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.managers.DatabaseHelper;
 import com.apexsoftware.quotable.models.Friend;
+import com.apexsoftware.quotable.models.FriendRequest;
 import com.apexsoftware.quotable.models.User;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +35,7 @@ import java.util.List;
 public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.RequestsViewHolder> {
     private static final String TAG = RequestsAdapter.class.getSimpleName();
 
-    private List<Friend> requestList;
+    private List<FriendRequest> requestList;
 
     @NonNull
     @Override
@@ -44,12 +46,14 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.Reques
 
     @Override
     public void onBindViewHolder(@NonNull final RequestsViewHolder holder, int position) {
-        Friend friend = requestList.get(position);
+        final FriendRequest friendRequest = requestList.get(position);
 
-        holder.nameTextView.setText(friend.getName());
+        final String currentUserId = FirebaseAuth.getInstance().getUid();
+
+        holder.nameTextView.setText(friendRequest.getName());
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        reference.child("users").child(friend.getId()).addValueEventListener(new ValueEventListener() {
+        reference.child("users").child(friendRequest.getId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -64,7 +68,7 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.Reques
             }
         });
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(friend.getProfilePhotoUrl());
+        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(friendRequest.getProfilePhotoUrl());
         storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -75,7 +79,9 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.Reques
         holder.addFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseHelper.getInstance(holder.context);
+                DatabaseHelper databaseHelper = DatabaseHelper.getInstance(holder.context);
+
+                databaseHelper.addFriend(friendRequest.getId(), currentUserId, v);
             }
         });
     }
@@ -103,7 +109,7 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.Reques
         }
     }
 
-    public RequestsAdapter(List<Friend> requestList) {
+    public RequestsAdapter(List<FriendRequest> requestList) {
         this.requestList = requestList;
     }
 
