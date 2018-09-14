@@ -40,4 +40,18 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="LoginTheme" parent="Theme.AppCompat.NoActionBar" >
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/primaryTextColor</item>
+        <item name="android:colorBackground">@color/primaryColor</item>
+        <!-- <item name="android:buttonStyle">@style/LoginTheme.Button</item> -->
+        <item name="android:textColorPrimary">@color/primaryTextColor</item>
+        <item name="android:textColorPrimaryInverse">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
+    </style>
+
+
+
+
 </resources>

@@ -1,5 +1,6 @@
 package com.apexsoftware.quotable.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -40,6 +41,8 @@ import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.User;
 import com.apexsoftware.quotable.R;
 import com.bumptech.glide.Glide;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,11 +56,13 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int CREATE_POST_REQUEST = 1;
+    private static final int RC_SIGN_IN = 123;
 
     //Adapter and recycler view are member variables
     private PostsAdapter postsAdapter;
@@ -77,15 +82,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
 
+    public static Intent createIntent(Context context) {
+        return new Intent(context, MainActivity.class);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(firebaseUser == null || auth == null) {
-            startActivity(new Intent(MainActivity.this, LoginActivity2.class));
-            finish();
-        } else {
-            firebaseUser = auth.getCurrentUser();
+        if(auth.getCurrentUser() == null) {
+            startActivityForResult(
+                    AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(Arrays.asList(
+                                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                new AuthUI.IdpConfig.EmailBuilder().build()))
+                    .build(), RC_SIGN_IN);
         }
 
         setContentView(R.layout.activity_main);
@@ -270,7 +282,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sign_out) {
             auth.signOut();
-            Intent intent = new Intent(MainActivity.this, LoginActivity2.class);
+            Intent intent = new Intent(MainActivity.this, LoginActivity3.class);
             startActivity(intent);
             return true;
         }
@@ -312,6 +324,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     }
                 });
             }
+        } else if (requestCode == RC_SIGN_IN) {
+
         }
     }
 
