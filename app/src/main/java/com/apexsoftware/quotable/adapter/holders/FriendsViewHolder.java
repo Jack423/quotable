@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.managers.DatabaseHelper;
-import com.apexsoftware.quotable.managers.UserManager;
+import com.apexsoftware.quotable.managers.ProfileManager;
 import com.apexsoftware.quotable.models.Friend;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -22,7 +22,7 @@ public class FriendsViewHolder extends RecyclerView.ViewHolder {
     private TextView bio;
     private ImageView profilePhoto;
 
-    private UserManager userManager;
+    private ProfileManager userManager;
     private DatabaseHelper databaseHelper;
 
     public FriendsViewHolder (View view, final OnClickListener onClickListener) {

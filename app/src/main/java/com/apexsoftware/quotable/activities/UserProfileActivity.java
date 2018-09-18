@@ -30,11 +30,9 @@ import android.widget.Toast;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.adapter.PostsByUserAdapter;
-import com.apexsoftware.quotable.managers.DatabaseHelper;
 import com.apexsoftware.quotable.managers.FriendManager;
 import com.apexsoftware.quotable.managers.PostManager;
-import com.apexsoftware.quotable.managers.UserManager;
-import com.apexsoftware.quotable.managers.listeners.OnFriendChangedListener;
+import com.apexsoftware.quotable.managers.ProfileManager;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
 import com.apexsoftware.quotable.models.FriendRequest;
@@ -42,10 +40,8 @@ import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.User;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -81,7 +77,7 @@ public class UserProfileActivity extends BaseActivity {
 
     private PostsByUserAdapter postsAdapter;
     private SwipeRefreshLayout swipeContainer;
-    private UserManager userManager;
+    private ProfileManager userManager;
     private FriendManager friendManager;
     private ProgressBar progressBar;
     private GoogleApiClient mGoogleApiClient;
@@ -154,8 +150,6 @@ public class UserProfileActivity extends BaseActivity {
         mUsersDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //Picasso.with(ProfileActivity.this).load(image).placeholder(R.drawable.default_avatar).into(mProfileImage);
-
                 if(currentUserId.equals(user_id)){
                     follow.setEnabled(false);
                     follow.setVisibility(View.INVISIBLE);
@@ -256,7 +250,7 @@ public class UserProfileActivity extends BaseActivity {
     }
 
     private void loadProfile() {
-        userManager = UserManager.getInstance(this);
+        userManager = ProfileManager.getInstance(this);
         userManager.getProfileValue(UserProfileActivity.this, user_id, createOnProfileChangedListener());
     }
 

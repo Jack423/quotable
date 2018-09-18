@@ -4,15 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,15 +34,22 @@ import android.widget.Toast;
 import com.apexsoftware.quotable.ApplicationHelper;
 import com.apexsoftware.quotable.FriendsFragment;
 import com.apexsoftware.quotable.adapter.PostsAdapter;
-import com.apexsoftware.quotable.managers.PostManager;
-import com.apexsoftware.quotable.managers.UserManager;
+import com.apexsoftware.quotable.managers.ProfileManager;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.User;
 import com.apexsoftware.quotable.R;
+import com.apexsoftware.quotable.modules.GlideApp;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.module.AppGlideModule;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.IdpResponse;
+import com.firebase.ui.auth.data.model.Resource;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,9 +59,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -66,7 +70,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     //Adapter and recycler view are member variables
     private PostsAdapter postsAdapter;
-    private UserManager userManager;
+    private ProfileManager userManager;
     private RecyclerView recyclerView;
     private FloatingActionButton floatingActionButton;
     private TextView name;
@@ -90,16 +94,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(auth.getCurrentUser() == null) {
-            startActivityForResult(
-                    AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(Arrays.asList(
-                                new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                new AuthUI.IdpConfig.EmailBuilder().build()))
-                    .build(), RC_SIGN_IN);
-        }
-
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
@@ -116,7 +110,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
 
-        userManager = UserManager.getInstance(this);
+        userManager = ProfileManager.getInstance(this);
         ApplicationHelper.initDatabaseHelper(getApplication());
 
         Class fragmentClass = null;
@@ -169,33 +163,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     name.setText(obj.getName());
                     bio.setText(obj.getBio());
 
-                    StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(obj.getPictureUrl());
-                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            Glide.with(MainActivity.this).load(uri).into(profilePhoto);
-                            /*Picasso.get()
-                                    .load(uri)
-                                    .networkPolicy(NetworkPolicy.OFFLINE)
-                                    .placeholder(R.drawable.ic_stub)
-                                    .into(profilePhoto, new Callback() {
-                                        @Override
-                                        public void onSuccess() {
-
-                                        }
-
-                                        @Override
-                                        public void onError(Exception e) {
-                                            Picasso.get().load(R.drawable.ic_stub).into(profilePhoto);
-                                        }
-                                    });*/
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Glide.with(MainActivity.this).load(R.drawable.ic_stub).into(profilePhoto);
-                        }
-                    });
+                    //Glide.with(MainActivity.this).load(obj.getPictureUrl()).into(profilePhoto);
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference("/images/user_" + firebaseUser.getUid());
+                    GlideApp.with(MainActivity.this).load(storageReference).centerCrop().into(profilePhoto);
                 }
             });
         } else {
@@ -347,7 +317,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_about) {
-
+            startActivity(new Intent(MainActivity.this, AboutActivity.class));
         } else if (id == R.id.nav_report_bug) {
 
         }

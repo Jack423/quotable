@@ -2,6 +2,7 @@ package com.apexsoftware.quotable.managers;
 //Created by Jack Butler on 8/1/2018.
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.apexsoftware.quotable.models.Like;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.PostListResult;
 import com.apexsoftware.quotable.models.User;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +41,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -85,14 +90,14 @@ public class DatabaseHelper {
     }
 
     public void createOrUpdateUser(final User user, final OnProfileCreatedListener onProfileCreatedListener) {
-        DatabaseReference databaseReference = ApplicationHelper.getDatabaseHelper().getDatabaseReference();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
         Task<Void> task = databaseReference.child("users").child(user.getId()).setValue(user);
         task.addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 onProfileCreatedListener.onProfileCreated(task.isSuccessful());
-                addRegistrationToken(FirebaseInstanceId.getInstance().getInstanceId().toString(), user.getId());
+                addRegistrationToken(FirebaseInstanceId.getInstance().getId(), user.getId());
                 Log.d(TAG, "createOrUpdateProfile, success: " + task.isSuccessful());
             }
         });
@@ -193,7 +198,7 @@ public class DatabaseHelper {
         reference.child("friends").child(currentUserId).child(friendId).setValue(friend).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     Snackbar.make(view, "Added friend", Snackbar.LENGTH_SHORT).show();
                 } else {
                     Snackbar.make(view, "Unable to add friend: " + task.getException(), Snackbar.LENGTH_SHORT).show();
@@ -331,13 +336,49 @@ public class DatabaseHelper {
         });
     }
 
-    public void addRegistrationToken(String token, String userId) {
-        DatabaseReference databaseReference = ApplicationHelper.getDatabaseHelper().getDatabaseReference();
-        Task<Void> task = databaseReference.child("users").child(userId).child("notificationTokens").child(token).setValue(true);
+    public void uploadImage(Uri uri, String imageTitle, final User user) {
+        final StorageReference storageRef = storage.getReferenceFromUrl(context.getResources().getString(R.string.storage_link));
+        final StorageReference riversRef = storageRef.child("images/" + imageTitle);
+        // Create file metadata including the content type
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setCacheControl("max-age=7776000, Expires=7776000, public, must-revalidate")
+                .build();
+        UploadTask uploadTask = riversRef.putFile(uri);
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                return riversRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "uploadImage success");
+                } else {
+                    Log.d(TAG, "downloadUri failed: " + task.getException());
+                }
+            }
+        });
+    }
+
+    public void addRegistrationToken(final String token, String userId) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        /*final Task<Void> task = databaseReference.child("users").child(userId).child("notificationTokens").child(token).setValue(true);
         task.addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Log.d(TAG, "addRegistrationToken, success: " + task.isSuccessful());
+            }
+        });*/
+
+        databaseReference.child("users").child(userId).child("notificationTokens").child(token).setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "addRegistrationTokem, success: " + token);
             }
         });
     }

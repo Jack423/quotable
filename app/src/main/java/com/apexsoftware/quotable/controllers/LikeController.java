@@ -34,7 +34,7 @@ import com.apexsoftware.quotable.activities.BaseActivity;
 import com.apexsoftware.quotable.activities.MainActivity;
 import com.apexsoftware.quotable.enums.ProfileStatus;
 import com.apexsoftware.quotable.managers.PostManager;
-import com.apexsoftware.quotable.managers.UserManager;
+import com.apexsoftware.quotable.managers.ProfileManager;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
 import com.apexsoftware.quotable.models.Post;
 
@@ -237,7 +237,7 @@ public class LikeController {
     }
 
     private void doHandleLikeClickAction(BaseActivity baseActivity, Post post) {
-        ProfileStatus profileStatus = UserManager.getInstance(baseActivity).checkProfile();
+        ProfileStatus profileStatus = ProfileManager.getInstance(baseActivity).checkProfile();
 
         if (profileStatus.equals(ProfileStatus.PROFILE_CREATED)) {
             if (isListView) {

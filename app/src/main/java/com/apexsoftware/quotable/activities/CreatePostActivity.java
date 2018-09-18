@@ -1,6 +1,5 @@
 package com.apexsoftware.quotable.activities;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +12,7 @@ import android.widget.Toast;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.managers.PostManager;
-import com.apexsoftware.quotable.managers.UserManager;
+import com.apexsoftware.quotable.managers.ProfileManager;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnPostCreatedListener;
 import com.apexsoftware.quotable.models.Post;
@@ -31,7 +30,7 @@ public class CreatePostActivity extends BaseActivity implements OnPostCreatedLis
     Toolbar toolbar;
 
     private boolean creatingPost = true;
-    private UserManager userManager;
+    private ProfileManager userManager;
     private String userID;
     private User user = new User();
     private final Calendar calendar = Calendar.getInstance();
@@ -62,7 +61,7 @@ public class CreatePostActivity extends BaseActivity implements OnPostCreatedLis
     }
 
     private void loadProfile() {
-        userManager = UserManager.getInstance(this);
+        userManager = ProfileManager.getInstance(this);
         userManager.getProfileValue(this, userID, createOnUserChangedListener());
     }
 

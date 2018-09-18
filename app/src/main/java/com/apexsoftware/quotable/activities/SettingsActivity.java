@@ -50,6 +50,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_settings3);
 
+        //toolbar = findViewById(R.id.)
+
         //toolbar.inflateMenu(R.menu.settings_menu);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

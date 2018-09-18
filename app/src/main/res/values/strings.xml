@@ -121,4 +121,13 @@
     <string name="friends_tab_1">Friends</string>
     <string name="friends_tab_2">Requests</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="error_general">Something went wrong</string>
+    <string name="error_bigger_file">File size is bigger than 10mb</string>
+    <string name="error_incorrect_file_type">Incorrect file type</string>
+    <string name="permissions_not_granted">Canceling, required permissions are not granted</string>
+    <string name="error_smaller_image">Image is too small. Required image size is 100x100 px</string>
+    <string name="error_fail_crop_image">Failed to crop image</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="error_profile_name_length">Max length of the name should be less than 120 symbols</string>
+    <string name="storage_link">gs://quotable-c70b9.appspot.com</string>
 </resources>

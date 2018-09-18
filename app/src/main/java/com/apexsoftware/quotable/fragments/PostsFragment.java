@@ -3,51 +3,28 @@ package com.apexsoftware.quotable.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.apexsoftware.quotable.ApplicationHelper;
-import com.apexsoftware.quotable.FriendsFragment;
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.activities.CreatePostActivity;
-import com.apexsoftware.quotable.activities.LoginActivity2;
-import com.apexsoftware.quotable.activities.MainActivity;
 import com.apexsoftware.quotable.activities.UserProfileActivity;
 import com.apexsoftware.quotable.adapter.PostsAdapter;
-import com.apexsoftware.quotable.managers.UserManager;
-import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
+import com.apexsoftware.quotable.managers.ProfileManager;
 import com.apexsoftware.quotable.models.Post;
 import com.apexsoftware.quotable.models.User;
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
@@ -63,7 +40,7 @@ public class PostsFragment extends Fragment {
 
     //Adapter and recycler view are member variables
     private PostsAdapter postsAdapter;
-    private UserManager userManager;
+    private ProfileManager userManager;
     private RecyclerView recyclerView;
     private FloatingActionButton floatingActionButton;
 
@@ -82,7 +59,7 @@ public class PostsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_posts, container, false);
 
-        userManager = UserManager.getInstance(getContext());
+        userManager = ProfileManager.getInstance(getContext());
         //ApplicationHelper.initDatabaseHelper();
 
         initContentView(view);
