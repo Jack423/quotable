@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#03a9f4</color>
-    <color name="primary_dark">#0288D1</color>
-    <color name="primary_light">#B3E5FC</color>
-    <color name="accent">#FF5252</color>
-    <color name="primary_text">#212121</color>
-    <color name="secondary_text">#757575</color>
-    <color name="icons">#ffffff</color>
-    <color name="divider">#BDBDBD</color>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimaryDarkText">#000000</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccentLight">#ff80ab</color>
+    <color name="google_button_color_pressed">#FFA43528</color>
+    <color name="google_button_color">#d44837</color>
+    <color name="white">#ffffff</color>
 
-    <color name="like_icon_activated">#FF5252</color>
+    <color name="colorSecondaryLight">#979797</color>
+
     <color name="icons_counter_color">#828181</color>
+    <color name="like_icon_activated">#FF5252</color>
 
-    <color name="primaryColor">#03a9f4</color>
-    <color name="primaryLightColor">#67daff</color>
-    <color name="primaryDarkColor">#007ac1</color>
-    <color name="secondaryColor">#ff5252</color>
-    <color name="secondaryLightColor">#ff867f</color>
-    <color name="secondaryDarkColor">#c50e29</color>
-    <color name="primaryTextColor">#ffffff</color>
-    <color name="secondaryTextColor">#ffffff</color>
+    <color name="highlight_text">#17a1d7</color>
 
-    <color name="buttonBackground">#ff5252</color>
-    <color name="text_color_primary">#000000</color>
+    <color name="follow_button_color">#0097D3</color>
+    <color name="follow_button_pressed_color">#0087BC</color>
+    <color name="follow_button_light_color">@color/white</color>
+    <color name="follow_button_light_pressed_color">#f7f7f7</color>
+    <color name="posts_counter_bg">#df3e3e3e</color>
 </resources>

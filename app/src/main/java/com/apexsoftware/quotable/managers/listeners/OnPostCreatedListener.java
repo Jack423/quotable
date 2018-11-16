@@ -1,5 +1,6 @@
 package com.apexsoftware.quotable.managers.listeners;
 
 public interface OnPostCreatedListener {
-    void onPostSaved(boolean success);
+
+    public void onPostSaved(boolean success);
 }

@@ -1,5 +1,5 @@
 package com.apexsoftware.quotable.util;
-//Created by Jack Butler on 7/30/2018.
+// Created by Jack Butler on 10/4/2018.
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 public class PreferencesUtil {
     private static final String TAG = PreferencesUtil.class.getSimpleName();
 
-    private static final String SHARED_PREFERENCES_NAME = "com.apexsoftware.quotable";
+    private static final String SHARED_PREFERENCES_NAME = "com.apexsoftware.quotabletest2";
     private static final String PREF_PARAM_IS_PROFILE_CREATED = "isProfileCreated";
     private static final String PREF_PARAM_IS_POSTS_WAS_LOADED_AT_LEAST_ONCE = "isPostsWasLoadedAtLeastOnce";
 

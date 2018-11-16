@@ -1,0 +1,12 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="createpost"
+        android:enabled="true"
+        android:icon="@drawable/ic_add_grey"
+        android:shortcutShortLabel="@string/create_post_shortcut_label">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.apexsoftware.quotable"
+            android:targetClass="com.apexsoftware.quotable.main.post.createPost.CreatePostActivity" />
+    </shortcut>
+</shortcuts>

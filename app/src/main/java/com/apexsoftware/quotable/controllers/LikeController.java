@@ -1,19 +1,3 @@
-/*
- * Copyright 2017 Rozdoum
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
-
 package com.apexsoftware.quotable.controllers;
 
 import android.animation.Animator;
@@ -24,23 +8,19 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.support.design.widget.Snackbar;
 import android.view.animation.BounceInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.apexsoftware.quotable.ApplicationHelper;
 import com.apexsoftware.quotable.R;
-import com.apexsoftware.quotable.activities.BaseActivity;
-import com.apexsoftware.quotable.activities.MainActivity;
-import com.apexsoftware.quotable.enums.ProfileStatus;
+import com.apexsoftware.quotable.main.base.BaseActivity;
+import com.apexsoftware.quotable.main.interactors.PostInteractor;
+import com.apexsoftware.quotable.main.main.MainActivity;
 import com.apexsoftware.quotable.managers.PostManager;
-import com.apexsoftware.quotable.managers.ProfileManager;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
-import com.apexsoftware.quotable.models.Post;
-
-/**
- * Created by Kristina on 12/30/16.
- */
+import com.apexsoftware.quotable.managers.listeners.OnPostChangedListener;
+import com.apexsoftware.quotable.model.Post;
 
 public class LikeController {
 
@@ -67,8 +47,8 @@ public class LikeController {
     public LikeController(Context context, Post post, TextView likeCounterTextView,
                           ImageView likesImageView, boolean isListView) {
         this.context = context;
-        this.postId = post.getPostId();
-        this.postAuthorId = post.getUserId();
+        this.postId = post.getId();
+        this.postAuthorId = post.getAuthorId();
         this.likeCounterTextView = likeCounterTextView;
         this.likesImageView = likesImageView;
         this.isListView = isListView;
@@ -96,14 +76,14 @@ public class LikeController {
         updatingLikeCounter = true;
         isLiked = true;
         likeCounterTextView.setText(String.valueOf(prevValue + 1));
-        ApplicationHelper.getDatabaseHelper().createOrUpdateLike(postId, postAuthorId);
+        PostInteractor.getInstance(context).createOrUpdateLike(postId, postAuthorId);
     }
 
     private void removeLike(long prevValue) {
         updatingLikeCounter = true;
         isLiked = false;
         likeCounterTextView.setText(String.valueOf(prevValue - 1));
-        ApplicationHelper.getDatabaseHelper().removeLike(postId, postAuthorId);
+        PostInteractor.getInstance(context).removeLike(postId, postAuthorId);
     }
 
     private void startAnimateLikeButton(AnimationType animationType) {
@@ -130,7 +110,7 @@ public class LikeController {
         bounceAnimY.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
-                likesImageView.setImageResource(!isLiked ? R.drawable.ic_like_activated
+                likesImageView.setImageResource(!isLiked ? R.drawable.ic_like_active
                         : R.drawable.ic_like);
             }
         });
@@ -199,8 +179,8 @@ public class LikeController {
     }
 
     public void initLike(boolean isLiked) {
-            likesImageView.setImageResource(isLiked ? R.drawable.ic_like_activated : R.drawable.ic_like);
-            this.isLiked = isLiked;
+        likesImageView.setImageResource(isLiked ? R.drawable.ic_like : R.drawable.ic_like_active);
+        this.isLiked = isLiked;
     }
 
     private void updateLocalPostLikeCounter(Post post) {
@@ -212,7 +192,7 @@ public class LikeController {
     }
 
     public void handleLikeClickAction(final BaseActivity baseActivity, final Post post) {
-        PostManager.getInstance(baseActivity.getApplicationContext()).isPostExistSingleValue(post.getPostId(), new OnObjectExistListener<Post>() {
+        PostManager.getInstance(baseActivity.getApplicationContext()).isPostExistSingleValue(post.getId(), new OnObjectExistListener<Post>() {
             @Override
             public void onDataChanged(boolean exist) {
                 if (exist) {
@@ -228,6 +208,24 @@ public class LikeController {
         });
     }
 
+    public void handleLikeClickAction(final BaseActivity baseActivity, final String postId) {
+        PostManager.getInstance(baseActivity.getApplicationContext()).getSinglePostValue(postId, new OnPostChangedListener() {
+            @Override
+            public void onObjectChanged(Post post) {
+                if (baseActivity.hasInternetConnection()) {
+                    doHandleLikeClickAction(baseActivity, post);
+                } else {
+                    showWarningMessage(baseActivity, R.string.internet_connection_failed);
+                }
+            }
+
+            @Override
+            public void onError(String errorText) {
+                baseActivity.showSnackBar(errorText);
+            }
+        });
+    }
+
     private void showWarningMessage(BaseActivity baseActivity, int messageId) {
         if (baseActivity instanceof MainActivity) {
             ((MainActivity) baseActivity).showFloatButtonRelatedSnackBar(messageId);
@@ -237,16 +235,25 @@ public class LikeController {
     }
 
     private void doHandleLikeClickAction(BaseActivity baseActivity, Post post) {
-        ProfileStatus profileStatus = ProfileManager.getInstance(baseActivity).checkProfile();
-
-        if (profileStatus.equals(ProfileStatus.PROFILE_CREATED)) {
+        if (baseActivity.checkAuthorization()) {
             if (isListView) {
                 likeClickActionLocal(post);
             } else {
                 likeClickAction(post.getLikesCount());
             }
-        } else {
-            baseActivity.doAuthorization(profileStatus);
         }
+    }
+
+    public void changeAnimationType() {
+        if (getLikeAnimationType() == LikeController.AnimationType.BOUNCE_ANIM) {
+            setLikeAnimationType(LikeController.AnimationType.COLOR_ANIM);
+        } else {
+            setLikeAnimationType(LikeController.AnimationType.BOUNCE_ANIM);
+        }
+
+        Snackbar snackbar = Snackbar
+                .make(likesImageView, "Animation was changed", Snackbar.LENGTH_LONG);
+
+        snackbar.show();
     }
 }

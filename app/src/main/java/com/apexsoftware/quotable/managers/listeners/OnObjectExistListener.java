@@ -1,5 +1,3 @@
-
-
 package com.apexsoftware.quotable.managers.listeners;
 
 public interface OnObjectExistListener<T> {

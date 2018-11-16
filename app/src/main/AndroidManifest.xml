@@ -2,59 +2,89 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.apexsoftware.quotable">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".Application"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_quotable_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_quotable_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-            android:name=".activities.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.CreateAccountActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activities.BaseActivity" />
-        <activity android:name=".activities.CreatePostActivity" />
-        <activity
-            android:name=".activities.UserProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.ProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.SettingsActivity2"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.LoginActivity2" />
-        <activity android:name=".activities.SettingsActivity" />
-        <activity android:name=".activities.CreateAccountActivity2" />
-        <activity
-            android:name=".activities.FriendsActivity"
-            android:label="@string/title_activity_friends"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".activities.FriendRequestsActivity" />
-        <activity
-            android:name=".activities.LoginActivity3"
-            android:theme="@style/LoginTheme">
+            android:name=".main.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="com.apexsoftware.quotable.TARGET_NOTIFICATION" />
-
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <meta-data android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
-        <activity android:name=".activities.CreateProfileActivity" />
+        <activity android:name=".main.login.LoginActivityOld" />
+        <activity android:name=".main.editProfile.createProfile.CreateProfileActivity" />
+        <activity
+            android:name=".main.editProfile.EditProfileActivity"
+            android:label="@string/edit_profile_menu_label"/>
+        <activity android:name=".main.login.LoginActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".activities.AboutActivity"></activity>
+        <activity
+            android:name=".main.profile.ProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/profile_label">
+        </activity>
+        <activity android:name=".main.hashtagTest.HashtagActivity" />
+        <activity android:name=".main.post.BaseCreatePostActivity" />
+        <activity android:name=".main.post.createPost.CreatePostActivity" />
+        <activity
+            android:name=".main.postDetails.PostDetailsActivity"
+            android:label="Details"
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".main.post.editPost.EditPostActivity" />
+        <activity
+            android:name=".main.followPosts.FollowingPostsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/following_label"/>
+        <activity android:name=".main.userList.UsersListActivity" />
+        <activity
+            android:name=".main.search.SearchActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
+
+        </activity>
+
+        <service
+            android:name=".services.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".services.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
