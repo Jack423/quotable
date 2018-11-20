@@ -2,10 +2,12 @@ package com.apexsoftware.quotable.main.main;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,18 +24,30 @@ import android.widget.TextView;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.adapters.PostsAdapter;
+import com.apexsoftware.quotable.dialogs.PrivacyPolicyDialog;
 import com.apexsoftware.quotable.main.base.BaseActivity;
 import com.apexsoftware.quotable.main.followPosts.FollowingPostsActivity;
 import com.apexsoftware.quotable.main.post.createPost.CreatePostActivity;
 import com.apexsoftware.quotable.main.postDetails.PostDetailsActivity;
 import com.apexsoftware.quotable.main.profile.ProfileActivity;
 import com.apexsoftware.quotable.main.search.SearchActivity;
+import com.apexsoftware.quotable.managers.listeners.OnDialogClickListener;
 import com.apexsoftware.quotable.model.Post;
 import com.apexsoftware.quotable.util.AnimationUtils;
+import com.apexsoftware.quotable.util.LogUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthSettings;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import static android.app.Activity.RESULT_OK;
 
-public class MainActivity extends BaseActivity<MainView, MainPresenter> implements MainView {
+public class MainActivity extends BaseActivity<MainView, MainPresenter> implements MainView, OnDialogClickListener {
 
     private PostsAdapter postsAdapter;
     private RecyclerView recyclerView;
@@ -53,12 +67,14 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         setSupportActionBar(toolbar);
 
         initContentView();
+        checkPrivacyPolicyState();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         presenter.updateNewPostCounter();
+        checkPrivacyPolicyState();
     }
 
     @NonNull
@@ -68,6 +84,50 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             return new MainPresenter(this);
         }
         return presenter;
+    }
+
+    private void checkPrivacyPolicyState() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
+        reference.child("/profiles/" + firebaseAuth.getUid()).child("privacy_policy").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue() == "false" || dataSnapshot.getValue() == null) {
+                    DialogFragment dialogFragment = new PrivacyPolicyDialog();
+                    dialogFragment.show(getSupportFragmentManager(), "PrivacyPolicyDialog");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        firebaseDatabase.getReference("/profiles/" + firebaseAuth.getUid()).child("privacy_policy").setValue("true").addOnCompleteListener(task -> {
+            LogUtil.logDebug(TAG, "User accepted the privacy policy");
+        });
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
+    }
+
+    @Override
+    public void onDialogNeutralClick(DialogFragment dialog) {
+        String url = "https://app.termly.io/document/privacy-policy/5b6df71c-52cf-4e91-9201-56301e7a5a46";
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
     }
 
     @Override

@@ -1,12 +1,15 @@
 package com.apexsoftware.quotable.main.main;
+
 // Created by Jack Butler on 10/5/2018.
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.v4.app.DialogFragment;
 import android.view.View;
 
 import com.apexsoftware.quotable.R;
+import com.apexsoftware.quotable.dialogs.PrivacyPolicyDialog;
 import com.apexsoftware.quotable.enums.PostStatus;
 import com.apexsoftware.quotable.main.base.BasePresenter;
 import com.apexsoftware.quotable.main.postDetails.PostDetailsActivity;
@@ -17,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MainPresenter extends BasePresenter<MainView> {
 
     private PostManager postManager;
+    private DialogFragment dialogFragment;
 
     public MainPresenter(Context context) {
         super(context);

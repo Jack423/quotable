@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/login_screen_title_margin"
-            android:text="Login"
+            android:text="Quotable Login"
             android:textAppearance="@android:style/TextAppearance.Material.Display1" />
 
         <RelativeLayout
@@ -55,5 +55,6 @@
                 android:textStyle="bold" />
 
         </RelativeLayout>
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
