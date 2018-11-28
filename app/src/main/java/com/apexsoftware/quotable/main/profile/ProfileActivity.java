@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -54,7 +55,10 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
     public static final String USER_ID_EXTRA_KEY = "ProfileActivity.USER_ID_EXTRA_KEY";
 
     // UI references.
-    private TextView nameEditText;
+    private TextView nameTextView;
+    private TextView handleTextView;
+    private TextView bioTextView;
+    private TextView dateJoinedTextView;
     private ImageView imageView;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -68,15 +72,16 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
 
     private PostsByUserAdapter postsAdapter;
     private SwipeRefreshLayout swipeContainer;
-    private TextView likesCountersTextView;
+    private TextView likesCounterTextView;
     private TextView followersCounterTextView;
     private TextView followingsCounterTextView;
     private FollowButton followButton;
+    private Button editProfileButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_profile_new);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -92,17 +97,26 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
             currentUserId = firebaseUser.getUid();
         }
 
-        //Setup login form
+        //Setup
         progressBar = findViewById(R.id.progressBar);
         imageView = findViewById(R.id.imageView);
-        nameEditText = findViewById(R.id.nameEditText);
+        nameTextView = findViewById(R.id.nameTextView);
+        handleTextView = findViewById(R.id.handleTextView);
+        bioTextView = findViewById(R.id.bioTextView);
+        dateJoinedTextView = findViewById(R.id.dateJoinedTextView);
+
         postsCounterTextView = findViewById(R.id.postsCounterTextView);
-        likesCountersTextView = findViewById(R.id.likesCountersTextView);
+        likesCounterTextView = findViewById(R.id.likesCounterTextView);
         followersCounterTextView = findViewById(R.id.followersCounterTextView);
         followingsCounterTextView = findViewById(R.id.followingsCounterTextView);
         postsProgressBar = findViewById(R.id.postsProgressBar);
         followButton = findViewById(R.id.followButton);
         swipeContainer = findViewById(R.id.swipeContainer);
+        editProfileButton = findViewById(R.id.editProfileButton);
+
+        if (!currentUserId.equals(userID)) {
+            editProfileButton.setVisibility(View.GONE);
+        }
 
         initListeners();
 
@@ -116,6 +130,8 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
     protected void onStart() {
         super.onStart();
         presenter.loadProfile(this, userID);
+        presenter.getFollowersCount(userID);
+        presenter.getFollowingsCount(userID);
     }
 
     @NonNull
@@ -130,6 +146,10 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
     private void initListeners() {
         followButton.setOnClickListener(v -> {
             presenter.onFollowButtonClick(followButton.getState(), userID);
+        });
+
+        editProfileButton.setOnClickListener(v -> {
+            presenter.onEditProfileButtonClick();
         });
 
         followingsCounterTextView.setOnClickListener(v -> {
@@ -210,7 +230,22 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
 
     @Override
     public void setProfileName(String username) {
-        nameEditText.setText(username);
+        nameTextView.setText(username);
+    }
+
+    @Override
+    public void setProfileHandle(String handle) {
+        handleTextView.setText(handle);
+    }
+
+    @Override
+    public void setProfileBio(String bio) {
+        bioTextView.setText(bio);
+    }
+
+    @Override
+    public void setProfileDateJoined(String dateJoined) {
+        dateJoinedTextView.setText(dateJoined);
     }
 
     private void scheduleStartPostponedTransition(final ImageView imageView) {
@@ -296,7 +331,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
 
     @Override
     public void updateLikesCounter(Spannable text) {
-        likesCountersTextView.setText(text);
+        likesCounterTextView.setText(text);
     }
 
     @Override
@@ -309,7 +344,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
 
     @Override
     public void showLikeCounter(boolean show) {
-        likesCountersTextView.setVisibility(show ? View.VISIBLE : View.GONE);
+        likesCounterTextView.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override

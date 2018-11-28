@@ -16,9 +16,16 @@ public class FormatterUtil {
 
     public static String firebaseDBDate = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     public static String firebaseDBDay = "yyyy-MM-dd";
+    public static String monthYear = "MMMM yyyy";
     public static final long NOW_TIME_RANGE = DateUtils.MINUTE_IN_MILLIS * 5; // 5 minutes
 
     public static String dateTime = "yyyy-MM-dd HH:mm:ss";
+
+    public static String getMonthYear(Date date) {
+        SimpleDateFormat cbDateFormat = new SimpleDateFormat(monthYear);
+        cbDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return cbDateFormat.format(date);
+    }
 
     public static SimpleDateFormat getFirebaseDateFormat() {
         SimpleDateFormat cbDateFormat = new SimpleDateFormat(firebaseDBDate);

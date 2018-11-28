@@ -1,7 +1,11 @@
 package com.apexsoftware.quotable.model;
+
 // Created by Jack Butler on 10/2/2018.
 
+import com.apexsoftware.quotable.util.FormatterUtil;
+
 import java.io.Serializable;
+import java.util.Date;
 
 public class Profile implements Serializable {
     private String id;
@@ -9,12 +13,16 @@ public class Profile implements Serializable {
     private String handle;
     private String email;
     private String bio;
+    private long createdDate;
+    private String dateJoined;
     private String photoUrl;
     private long likesCount;
     private String registrationToken;
 
     public Profile() {
         //Default constructor required for calls to DataSnapshot.getValue(Profile.class)
+        this.createdDate = new Date().getTime();
+        dateJoined = FormatterUtil.getMonthYear(new Date(createdDate));
     }
 
     public Profile(String id) {
@@ -59,6 +67,14 @@ public class Profile implements Serializable {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public long getCreatedDate() {
+        return createdDate;
+    }
+
+    public String getDateJoined() {
+        return dateJoined;
     }
 
     public String getPhotoUrl() {

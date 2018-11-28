@@ -19,6 +19,9 @@ public interface ProfileView extends BaseView {
     void startEditProfileActivity();
     void openCreatePostActivity();
     void setProfileName(String username);
+    void setProfileHandle(String handle);
+    void setProfileBio(String bio);
+    void setProfileDateJoined(String dateJoined);
     void setProfilePhoto(String photoUrl);
     void setDefaultProfilePhoto();
     void updateLikesCounter(Spannable text);

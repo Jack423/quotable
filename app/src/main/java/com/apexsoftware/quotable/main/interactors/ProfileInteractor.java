@@ -3,6 +3,7 @@ package com.apexsoftware.quotable.main.interactors;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import com.apexsoftware.quotable.ApplicationHelper;
 import com.apexsoftware.quotable.enums.UploadImagePrefix;
@@ -16,6 +17,9 @@ import com.apexsoftware.quotable.model.Post;
 import com.apexsoftware.quotable.model.Profile;
 import com.apexsoftware.quotable.util.ImageUtil;
 import com.apexsoftware.quotable.util.LogUtil;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,10 +31,14 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.apexsoftware.quotable.managers.DatabaseHelper.IMAGES_STORAGE_KEY;
 
 public class ProfileInteractor {
     private static final String TAG = ProfileInteractor.class.getSimpleName();
@@ -67,27 +75,31 @@ public class ProfileInteractor {
 
     public void createOrUpdateProfileWithImage(final Profile profile, Uri imageUri, final OnProfileCreatedListener onProfileCreatedListener) {
         String imageTitle = ImageUtil.generateImageTitle(UploadImagePrefix.PROFILE, profile.getId());
-        UploadTask uploadTask = databaseHelper.uploadImage(imageUri, imageTitle);
-
-        if (uploadTask != null) {
-            uploadTask.addOnCompleteListener(task -> {
+        databaseHelper.uploadImage(imageUri, imageTitle).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                 if (task.isSuccessful()) {
-                    Uri downloadUrl = task.getResult().getUploadSessionUri();
-                    LogUtil.logDebug(TAG, "successful upload image, image url: " + String.valueOf(downloadUrl));
+                    final StorageReference reference = FirebaseStorage.getInstance().getReference().child(IMAGES_STORAGE_KEY + "/" + imageTitle);
+                    return reference.getDownloadUrl();
+                } else {
+                    throw task.getException();
+                }
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    String downloadUrl = downloadUri.toString();
 
-                    profile.setPhotoUrl(downloadUrl.toString());
+                    profile.setPhotoUrl(downloadUrl);
                     createOrUpdateProfile(profile, onProfileCreatedListener);
-
                 } else {
                     onProfileCreatedListener.onProfileCreated(false);
-                    LogUtil.logDebug(TAG, "fail to upload image");
+                    LogUtil.logDebug(TAG, "failed to upload image");
                 }
-
-            });
-        } else {
-            onProfileCreatedListener.onProfileCreated(false);
-            LogUtil.logDebug(TAG, "fail to upload image");
-        }
+            }
+        });
     }
 
     public void isProfileExist(String id, final OnObjectExistListener<Profile> onObjectExistListener) {

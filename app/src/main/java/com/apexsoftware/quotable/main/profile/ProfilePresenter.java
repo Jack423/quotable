@@ -19,6 +19,7 @@ import com.apexsoftware.quotable.managers.ProfileManager;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListenerSimple;
 import com.apexsoftware.quotable.model.Post;
 import com.apexsoftware.quotable.model.Profile;
+import com.apexsoftware.quotable.util.FormatterUtil;
 import com.apexsoftware.quotable.util.LogUtil;
 import com.apexsoftware.quotable.views.FollowButton;
 
@@ -74,6 +75,12 @@ class ProfilePresenter extends BasePresenter<ProfileView> {
         }
     }
 
+    public void onEditProfileButtonClick() {
+        if (checkInternetConnection()) {
+            ifViewAttached(ProfileView::startEditProfileActivity);
+        }
+    }
+
     public void checkFollowState(String targetUserId) {
         String currentUserId = getCurrentUserId();
 
@@ -124,6 +131,9 @@ class ProfilePresenter extends BasePresenter<ProfileView> {
                 profile = obj;
                 ifViewAttached(view -> {
                     view.setProfileName(profile.getUsername());
+                    view.setProfileHandle("@" + profile.getHandle());
+                    view.setProfileBio(profile.getBio());
+                    view.setProfileDateJoined(profile.getDateJoined());
 
                     if (profile.getPhotoUrl() != null) {
                         view.setProfilePhoto(profile.getPhotoUrl());

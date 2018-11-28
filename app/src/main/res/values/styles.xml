@@ -29,6 +29,11 @@
         <item name="android:textColor">@color/colorPrimaryDarkText</item>
     </style>
 
+    <style name="TextAppearance.Handle" parent="@android:style/TextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
     <style name="HashtagView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
