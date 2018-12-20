@@ -9,12 +9,14 @@ import com.apexsoftware.quotable.main.base.BaseView;
 import com.apexsoftware.quotable.main.pickImageBase.PickImagePresenter;
 import com.apexsoftware.quotable.managers.ProfileManager;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListenerSimple;
+import com.apexsoftware.quotable.model.Handle;
 import com.apexsoftware.quotable.model.Profile;
 import com.apexsoftware.quotable.util.ValidationUtil;
 
 public class EditProfilePresenter<V extends EditProfileView> extends PickImagePresenter<V> {
 
     protected Profile profile;
+    protected Handle handle;
     protected ProfileManager profileManager;
 
     protected EditProfilePresenter(Context context) {
@@ -69,7 +71,8 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                     view.showProgress();
                     profile.setUsername(name);
                     profile.setBio(bio);
-                    profile.setHandle(handle);
+                    //profile.setHandle(handle);
+
                     createOrUpdateProfile(imageUri);
                 }
             });

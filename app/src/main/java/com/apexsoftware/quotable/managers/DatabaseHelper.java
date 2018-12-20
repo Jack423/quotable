@@ -33,6 +33,7 @@ public class DatabaseHelper {
     public static final String FOLLOWINGS_POSTS_DB_KEY = "followingPostsIds";
     public static final String FOLLOWERS_DB_KEY = "followers";
     public static final String IMAGES_STORAGE_KEY = "images";
+    public static final String HANDLES_DB_KEY = "handles";
 
     private Context context;
     private FirebaseDatabase database;

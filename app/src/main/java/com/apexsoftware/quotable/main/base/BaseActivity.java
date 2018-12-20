@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.apexsoftware.quotable.Constants;
 import com.apexsoftware.quotable.R;
-import com.apexsoftware.quotable.main.login.LoginActivity;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 
 public abstract class BaseActivity<V extends BaseView, P extends BasePresenter<V>> extends MvpActivity<V, P> implements BaseView {

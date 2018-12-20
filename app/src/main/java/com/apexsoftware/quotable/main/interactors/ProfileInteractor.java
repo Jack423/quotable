@@ -3,6 +3,7 @@ package com.apexsoftware.quotable.main.interactors;
 
 import android.content.Context;
 import android.net.Uri;
+import android.renderscript.Sampler;
 import android.support.annotation.NonNull;
 
 import com.apexsoftware.quotable.ApplicationHelper;
@@ -118,7 +119,7 @@ public class ProfileInteractor {
     }
 
     public void isHandleExist(String handle, final OnObjectExistListener<Profile> onObjectExistListener) {
-        //DatabaseReference databaseReference = databaseHelper.getDatabaseReference().child("profiles").child()
+        //DatabaseReference databaseReference = databaseHelper.getDatabaseReference().child("handles").child()
         //TODO: implement handle checking on profile setup
     }
 
@@ -234,6 +235,29 @@ public class ProfileInteractor {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 LogUtil.logError(TAG, "searchProfiles(), onCancelled", new Exception(databaseError.getMessage()));
+            }
+        });
+
+        databaseHelper.addActiveListener(valueEventListener, reference);
+        return valueEventListener;
+    }
+
+    public ValueEventListener searchHandles(String handleText, OnDataChangedListener<Profile> onDataChangedListener) {
+        DatabaseReference reference = databaseHelper.getDatabaseReference().child(DatabaseHelper.PROFILES_DB_KEY);
+        ValueEventListener valueEventListener = getSearchQuery(reference, "handle", handleText).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Profile> list = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Profile profile = snapshot.getValue(Profile.class);
+                    list.add(profile);
+                }
+                onDataChangedListener.onListChanged(list);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                LogUtil.logError(TAG, "searchHandles(), onCanceled", new Exception(databaseError.getMessage()));
             }
         });
 
