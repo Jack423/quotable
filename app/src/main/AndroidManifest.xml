@@ -30,7 +30,6 @@
             <meta-data android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
-        <activity android:name=".main.login.LoginActivity" />
         <activity android:name=".main.editProfile.createProfile.CreateProfileActivity" />
         <activity
             android:name=".main.editProfile.EditProfileActivity"
@@ -72,6 +71,7 @@
                 android:resource="@xml/searchable"/>
 
         </activity>
+        <activity android:name=".main.login.LoginActivity" />
 
         <service
             android:name=".services.MyFirebaseMessagingService">

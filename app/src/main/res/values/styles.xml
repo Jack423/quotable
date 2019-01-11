@@ -4,6 +4,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="fontFamily">@font/roboto</item> <!-- target android sdk versions < 26 and > 14 if theme other than AppCompat -->
     </style>
 
     <!-- Base application theme. -->
@@ -12,6 +14,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="fontFamily">@font/roboto</item> <!-- target android sdk versions < 26 and > 14 if theme other than AppCompat -->
     </style>
 
     <style name="TextAppearance.Title" parent="@android:style/TextAppearance">

@@ -20,6 +20,7 @@ import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.adapters.UsersAdapter;
 import com.apexsoftware.quotable.adapters.holders.UserViewHolder;
 import com.apexsoftware.quotable.main.base.BaseActivity;
+import com.apexsoftware.quotable.main.login.LoginActivity;
 import com.apexsoftware.quotable.main.profile.ProfileActivity;
 import com.apexsoftware.quotable.views.FollowButton;
 

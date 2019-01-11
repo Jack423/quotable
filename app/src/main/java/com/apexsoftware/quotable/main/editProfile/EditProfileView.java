@@ -6,7 +6,7 @@ import com.apexsoftware.quotable.model.Profile;
 import java.util.List;
 
 public interface EditProfileView extends PickImageView {
-    void onHandleSearchResultsReady(List<Profile> profiles);
+    //void onHandleSearchResultsReady(List<Profile> profiles);
 
     void setName(String username);
 
