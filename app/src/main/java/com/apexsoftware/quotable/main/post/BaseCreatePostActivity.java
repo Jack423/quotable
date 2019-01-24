@@ -9,25 +9,28 @@ import android.widget.ProgressBar;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.main.pickImageBase.PickImageActivity;
+import com.hootsuite.nachos.NachoTextView;
 
 public abstract class BaseCreatePostActivity<V extends BaseCreatePostView, P extends BaseCreatePostPresenter<V>> extends PickImageActivity<V, P> implements BaseCreatePostView {
 
     protected ProgressBar progressBar;
     protected EditText quoteEditText;
     protected EditText contextEditText;
-    protected EditText namesEditText;
+    //protected EditText namesEditText;
+    protected NachoTextView tags;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.base_create_post_activity);
+        setContentView(R.layout.base_create_post_activity_new);
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
         quoteEditText = findViewById(R.id.et_quote);
         contextEditText = findViewById(R.id.et_description);
-        namesEditText = findViewById(R.id.et_names);
+        //namesEditText = findViewById(R.id.et_names);
+        tags = findViewById(R.id.et_tag);
     }
 
     @Override
@@ -59,8 +62,8 @@ public abstract class BaseCreatePostActivity<V extends BaseCreatePostView, P ext
 
     @Override
     public void setNamesError(String error) {
-        namesEditText.setError(error);
-        namesEditText.requestFocus();
+        //namesEditText.setError(error);
+        //namesEditText.requestFocus();
     }
 
     @Override
@@ -75,7 +78,7 @@ public abstract class BaseCreatePostActivity<V extends BaseCreatePostView, P ext
 
     @Override
     public String getNamesText() {
-        return namesEditText.getText().toString();
+        //return namesEditText.getText().toString();
     }
 
     @Override
