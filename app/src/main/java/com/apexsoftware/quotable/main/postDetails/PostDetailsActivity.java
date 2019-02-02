@@ -48,6 +48,7 @@ import com.apexsoftware.quotable.util.GlideApp;
 import com.apexsoftware.quotable.util.ImageUtil;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.greenfrvr.hashtagview.HashtagView;
+import com.hootsuite.nachos.NachoTextView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -75,6 +76,7 @@ public class PostDetailsActivity extends BaseActivity<PostDetailsView, PostDetai
     private TextView quoteTextView;
     private TextView descriptionEditText;
     private HashtagView namesView;
+    private NachoTextView tagsView;
     private ProgressBar commentsProgressBar;
     private RecyclerView commentsRecyclerView;
     private TextView warningCommentsTextView;
@@ -130,6 +132,7 @@ public class PostDetailsActivity extends BaseActivity<PostDetailsView, PostDetai
         warningCommentsTextView = findViewById(R.id.tv_warning_comments);
         sendButton = findViewById(R.id.bt_send);
         namesView = findViewById(R.id.namesView);
+        tagsView = findViewById(R.id.tagsView);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isAuthorAnimationRequired) {
             authorImageView.setScaleX(0);
@@ -341,10 +344,15 @@ public class PostDetailsActivity extends BaseActivity<PostDetailsView, PostDetai
     }
 
     @Override
+    public void setTags(List<String> tags) {
+        tagsView.setText(tags);
+    }
+
+    /*@Override
     public void setNames(String names) {
         List<String> namesList = Arrays.asList(names.split(" "));
         namesView.setData(namesList);
-    }
+    }*/
 
     @Override
     public void loadAuthorPhoto(String photoUrl) {

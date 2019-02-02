@@ -252,7 +252,9 @@ public class PostInteractor {
                         post.setDescription((String) mapObj.get("description"));
                         post.setAuthorId((String) mapObj.get("authorId"));
                         post.setCreatedDate(createdDate);
-                        post.setNames((String) mapObj.get("names"));
+                        //TODO: Fix this
+                        //post.setNames((String) mapObj.get("tags"));
+                        post.setTags((List<String>) mapObj.get("tags"));
                         if (mapObj.containsKey("commentsCount")) {
                             post.setCommentsCount((long) mapObj.get("commentsCount"));
                         }

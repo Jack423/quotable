@@ -98,9 +98,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/namesView" />
+                app:layout_constraintTop_toBottomOf="@+id/tagsView" />
 
-            <com.greenfrvr.hashtagview.HashtagView
+            <!--<com.greenfrvr.hashtagview.HashtagView
                 android:id="@+id/namesView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -113,7 +113,21 @@
                 app:tagPaddingBottom="@dimen/small_intrinsic_padding"
                 app:tagPaddingLeft="6dp"
                 app:tagPaddingTop="8dp"
-                app:tagTextColor="#E5E5E5"></com.greenfrvr.hashtagview.HashtagView>
+                app:tagTextColor="#E5E5E5"></com.greenfrvr.hashtagview.HashtagView>-->
+
+            <com.hootsuite.nachos.NachoTextView
+                android:id="@+id/tagsView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/transparent"
+                android:editable="false"
+                android:gravity="left"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/commentsParentContainer"

@@ -20,7 +20,9 @@ public interface PostDetailsView extends BaseView {
 
     void setDescription(String description);
 
-    void setNames(String names);
+    void setTags(List<String> tags);
+
+    //void setNames(String names);
 
     //void loadPostDetailImage(String imagePath);
 

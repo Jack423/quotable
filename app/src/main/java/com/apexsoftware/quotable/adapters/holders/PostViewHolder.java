@@ -25,6 +25,8 @@ import com.apexsoftware.quotable.util.ImageUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.greenfrvr.hashtagview.HashtagView;
+import com.hootsuite.nachos.NachoTextView;
+import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +46,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private TextView dateTextView;
     private ImageView authorImageView;
     private ViewGroup likeViewGroup;
-    private HashtagView hashtagView;
+    //private HashtagView hashtagView;
+    private NachoTextView tagsEditText;
 
     private ProfileManager profileManager;
     protected PostManager postManager;
@@ -67,14 +70,14 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         watchersCountTextView = view.findViewById(R.id.tv_watchers_count);
         dateTextView = view.findViewById(R.id.tv_date);
         nameTextView = view.findViewById(R.id.tv_name);
+        tagsEditText = view.findViewById(R.id.tagsEditText);
         handleTextView = view.findViewById(R.id.tv_handle);
         quoteTextView = view.findViewById(R.id.tv_quote);
         detailsTextView = view.findViewById(R.id.tv_description);
         authorImageView = view.findViewById(R.id.iv_author_post);
         likeViewGroup = view.findViewById(R.id.likesContainer);
-        hashtagView = view.findViewById(R.id.namesView);
-
-        //authorImageView.setVisibility(isAuthorNeeded ? View.VISIBLE : View.GONE);
+        //hashtagView = view.findViewById(R.id.namesView);
+        tagsEditText = view.findViewById(R.id.tagsEditText);
 
         profileManager = ProfileManager.getInstance(context.getApplicationContext());
         postManager = PostManager.getInstance(context.getApplicationContext());
@@ -123,8 +126,13 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         watchersCountTextView.setText(String.valueOf(post.getWatchersCount()));
 
         //Adds names to an array and makes hashtag view with them
-        List<String> namesList = Arrays.asList(post.getNames().split(" "));
-        hashtagView.setData(namesList);
+        //TODO: Fix this
+        //List<String> namesList = Arrays.asList(post.getNames().split(" "));
+        //hashtagView.setData(namesList);
+        List<String> tags = post.getTags();
+        tagsEditText.setText(tags);
+        tagsEditText.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+
 
         CharSequence date = FormatterUtil.getRelativeTimeSpanStringShort(context, post.getCreatedDate());
         dateTextView.setText(date);

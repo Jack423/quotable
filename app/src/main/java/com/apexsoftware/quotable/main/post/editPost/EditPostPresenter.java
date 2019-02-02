@@ -9,6 +9,8 @@ import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.managers.listeners.OnPostChangedListener;
 import com.apexsoftware.quotable.model.Post;
 
+import java.util.List;
+
 public class EditPostPresenter extends BaseCreatePostPresenter<EditPostView> {
     private Post post;
 
@@ -44,13 +46,14 @@ public class EditPostPresenter extends BaseCreatePostPresenter<EditPostView> {
     }
 
     @Override
-    protected void savePost(String quote, String description, String names) {
+    protected void savePost(String quote, String description, List<String> tags) {
         ifViewAttached(view -> {
             view.showProgress(R.string.message_saving);
 
             post.setQuote(quote);
             post.setDescription(description);
-            post.setNames(names);
+            //post.setNames(names);
+            post.setTags(tags);
 
             postManager.createOrUpdatePost(post);
             onPostSaved(true);

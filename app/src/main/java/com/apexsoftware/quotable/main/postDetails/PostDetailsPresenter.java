@@ -86,7 +86,8 @@ public class PostDetailsPresenter extends BasePresenter<PostDetailsView> {
         ifViewAttached(view -> {
             view.setQuote(post.getQuote());
             view.setDescription(post.getDescription());
-            view.setNames(post.getNames());
+            //view.setNames(post.getNames());
+            view.setTags(post.getTags());
             loadAuthorProfile();
         });
     }

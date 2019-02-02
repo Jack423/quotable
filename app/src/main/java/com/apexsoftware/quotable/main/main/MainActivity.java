@@ -90,20 +90,24 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
-        reference.child("/profiles/" + firebaseAuth.getUid()).child("privacy_policy").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue() == "false" || dataSnapshot.getValue() == null) {
-                    DialogFragment dialogFragment = new PrivacyPolicyDialog();
-                    dialogFragment.show(getSupportFragmentManager(), "PrivacyPolicyDialog");
+        if (firebaseAuth.getCurrentUser() != null) {
+            reference.child("/profiles/" + firebaseAuth.getUid()).child("privacy_policy").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.getValue() == "false" || dataSnapshot.getValue() == null) {
+                        DialogFragment dialogFragment = new PrivacyPolicyDialog();
+                        dialogFragment.show(getSupportFragmentManager(), "PrivacyPolicyDialog");
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        } else {
+            LogUtil.logDebug(TAG, "checkPrivacyPolicyState: User not signed in, skipping..");
+        }
     }
 
     @Override

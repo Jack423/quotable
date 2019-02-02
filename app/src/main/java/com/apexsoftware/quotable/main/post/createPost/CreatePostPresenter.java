@@ -8,6 +8,8 @@ import com.apexsoftware.quotable.main.post.BaseCreatePostPresenter;
 import com.apexsoftware.quotable.model.Post;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.List;
+
 public class CreatePostPresenter extends BaseCreatePostPresenter<CreatePostView> {
     public CreatePostPresenter(Context context) {
         super(context);
@@ -19,14 +21,15 @@ public class CreatePostPresenter extends BaseCreatePostPresenter<CreatePostView>
     }
 
     @Override
-    protected void savePost(String quote, String description, String names) {
+    protected void savePost(String quote, String description, List<String> tags) {
         ifViewAttached(view -> {
             view.showProgress();
             Post post = new Post();
             post.setQuote(quote);
             post.setDescription(description);
 
-            post.setNames(names);
+            //post.setNames(names);
+            post.setTags(tags);
 
             post.setAuthorId(FirebaseAuth.getInstance().getCurrentUser().getUid());
             postManager.createPost(post, this);

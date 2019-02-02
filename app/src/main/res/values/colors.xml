@@ -21,4 +21,7 @@
     <color name="follow_button_light_color">@color/white</color>
     <color name="follow_button_light_pressed_color">#f7f7f7</color>
     <color name="posts_counter_bg">#df3e3e3e</color>
+
+    <color name="chip_text_color">#FFFFFF</color>
+    <color name="chip_background_color">#ff80ab</color>
 </resources>

@@ -7,13 +7,15 @@ import com.apexsoftware.quotable.util.FormatterUtil;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Post implements Serializable, LazyLoading {
     private String id;
     private String quote;
     private String description;
-    private String names;
+    //private String names;
+    private List<String> tags;
     private long createdDate;
     private String authorId;
     private long commentsCount;
@@ -56,12 +58,12 @@ public class Post implements Serializable, LazyLoading {
         this.description = description;
     }
 
-    public String getNames() {
-        return names;
+    public List<String> getTags() {
+        return tags;
     }
 
-    public void setNames(String names) {
-        this.names = names;
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 
     public long getCreatedDate() {
@@ -124,7 +126,7 @@ public class Post implements Serializable, LazyLoading {
         result.put("watchersCount", watchersCount);
         result.put("hasReport", hasReport);
         result.put("createdDateText", FormatterUtil.getFirebaseDateFormat().format(new Date(createdDate)));
-        result.put("names", names);
+        result.put("tags", tags);
 
         return result;
     }

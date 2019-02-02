@@ -61,7 +61,7 @@ public class EditPostActivity extends BaseCreatePostActivity<EditPostView, EditP
     private void fillUiFields(Post post) {
         quoteEditText.setText(post.getQuote());
         contextEditText.setText(post.getDescription());
-        namesEditText.setText(post.getNames());
+        //namesEditText.setText(post.getNames());
         hideProgress();
     }
 

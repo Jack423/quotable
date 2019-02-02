@@ -10,6 +10,9 @@ import android.widget.ProgressBar;
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.main.pickImageBase.PickImageActivity;
 import com.hootsuite.nachos.NachoTextView;
+import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
+
+import java.util.List;
 
 public abstract class BaseCreatePostActivity<V extends BaseCreatePostView, P extends BaseCreatePostPresenter<V>> extends PickImageActivity<V, P> implements BaseCreatePostView {
 
@@ -17,7 +20,7 @@ public abstract class BaseCreatePostActivity<V extends BaseCreatePostView, P ext
     protected EditText quoteEditText;
     protected EditText contextEditText;
     //protected EditText namesEditText;
-    protected NachoTextView tags;
+    protected NachoTextView tagsEditText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,7 +33,9 @@ public abstract class BaseCreatePostActivity<V extends BaseCreatePostView, P ext
         quoteEditText = findViewById(R.id.et_quote);
         contextEditText = findViewById(R.id.et_description);
         //namesEditText = findViewById(R.id.et_names);
-        tags = findViewById(R.id.et_tag);
+        tagsEditText = findViewById(R.id.et_tag);
+
+        tagsEditText.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
     }
 
     @Override
@@ -61,9 +66,20 @@ public abstract class BaseCreatePostActivity<V extends BaseCreatePostView, P ext
     }
 
     @Override
+    public void setTagsError(String error){
+        tagsEditText.setError(error);
+        tagsEditText.requestFocus();
+    }
+
+    /*@Override
     public void setNamesError(String error) {
-        //namesEditText.setError(error);
-        //namesEditText.requestFocus();
+        namesEditText.setError(error);
+        namesEditText.requestFocus();
+    }*/
+
+    @Override
+    public List<String> getTags() {
+        return tagsEditText.getChipValues();
     }
 
     @Override
@@ -76,11 +92,11 @@ public abstract class BaseCreatePostActivity<V extends BaseCreatePostView, P ext
         return contextEditText.getText().toString();
     }
 
-    @Override
+    /*@Override
     public String getNamesText() {
-        //return namesEditText.getText().toString();
+        return namesEditText.getText().toString();
     }
-
+    */
     @Override
     public void onPostSavedSuccess() {
         setResult(RESULT_OK);
