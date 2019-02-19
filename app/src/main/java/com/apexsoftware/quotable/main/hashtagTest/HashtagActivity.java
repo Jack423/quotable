@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.main.base.BaseActivity;
+import com.hootsuite.nachos.NachoTextView;
+import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,16 +15,19 @@ public class HashtagActivity extends BaseActivity<HashtagView, HastagPresenter> 
 
     private static final List<String> DATA = Arrays.asList("bob", "allice", "dan", "joe", "margret", "daniel", "danna");
 
-    private com.greenfrvr.hashtagview.HashtagView hashtagView;
+    //private com.greenfrvr.hashtagview.HashtagView hashtagView;
+    private NachoTextView nachoTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hashtag);
 
-        hashtagView = findViewById(R.id.hastags);
+        //hashtagView = findViewById(R.id.hastags);
+        //hashtagView.setData(DATA);
 
-        hashtagView.setData(DATA);
+        nachoTextView = findViewById(R.id.tagsView);
+        nachoTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
     }
 
     @NonNull

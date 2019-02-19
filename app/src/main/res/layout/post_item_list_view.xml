@@ -93,7 +93,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_quote" />
 
-            <com.greenfrvr.hashtagview.HashtagView
+            <!--<com.greenfrvr.hashtagview.HashtagView
                 android:id="@+id/namesView"
                 style="@style/HashtagView"
                 android:layout_width="0dp"
@@ -115,7 +115,7 @@
                 app:tagPaddingLeft="6dp"
                 app:tagPaddingRight="6dp"
                 app:tagPaddingTop="8dp"
-                app:tagTextColor="#E5E5E5"></com.greenfrvr.hashtagview.HashtagView>
+                app:tagTextColor="#E5E5E5"></com.greenfrvr.hashtagview.HashtagView>-->
 
             <include
                 android:id="@+id/countersContainer"

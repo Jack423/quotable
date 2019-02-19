@@ -254,7 +254,7 @@ public class PostInteractor {
                         post.setCreatedDate(createdDate);
                         //TODO: Fix this
                         //post.setNames((String) mapObj.get("tags"));
-                        post.setTags((List<String>) mapObj.get("tags"));
+                        post.setTags((String) mapObj.get("tags"));
                         if (mapObj.containsKey("commentsCount")) {
                             post.setCommentsCount((long) mapObj.get("commentsCount"));
                         }
@@ -264,6 +264,7 @@ public class PostInteractor {
                         if (mapObj.containsKey("watchersCount")) {
                             post.setWatchersCount((long) mapObj.get("watchersCount"));
                         }
+                        //LogUtil.logInfo(TAG, (String) mapObj.get("tags"));
                         list.add(post);
                     }
                 }
@@ -517,7 +518,7 @@ public class PostInteractor {
         DatabaseReference reference = databaseHelper.getDatabaseReference().child(DatabaseHelper.POSTS_DB_KEY);
         ValueEventListener valueEventListener = getFilteredQuery(reference,"likesCount", limit).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 PostListResult result = parsePostList((Map<String, Object>) dataSnapshot.getValue());
                 onDataChangedListener.onListChanged(result.getPosts());
             }

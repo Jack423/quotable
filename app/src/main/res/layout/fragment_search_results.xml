@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:paddingBottom="@dimen/intrinsic_padding"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:listitem="@layout/post_item_list_view" />
+        tools:listitem="@layout/post_item_list_view_new" />
 
     <TextView
         android:id="@+id/emptyListMessageTextView"

@@ -35,7 +35,7 @@ public abstract class BaseCreatePostActivity<V extends BaseCreatePostView, P ext
         //namesEditText = findViewById(R.id.et_names);
         tagsEditText = findViewById(R.id.et_tag);
 
-        tagsEditText.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+        tagsEditText.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
     }
 
     @Override
@@ -78,8 +78,8 @@ public abstract class BaseCreatePostActivity<V extends BaseCreatePostView, P ext
     }*/
 
     @Override
-    public List<String> getTags() {
-        return tagsEditText.getChipValues();
+    public String getTags() {
+        return tagsEditText.getText().toString();
     }
 
     @Override

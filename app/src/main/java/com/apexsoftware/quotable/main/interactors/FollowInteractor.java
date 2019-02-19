@@ -158,6 +158,7 @@ public class FollowInteractor {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 LogUtil.logDebug(TAG, "getFollowersCount, onCancelled");
+                LogUtil.logDebug(TAG, databaseError.getMessage());
             }
         });
     }

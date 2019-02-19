@@ -42,12 +42,11 @@ import com.apexsoftware.quotable.main.profile.ProfileActivity;
 import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.model.Comment;
 import com.apexsoftware.quotable.model.Post;
-import com.apexsoftware.quotable.util.AnimationUtils;
 import com.apexsoftware.quotable.util.FormatterUtil;
 import com.apexsoftware.quotable.util.GlideApp;
 import com.apexsoftware.quotable.util.ImageUtil;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.greenfrvr.hashtagview.HashtagView;
+//import com.greenfrvr.hashtagview.HashtagView;
 import com.hootsuite.nachos.NachoTextView;
 
 import java.util.Arrays;
@@ -75,7 +74,7 @@ public class PostDetailsActivity extends BaseActivity<PostDetailsView, PostDetai
     private ProgressBar progressBar;
     private TextView quoteTextView;
     private TextView descriptionEditText;
-    private HashtagView namesView;
+    //private HashtagView namesView;
     private NachoTextView tagsView;
     private ProgressBar commentsProgressBar;
     private RecyclerView commentsRecyclerView;
@@ -131,7 +130,7 @@ public class PostDetailsActivity extends BaseActivity<PostDetailsView, PostDetai
         commentsProgressBar = findViewById(R.id.commentsProgressBar);
         warningCommentsTextView = findViewById(R.id.tv_warning_comments);
         sendButton = findViewById(R.id.bt_send);
-        namesView = findViewById(R.id.namesView);
+        //namesView = findViewById(R.id.namesView);
         tagsView = findViewById(R.id.tagsView);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isAuthorAnimationRequired) {
@@ -344,8 +343,9 @@ public class PostDetailsActivity extends BaseActivity<PostDetailsView, PostDetai
     }
 
     @Override
-    public void setTags(List<String> tags) {
-        tagsView.setText(tags);
+    public void setTags(String tags) {
+        List<String> tagsList = Arrays.asList(tags.split(" "));
+        tagsView.setText(tagsList);
     }
 
     /*@Override

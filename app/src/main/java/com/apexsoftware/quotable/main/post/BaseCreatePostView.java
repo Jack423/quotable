@@ -13,7 +13,7 @@ public interface BaseCreatePostView extends PickImageView {
     void setTagsError(String error);
     String getQuoteText();
     String getContextText();
-    List<String> getTags();
+    String getTags();
     //String getNamesText();
     void onPostSavedSuccess();
 }

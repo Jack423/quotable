@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.greenfrvr.hashtagview.HashtagView
+        <!--<com.greenfrvr.hashtagview.HashtagView
             android:id="@+id/hastags"
             style="@style/HashtagView"
             android:layout_marginStart="@dimen/intrinsic_padding"
@@ -29,7 +29,17 @@
             app:tagPaddingLeft="6dp"
             app:tagPaddingRight="6dp"
             app:tagPaddingTop="8dp"
-            app:tagTextColor="#E5E5E5"></com.greenfrvr.hashtagview.HashtagView>
+            app:tagTextColor="#E5E5E5"></com.greenfrvr.hashtagview.HashtagView>-->
+
+        <com.hootsuite.nachos.NachoTextView
+            android:id="@+id/tagsView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@android:color/transparent"
+            android:gravity="left" />
 
     </android.support.v7.widget.CardView>
 </android.support.constraint.ConstraintLayout>

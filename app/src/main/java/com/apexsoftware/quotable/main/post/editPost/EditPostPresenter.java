@@ -46,7 +46,7 @@ public class EditPostPresenter extends BaseCreatePostPresenter<EditPostView> {
     }
 
     @Override
-    protected void savePost(String quote, String description, List<String> tags) {
+    protected void savePost(String quote, String description, String tags) {
         ifViewAttached(view -> {
             view.showProgress(R.string.message_saving);
 

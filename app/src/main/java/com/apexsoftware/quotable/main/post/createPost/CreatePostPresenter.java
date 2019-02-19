@@ -21,14 +21,13 @@ public class CreatePostPresenter extends BaseCreatePostPresenter<CreatePostView>
     }
 
     @Override
-    protected void savePost(String quote, String description, List<String> tags) {
+    protected void savePost(String quote, String description, String tags) {
         ifViewAttached(view -> {
             view.showProgress();
             Post post = new Post();
             post.setQuote(quote);
             post.setDescription(description);
 
-            //post.setNames(names);
             post.setTags(tags);
 
             post.setAuthorId(FirebaseAuth.getInstance().getCurrentUser().getUid());

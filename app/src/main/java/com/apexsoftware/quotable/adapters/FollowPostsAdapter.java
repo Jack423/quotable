@@ -45,7 +45,7 @@ public class FollowPostsAdapter extends RecyclerView.Adapter<FollowPostViewHolde
     @Override
     public FollowPostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.post_item_list_view, parent, false);
+        View view = inflater.inflate(R.layout.post_item_list_view_new, parent, false);
         return new FollowPostViewHolder(view, createOnClickListener(), activity, true);
     }
 

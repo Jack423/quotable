@@ -3,6 +3,7 @@ package com.apexsoftware.quotable.model;
 
 import com.apexsoftware.quotable.enums.ItemType;
 import com.apexsoftware.quotable.util.FormatterUtil;
+import com.hootsuite.nachos.chip.Chip;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,18 +12,18 @@ import java.util.List;
 import java.util.Map;
 
 public class Post implements Serializable, LazyLoading {
-    private String id;
-    private String quote;
-    private String description;
+    String id;
+    String quote;
+    String description;
     //private String names;
-    private List<String> tags;
-    private long createdDate;
-    private String authorId;
-    private long commentsCount;
-    private long likesCount;
-    private long watchersCount;
-    private boolean hasReport;
-    private ItemType itemType;
+    String tags;
+    long createdDate;
+    String authorId;
+    long commentsCount;
+    long likesCount;
+    long watchersCount;
+    boolean hasReport;
+    ItemType itemType;
 
     public Post() {
         this.createdDate = new Date().getTime();
@@ -58,11 +59,11 @@ public class Post implements Serializable, LazyLoading {
         this.description = description;
     }
 
-    public List<String> getTags() {
+    public String getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(String tags) {
         this.tags = tags;
     }
 
@@ -119,6 +120,7 @@ public class Post implements Serializable, LazyLoading {
 
         result.put("quote", quote);
         result.put("description", description);
+        result.put("tags", tags);
         result.put("createdDate", createdDate);
         result.put("authorId", authorId);
         result.put("commentsCount", commentsCount);
@@ -126,7 +128,6 @@ public class Post implements Serializable, LazyLoading {
         result.put("watchersCount", watchersCount);
         result.put("hasReport", hasReport);
         result.put("createdDateText", FormatterUtil.getFirebaseDateFormat().format(new Date(createdDate)));
-        result.put("tags", tags);
 
         return result;
     }

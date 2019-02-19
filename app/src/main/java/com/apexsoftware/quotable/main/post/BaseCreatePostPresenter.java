@@ -25,7 +25,7 @@ public abstract class BaseCreatePostPresenter<V extends BaseCreatePostView> exte
     @StringRes
     protected abstract int getSaveFailMessage();
 
-    protected abstract void savePost(final String quote, final String description, final List<String> tags);
+    protected abstract void savePost(final String quote, final String description, final String tags);
 
     protected void attemptCreatePost() {
         ifViewAttached(view -> {
@@ -36,7 +36,7 @@ public abstract class BaseCreatePostPresenter<V extends BaseCreatePostView> exte
 
             String quote = view.getQuoteText().trim();
             String context = view.getContextText().trim();
-            List<String> tags = view.getTags();
+            String tags = view.getTags();
             //String names = view.getNamesText();
 
             boolean cancel = false;
@@ -56,10 +56,10 @@ public abstract class BaseCreatePostPresenter<V extends BaseCreatePostView> exte
                 cancel = true;
             }
 
-            /*if (TextUtils.isEmpty(names)) {
-                view.setNamesError("You need to specify who made this quote");
+            if (TextUtils.isEmpty(tags)) {
+                view.setTagsError("You need to specify who made this quote");
                 cancel = true;
-            }*/
+            }
 
             if(!cancel) {
                 creatingPost = true;

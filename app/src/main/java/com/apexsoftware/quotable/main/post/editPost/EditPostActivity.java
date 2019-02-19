@@ -62,6 +62,7 @@ public class EditPostActivity extends BaseCreatePostActivity<EditPostView, EditP
         quoteEditText.setText(post.getQuote());
         contextEditText.setText(post.getDescription());
         //namesEditText.setText(post.getNames());
+        tagsEditText.setText(post.getTags());
         hideProgress();
     }
 
