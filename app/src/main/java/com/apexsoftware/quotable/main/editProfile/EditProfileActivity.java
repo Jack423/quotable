@@ -142,6 +142,18 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
     }
 
     @Override
+    public void setBioError(String string) {
+        bioEditText.setError(string);
+        bioEditText.requestFocus();
+    }
+
+    @Override
+    public void setHandleError(String string) {
+        handleEditText.setError(string);
+        handleEditText.requestFocus();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.edit_profile, menu);

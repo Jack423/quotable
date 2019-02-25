@@ -112,11 +112,11 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
         postsProgressBar = findViewById(R.id.postsProgressBar);
         followButton = findViewById(R.id.followButton);
         swipeContainer = findViewById(R.id.swipeContainer);
-        editProfileButton = findViewById(R.id.editProfileButton);
+        //editProfileButton = findViewById(R.id.editProfileButton);
 
-        if (!currentUserId.equals(userID)) {
+        /*if (!currentUserId.equals(userID)) {
             editProfileButton.setVisibility(View.GONE);
-        }
+        }*/
 
         initListeners();
 
@@ -148,9 +148,9 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
             presenter.onFollowButtonClick(followButton.getState(), userID);
         });
 
-        editProfileButton.setOnClickListener(v -> {
+        /*editProfileButton.setOnClickListener(v -> {
             presenter.onEditProfileButtonClick();
-        });
+        });*/
 
         followingsCounterTextView.setOnClickListener(v -> {
             startUsersListActivity(UsersListType.FOLLOWINGS);

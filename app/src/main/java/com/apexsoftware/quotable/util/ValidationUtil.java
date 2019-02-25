@@ -42,12 +42,16 @@ public class ValidationUtil {
         return false;
     }
 
-    public static boolean isPostTitleValid(String name) {
-        return name.length() <= Constants.Post.MAX_POST_TITLE_LENGTH;
-    }
-
     public static boolean isNameValid(String name) {
         return name.length() <= Constants.Profile.MAX_NAME_LENGTH;
+    }
+
+    public static boolean isBioValid(String bio) {
+        return !bio.isEmpty();
+    }
+
+    public static boolean isHandleValid(String handle) {
+        return handle.length() <= Constants.Profile.MAX_HANDLE_LENGTH;
     }
 
     public static boolean isImage(Uri uri, Context context) {

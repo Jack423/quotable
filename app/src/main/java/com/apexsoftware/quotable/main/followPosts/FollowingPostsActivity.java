@@ -128,7 +128,7 @@ public class FollowingPostsActivity extends BaseActivity<FollowPostsView, Follow
         Intent intent = new Intent(FollowingPostsActivity.this, PostDetailsActivity.class);
         intent.putExtra(PostDetailsActivity.POST_ID_EXTRA_KEY, postId);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             View authorImageView = v.findViewById(R.id.iv_author_details);
 
@@ -138,7 +138,8 @@ public class FollowingPostsActivity extends BaseActivity<FollowPostsView, Follow
             startActivityForResult(intent, PostDetailsActivity.UPDATE_POST_REQUEST, options.toBundle());
         } else {
             startActivityForResult(intent, PostDetailsActivity.UPDATE_POST_REQUEST);
-        }
+        }*/
+        startActivityForResult(intent, PostDetailsActivity.UPDATE_POST_REQUEST);
     }
 
     @SuppressLint("RestrictedApi")
@@ -147,7 +148,7 @@ public class FollowingPostsActivity extends BaseActivity<FollowPostsView, Follow
         Intent intent = new Intent(FollowingPostsActivity.this, ProfileActivity.class);
         intent.putExtra(ProfileActivity.USER_ID_EXTRA_KEY, userId);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && view != null) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && view != null) {
 
             View authorImageView = view.findViewById(R.id.iv_author_details);
 
@@ -157,6 +158,7 @@ public class FollowingPostsActivity extends BaseActivity<FollowPostsView, Follow
             startActivityForResult(intent, ProfileActivity.CREATE_POST_FROM_PROFILE_REQUEST, options.toBundle());
         } else {
             startActivityForResult(intent, ProfileActivity.CREATE_POST_FROM_PROFILE_REQUEST);
-        }
+        }*/
+        startActivityForResult(intent, ProfileActivity.CREATE_POST_FROM_PROFILE_REQUEST);
     }
 }

@@ -23,4 +23,8 @@ public interface EditProfileView extends PickImageView {
     String getHandle();
 
     void setNameError(String string);
+
+    void setBioError(String string);
+
+    void setHandleError(String string);
 }

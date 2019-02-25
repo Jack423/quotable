@@ -356,10 +356,10 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                 startActivity(searchIntent);
                 return true;
 
-            case R.id.launch_hashtag_activity:
+            /*case R.id.launch_hashtag_activity:
                 Intent hashtagActivity = new Intent(this, HashtagActivity.class);
                 startActivity(hashtagActivity);
-                return true;
+                return true;*/
             default:
                 return super.onOptionsItemSelected(item);
         }

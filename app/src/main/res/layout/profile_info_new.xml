@@ -79,7 +79,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
-    <Button
+    <!--<Button
         android:id="@+id/editProfileButton"
         style="@android:style/Widget.DeviceDefault.Button.Borderless.Colored"
         android:layout_width="wrap_content"
@@ -88,7 +88,7 @@
         android:layout_marginEnd="8dp"
         android:text="Edit Profile"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />-->
 
     <TextView
         android:id="@+id/bioTextView"

@@ -65,13 +65,22 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                 } else if (!ValidationUtil.isNameValid(name)) {
                     view.setNameError(context.getString(R.string.error_profile_name_length));
                     cancel = true;
+                } else if (TextUtils.isEmpty(bio)) {
+                    view.setBioError("This field is required");
+                    cancel = true;
+                } else if (TextUtils.isEmpty(handle)) {
+                    view.setHandleError("This field is required");
+                    cancel = true;
+                } else if (!ValidationUtil.isHandleValid(handle)) {
+                    view.setHandleError("Max length of the handle should be less that 20 characters");
+                    cancel = true;
                 }
 
                 if (!cancel) {
                     view.showProgress();
                     profile.setUsername(name);
                     profile.setBio(bio);
-                    //profile.setHandle(handle);
+                    profile.setHandle(handle);
 
                     createOrUpdateProfile(imageUri);
                 }
