@@ -9,8 +9,6 @@ import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.managers.listeners.OnPostChangedListener;
 import com.apexsoftware.quotable.model.Post;
 
-import java.util.List;
-
 public class EditPostPresenter extends BaseCreatePostPresenter<EditPostView> {
     private Post post;
 

@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.adapters.holders.CommentViewHolder;
 import com.apexsoftware.quotable.model.Comment;

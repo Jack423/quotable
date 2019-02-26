@@ -19,7 +19,6 @@ import com.apexsoftware.quotable.managers.ProfileManager;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListenerSimple;
 import com.apexsoftware.quotable.model.Post;
 import com.apexsoftware.quotable.model.Profile;
-import com.apexsoftware.quotable.util.FormatterUtil;
 import com.apexsoftware.quotable.util.LogUtil;
 import com.apexsoftware.quotable.views.FollowButton;
 

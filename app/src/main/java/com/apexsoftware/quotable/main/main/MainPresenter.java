@@ -9,7 +9,6 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 
 import com.apexsoftware.quotable.R;
-import com.apexsoftware.quotable.dialogs.PrivacyPolicyDialog;
 import com.apexsoftware.quotable.enums.PostStatus;
 import com.apexsoftware.quotable.main.base.BasePresenter;
 import com.apexsoftware.quotable.main.postDetails.PostDetailsActivity;

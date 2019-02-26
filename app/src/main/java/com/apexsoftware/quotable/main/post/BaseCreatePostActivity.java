@@ -12,8 +12,6 @@ import com.apexsoftware.quotable.main.pickImageBase.PickImageActivity;
 import com.hootsuite.nachos.NachoTextView;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 
-import java.util.List;
-
 public abstract class BaseCreatePostActivity<V extends BaseCreatePostView, P extends BaseCreatePostPresenter<V>> extends PickImageActivity<V, P> implements BaseCreatePostView {
 
     protected ProgressBar progressBar;

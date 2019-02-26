@@ -1,7 +1,6 @@
 package com.apexsoftware.quotable.main.main;
 // Created by Jack Butler on 10/5/2018.
 
-import android.support.v4.app.DialogFragment;
 import android.view.View;
 
 import com.apexsoftware.quotable.main.base.BaseView;

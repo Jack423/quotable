@@ -46,11 +46,12 @@ import com.apexsoftware.quotable.util.FormatterUtil;
 import com.apexsoftware.quotable.util.GlideApp;
 import com.apexsoftware.quotable.util.ImageUtil;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-//import com.greenfrvr.hashtagview.HashtagView;
 import com.hootsuite.nachos.NachoTextView;
 
 import java.util.Arrays;
 import java.util.List;
+
+//import com.greenfrvr.hashtagview.HashtagView;
 
 public class PostDetailsActivity extends BaseActivity<PostDetailsView, PostDetailsPresenter> implements PostDetailsView, EditCommentDialog.CommentDialogCallback {
     public static final String POST_ID_EXTRA_KEY = "PostDetailsActivity.POST_ID_EXTRA_KEY";

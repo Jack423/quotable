@@ -25,7 +25,6 @@ import com.apexsoftware.quotable.util.ImageUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hootsuite.nachos.NachoTextView;
-import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 
 import java.util.Arrays;
 import java.util.List;

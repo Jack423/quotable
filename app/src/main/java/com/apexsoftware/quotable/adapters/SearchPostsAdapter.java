@@ -22,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.adapters.holders.PostViewHolder;
 import com.apexsoftware.quotable.controllers.LikeController;

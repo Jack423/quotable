@@ -3,27 +3,25 @@ package com.apexsoftware.quotable.model;
 
 import com.apexsoftware.quotable.enums.ItemType;
 import com.apexsoftware.quotable.util.FormatterUtil;
-import com.hootsuite.nachos.chip.Chip;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Post implements Serializable, LazyLoading {
-    String id;
-    String quote;
-    String description;
+    private String id;
+    private String quote;
+    private String description;
     //private String names;
-    String tags;
-    long createdDate;
-    String authorId;
-    long commentsCount;
-    long likesCount;
-    long watchersCount;
-    boolean hasReport;
-    ItemType itemType;
+    private String tags;
+    private long createdDate;
+    private String authorId;
+    private long commentsCount;
+    private long likesCount;
+    private long watchersCount;
+    private boolean hasReport;
+    private ItemType itemType;
 
     public Post() {
         this.createdDate = new Date().getTime();

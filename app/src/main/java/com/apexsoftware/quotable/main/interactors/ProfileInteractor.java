@@ -3,7 +3,6 @@ package com.apexsoftware.quotable.main.interactors;
 
 import android.content.Context;
 import android.net.Uri;
-import android.renderscript.Sampler;
 import android.support.annotation.NonNull;
 
 import com.apexsoftware.quotable.ApplicationHelper;
@@ -20,7 +19,6 @@ import com.apexsoftware.quotable.util.ImageUtil;
 import com.apexsoftware.quotable.util.LogUtil;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

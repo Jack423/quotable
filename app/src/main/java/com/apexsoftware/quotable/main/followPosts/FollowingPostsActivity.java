@@ -23,8 +23,6 @@ import com.apexsoftware.quotable.model.FollowingPost;
 
 import java.util.List;
 
-import static android.app.Activity.RESULT_OK;
-
 public class FollowingPostsActivity extends BaseActivity<FollowPostsView, FollowingPostsPresenter> implements FollowPostsView {
 
     private FollowPostsAdapter postsAdapter;

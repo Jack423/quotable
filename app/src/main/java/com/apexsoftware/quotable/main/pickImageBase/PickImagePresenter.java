@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.main.base.BasePresenter;
 import com.apexsoftware.quotable.util.LogUtil;

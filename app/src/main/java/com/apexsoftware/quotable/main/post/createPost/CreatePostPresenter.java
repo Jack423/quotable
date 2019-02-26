@@ -8,8 +8,6 @@ import com.apexsoftware.quotable.main.post.BaseCreatePostPresenter;
 import com.apexsoftware.quotable.model.Post;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.List;
-
 public class CreatePostPresenter extends BaseCreatePostPresenter<CreatePostView> {
     public CreatePostPresenter(Context context) {
         super(context);

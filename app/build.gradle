@@ -8,35 +8,23 @@ android {
             storeFile file('C:/Users/Jack/OneDrive/Quotable Keystore/keystore (2018_08_10 17_24_17 UTC).jks')
             storePassword 'hijack234590J'
         }
-        release {
-            keyAlias 'key0'
-            keyPassword 'hijack234590J'
-            storeFile file('C:/Users/Jack/OneDrive/Quotable Keystore/keystore (2018_08_10 17_24_17 UTC).jks')
-            storePassword 'hijack234590J'
-        }
     }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.apexsoftware.quotable"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 10
+        versionCode 9
         versionName "2.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.release
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
-            signingConfig signingConfigs.release
-            proguardFile 'C:/Users/Jack/StudioProjects/quotable/app/proguard-rules.pro'
-        }
-        debug {
-            debuggable true
-            minifyEnabled false
-            proguardFile 'C:/Users/Jack/StudioProjects/quotable/app/proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
     productFlavors {
@@ -62,21 +50,15 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
     implementation 'com.hootsuite.android:nachos:1.1.1'
-    //Hashtag View
-    //implementation 'com.github.greenfrvr:hashtag-view:1.3.1'
-    //implementation('com.github.greenfrvr:hashtag-view:1.3.1@aar') {
-    //  transitive = true
-    //}
     //Images
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     //MVP
     implementation 'com.hannesdorfmann.mosby3:mvp:3.1.0'
-    // Plain MVP
     //Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.5'
-    implementation 'com.google.firebase:firebase-auth:16.0.5'
-    implementation 'com.google.firebase:firebase-database:16.0.5'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation 'com.google.firebase:firebase-database:16.0.6'
     implementation 'com.google.firebase:firebase-storage:16.0.5'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     //Firebase UI

@@ -11,8 +11,6 @@ import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.managers.listeners.OnPostCreatedListener;
 import com.apexsoftware.quotable.util.LogUtil;
 
-import java.util.List;
-
 public abstract class BaseCreatePostPresenter<V extends BaseCreatePostView> extends PickImagePresenter<V> implements OnPostCreatedListener {
     protected boolean creatingPost = false;
     protected PostManager postManager;
