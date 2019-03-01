@@ -28,6 +28,7 @@ import com.apexsoftware.quotable.dialogs.PrivacyPolicyDialog;
 import com.apexsoftware.quotable.main.base.BaseActivity;
 import com.apexsoftware.quotable.main.followPosts.FollowingPostsActivity;
 import com.apexsoftware.quotable.main.hashtagTest.HashtagActivity;
+import com.apexsoftware.quotable.main.mentionTest.MentionActivity;
 import com.apexsoftware.quotable.main.post.createPost.CreatePostActivity;
 import com.apexsoftware.quotable.main.postDetails.PostDetailsActivity;
 import com.apexsoftware.quotable.main.profile.ProfileActivity;
@@ -351,10 +352,10 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                 startActivity(searchIntent);
                 return true;
 
-            /*case R.id.launch_hashtag_activity:
-                Intent hashtagActivity = new Intent(this, HashtagActivity.class);
-                startActivity(hashtagActivity);
-                return true;*/
+            case R.id.launch_mention_activity:
+                Intent mentionActivity = new Intent(this, MentionActivity.class);
+                startActivity(mentionActivity);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

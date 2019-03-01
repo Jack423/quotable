@@ -18,7 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.mentionTest.MentionActivity"></activity>
+        <activity
+            android:name=".main.mentionTest.MentionActivity"
+            android:label="@string/mention_activity_label">
+        </activity>
         <activity
             android:name=".main.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -43,7 +46,8 @@
         <activity
             android:name=".main.profile.ProfileActivity"
             android:label="@string/profile_label"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity android:name=".main.hashtagTest.HashtagActivity" />
         <activity android:name=".main.post.BaseCreatePostActivity" />
         <activity android:name=".main.post.createPost.CreatePostActivity" />

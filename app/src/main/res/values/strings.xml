@@ -113,4 +113,5 @@
         By using Quotable, you agree to the Privacy Policy and consent to having your personal data, behavior transferred outside the EU.
     </string>
     <string name="privacy_policy_link">http://app.termly.io/document/privacy-policy/5b6df71c-52cf-4e91-9201-56301e7a5a46/</string>
+    <string name="mention_activity_label">Mention Test</string>
 </resources>

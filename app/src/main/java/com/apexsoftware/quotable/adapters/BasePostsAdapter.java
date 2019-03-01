@@ -14,15 +14,15 @@ import java.util.List;
 public abstract class BasePostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String TAG = BasePostsAdapter.class.getSimpleName();
 
-    protected List<Post> postList = new LinkedList<>();
+    List<Post> postList = new LinkedList<>();
     protected BaseActivity activity;
-    protected int selectedPostPosition = RecyclerView.NO_POSITION;
+    int selectedPostPosition = RecyclerView.NO_POSITION;
 
-    public BasePostsAdapter(BaseActivity activity) {
+    BasePostsAdapter(BaseActivity activity) {
         this.activity = activity;
     }
 
-    protected void cleanSelectedPostInformation() {
+    void cleanSelectedPostInformation() {
         selectedPostPosition = -1;
     }
 

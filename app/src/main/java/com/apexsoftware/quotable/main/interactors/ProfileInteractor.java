@@ -13,6 +13,7 @@ import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListenerSimple;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
 import com.apexsoftware.quotable.managers.listeners.OnProfileCreatedListener;
+import com.apexsoftware.quotable.model.Mention;
 import com.apexsoftware.quotable.model.Post;
 import com.apexsoftware.quotable.model.Profile;
 import com.apexsoftware.quotable.util.ImageUtil;
@@ -240,15 +241,20 @@ public class ProfileInteractor {
         return valueEventListener;
     }
 
-    public ValueEventListener searchHandles(String handleText, OnDataChangedListener<Profile> onDataChangedListener) {
+    public ValueEventListener searchHandles(String handleText, OnDataChangedListener<Mention> onDataChangedListener) {
         DatabaseReference reference = databaseHelper.getDatabaseReference().child(DatabaseHelper.PROFILES_DB_KEY);
         ValueEventListener valueEventListener = getSearchQuery(reference, "handle", handleText).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<Profile> list = new ArrayList<>();
+                List<Mention> list = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Mention mention = new Mention();
                     Profile profile = snapshot.getValue(Profile.class);
-                    list.add(profile);
+                    mention.setAuthorId(profile.getId());
+                    mention.setName(profile.getUsername());
+                    mention.setHandle(profile.getHandle());
+                    mention.setImageUrl(profile.getPhotoUrl());
+                    list.add(mention);
                 }
                 onDataChangedListener.onListChanged(list);
             }

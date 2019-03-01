@@ -23,9 +23,8 @@
         android:title="@string/search_menu_item"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/launch_hashtag_activity"
-        android:title="Hashtag Activity"
-        android:visible="false"
+        android:id="@+id/launch_mention_activity"
+        android:title="Mention Activity"
         app:showAsAction="never" />
 
 </menu>

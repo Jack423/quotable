@@ -10,6 +10,7 @@ import com.apexsoftware.quotable.managers.listeners.OnDataChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
 import com.apexsoftware.quotable.managers.listeners.OnProfileCreatedListener;
+import com.apexsoftware.quotable.model.Mention;
 import com.apexsoftware.quotable.model.Profile;
 import com.apexsoftware.quotable.util.PreferencesUtil;
 import com.google.firebase.auth.FirebaseAuth;
@@ -97,7 +98,7 @@ public class ProfileManager extends FirebaseListenersManager{
         addListenerToMap(context, valueEventListener);
     }
 
-    public void searchHandle(String handleText, OnDataChangedListener<Profile> onDataChangedListener) {
+    public void searchHandle(String handleText, OnDataChangedListener<Mention> onDataChangedListener) {
         closeListeners(context);
         ValueEventListener valueEventListener = profileInteractor.searchHandles(handleText, onDataChangedListener);
         addListenerToMap(context, valueEventListener);
