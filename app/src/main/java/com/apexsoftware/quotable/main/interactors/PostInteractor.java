@@ -1,7 +1,6 @@
 package com.apexsoftware.quotable.main.interactors;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.apexsoftware.quotable.ApplicationHelper;
@@ -35,6 +34,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
 
 public class PostInteractor {
 
@@ -537,8 +538,8 @@ public class PostInteractor {
     private Query getSearchQuery(DatabaseReference databaseReference, String childOrderBy, String searchText) {
         return databaseReference
                 .orderByChild(childOrderBy)
-                .startAt(searchText)
-                .endAt(searchText + "\uf8ff");
+                .startAt(searchText.toLowerCase())
+                .endAt(searchText.toLowerCase() + "\uf8ff");
     }
 
     private Query getFilteredQuery(DatabaseReference databaseReference, String childOrderBy, int limit) {

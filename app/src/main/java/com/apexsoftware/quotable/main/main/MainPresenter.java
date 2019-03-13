@@ -5,7 +5,6 @@ package com.apexsoftware.quotable.main.main;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
-import android.support.v4.app.DialogFragment;
 import android.view.View;
 
 import com.apexsoftware.quotable.R;
@@ -15,6 +14,8 @@ import com.apexsoftware.quotable.main.postDetails.PostDetailsActivity;
 import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.model.Post;
 import com.google.firebase.auth.FirebaseAuth;
+
+import androidx.fragment.app.DialogFragment;
 
 public class MainPresenter extends BasePresenter<MainView> {
 

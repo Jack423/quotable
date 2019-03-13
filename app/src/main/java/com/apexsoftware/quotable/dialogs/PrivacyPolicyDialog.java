@@ -1,12 +1,9 @@
 package com.apexsoftware.quotable.dialogs;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -16,6 +13,10 @@ import android.widget.TextView;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.managers.listeners.OnDialogClickListener;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 
 // Created by Jack Butler on 11/15/2018
 

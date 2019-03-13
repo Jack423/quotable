@@ -4,8 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.SparseBooleanArray;
@@ -19,6 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.apexsoftware.quotable.R;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class ExpandableTextView extends LinearLayout implements View.OnClickListener {
 

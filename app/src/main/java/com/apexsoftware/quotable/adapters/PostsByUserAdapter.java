@@ -1,6 +1,5 @@
 package com.apexsoftware.quotable.adapters;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,8 @@ import com.apexsoftware.quotable.managers.listeners.OnDataChangedListener;
 import com.apexsoftware.quotable.model.Post;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class PostsByUserAdapter extends BasePostsAdapter{
     public static final String TAG = PostsByUserAdapter.class.getSimpleName();

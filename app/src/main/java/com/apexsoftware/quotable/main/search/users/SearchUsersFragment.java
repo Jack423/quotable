@@ -5,9 +5,6 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +24,10 @@ import com.apexsoftware.quotable.util.AnimationUtils;
 import com.apexsoftware.quotable.views.FollowButton;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import static android.app.Activity.RESULT_OK;
 import static com.apexsoftware.quotable.main.userList.UsersListActivity.UPDATE_FOLLOWING_STATE_REQ;

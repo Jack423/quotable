@@ -8,7 +8,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.support.design.widget.Snackbar;
 import android.view.animation.BounceInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +20,7 @@ import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
 import com.apexsoftware.quotable.managers.listeners.OnPostChangedListener;
 import com.apexsoftware.quotable.model.Post;
+import com.google.android.material.snackbar.Snackbar;
 
 public class LikeController {
 

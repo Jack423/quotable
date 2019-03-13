@@ -1,8 +1,6 @@
 package com.apexsoftware.quotable.adapters.holders;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,7 +15,8 @@ import com.apexsoftware.quotable.util.GlideApp;
 import com.apexsoftware.quotable.util.ImageUtil;
 import com.apexsoftware.quotable.util.LogUtil;
 
-import org.w3c.dom.Text;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MentionViewHolder extends RecyclerView.ViewHolder {
     private static final String TAG = MentionViewHolder.class.getSimpleName();

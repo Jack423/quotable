@@ -2,7 +2,6 @@ package com.apexsoftware.quotable.adapters.holders;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +17,8 @@ import com.apexsoftware.quotable.util.GlideApp;
 import com.apexsoftware.quotable.util.ImageUtil;
 import com.apexsoftware.quotable.views.FollowButton;
 import com.google.firebase.auth.FirebaseAuth;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class UserViewHolder extends RecyclerView.ViewHolder {

@@ -1,10 +1,11 @@
 package com.apexsoftware.quotable.views;
 
 import android.content.Context;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 
 import com.apexsoftware.quotable.R;
+
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
  * SwipeRefreshLayout compatible with pre Lolly pop android versions

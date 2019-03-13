@@ -2,7 +2,6 @@ package com.apexsoftware.quotable.main.post;
 // Created by Jack Butler on 10/8/2018.
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -11,6 +10,8 @@ import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.main.pickImageBase.PickImageActivity;
 import com.hootsuite.nachos.NachoTextView;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
+
+import androidx.annotation.Nullable;
 
 public abstract class BaseCreatePostActivity<V extends BaseCreatePostView, P extends BaseCreatePostPresenter<V>> extends PickImageActivity<V, P> implements BaseCreatePostView {
 

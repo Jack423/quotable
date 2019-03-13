@@ -1,13 +1,14 @@
 package com.apexsoftware.quotable.main.post.createPost;
 // Created by Jack Butler on 10/9/2018.
 
-import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.main.post.BaseCreatePostActivity;
+
+import androidx.annotation.NonNull;
 
 public class CreatePostActivity extends BaseCreatePostActivity<CreatePostView, CreatePostPresenter> implements CreatePostView {
     public static final int CREATE_NEW_POST_REQUEST = 11;

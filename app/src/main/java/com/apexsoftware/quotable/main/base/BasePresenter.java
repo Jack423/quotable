@@ -3,7 +3,6 @@ package com.apexsoftware.quotable.main.base;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.apexsoftware.quotable.R;
@@ -12,6 +11,8 @@ import com.apexsoftware.quotable.managers.ProfileManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby3.mvp.MvpView;
+
+import androidx.annotation.Nullable;
 
 
 public class BasePresenter<T extends BaseView & MvpView> extends MvpBasePresenter<T> {

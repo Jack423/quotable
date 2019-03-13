@@ -5,9 +5,6 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +26,10 @@ import com.apexsoftware.quotable.model.Post;
 import com.apexsoftware.quotable.util.AnimationUtils;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import static android.app.Activity.RESULT_OK;
 

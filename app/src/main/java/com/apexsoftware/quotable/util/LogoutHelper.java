@@ -3,9 +3,6 @@ package com.apexsoftware.quotable.util;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 
 import com.apexsoftware.quotable.main.interactors.ProfileInteractor;
 import com.bumptech.glide.Glide;
@@ -18,6 +15,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
 public class LogoutHelper {
 

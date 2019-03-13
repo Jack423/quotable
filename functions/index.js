@@ -1,6 +1,9 @@
 var functions = require('firebase-functions');
-
+var algoliasearch = require('algoliasearch');
+var dotenv = require('dotenv');
 const admin = require('firebase-admin');
+const firebase = require('firebase');
+
 admin.initializeApp(functions.config().firebase);
 
 const actionTypeNewLike = "new_like";
@@ -16,6 +19,103 @@ const followersDbKey = "followers";
 const followingDbKey = "follow";
 
 const postsTopic = "postsTopic";
+
+//App ID and API key are stored in functions config variables
+const ALGOLIA_ID = 'K8DB4XKE4D';
+const ALGOLIA_ADMIN_KEY = 'a2d20c8f4645f8925e6529b76a874668';
+const ALGOLIA_SEARCH_KEY = '0ee1cee2b4a5c45657a2165ced5d210d';
+const ALGOLIA_PROFILES_INDEX = 'profiles';
+const ALGOLIA_POSTS_INDEX = 'posts';
+const FIREBASE_DATABASE_URL = 'https://quotable-c70b9.firebaseio.com/';
+const algolia = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
+
+const postIndex = algolia.initIndex(ALGOLIA_POSTS_INDEX);
+const profileIndex = algolia.initIndex(ALGOLIA_PROFILES_INDEX);
+
+firebase.initializeApp({
+  databaseURL: FIREBASE_DATABASE_URL,
+});
+
+const database = firebase.database();
+
+const postsRef = database.ref('/posts');
+const profilesRef = database.ref('/profiles');
+postsRef.on('child_added', addOrUpdatePostRecord);
+postsRef.on('child_changed', addOrUpdatePostRecord);
+postsRef.on('child_removed', deletePostRecord);
+profilesRef.on('child_added', addOrUpdateProfileRecord);
+profilesRef.on('child_changed', addOrUpdateProfileRecord);
+profilesRef.on('child_removed', deleteProfileRecord);
+
+function addOrUpdatePostRecord(post) {
+  //Get Firebase object
+  const record = post.val();
+
+  //Specify Algolia's objectID using the Firebase object key
+  record.objectID = post.key;
+  //Add or update the object
+  postIndex
+    .saveObject(record)
+    .then(() => {
+      console.log('Firebase object indexed in Algolia', record.objectID);
+      return record;
+    })
+    .catch(error => {
+      console.error('Error when indexing post into Algolia', error);
+      process.exit(1);
+    });
+}
+
+function addOrUpdateProfileRecord(profile) {
+  //Get Firebase object
+  const record = profile.val();
+
+  //Specify Algolia's objectID using the Firebase object key
+  record.objectID = profile.key;
+  //Add or update the object
+  profileIndex
+    .saveObject(record)
+    .then(() => {
+      console.log('Firebase object indexed in Algolia', record.objectID);
+      return record;
+    })
+    .catch(error => {
+      console.error('Error when indexing post into Algolia', error);
+      process.exit(1);
+    });
+}
+
+function deletePostRecord(post) {
+  // Get Algolia's objectID from the Firebase object key
+  const objectID = post.key;
+  // Remove the object from Algolia
+  postIndex
+    .deleteObject(objectID)
+    .then(() => {
+      console.log('Firebase object deleted from Algolia', objectID);
+      return post;
+    })
+    .catch(error => {
+      console.error('Error when deleting post from Algolia', error);
+      process.exit(1);
+    });
+}
+
+function deleteProfileRecord(profile) {
+  // Get Algolia's objectID from the Firebase object key
+  const objectID = post.key;
+  // Remove the object from Algolia
+  profileIndex
+    .deleteObject(objectID)
+    .then(() => {
+      console.log('Firebase object deleted from Algolia', objectID);
+      return profile;
+    })
+    .catch(error => {
+      console.error('Error when deleting profile from Algolia', error);
+      process.exit(1);
+    });
+}
 
 exports.pushNotificationLikes = functions.database.ref('/post-likes/{postId}/{authorId}/{likeId}').onCreate((snap, context)  => {
 

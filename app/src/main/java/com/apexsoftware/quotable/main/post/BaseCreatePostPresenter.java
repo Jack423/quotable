@@ -2,7 +2,6 @@ package com.apexsoftware.quotable.main.post;
 // Created by Jack Butler on 10/8/2018.
 
 import android.content.Context;
-import android.support.annotation.StringRes;
 import android.text.TextUtils;
 
 import com.apexsoftware.quotable.R;
@@ -10,6 +9,8 @@ import com.apexsoftware.quotable.main.pickImageBase.PickImagePresenter;
 import com.apexsoftware.quotable.managers.PostManager;
 import com.apexsoftware.quotable.managers.listeners.OnPostCreatedListener;
 import com.apexsoftware.quotable.util.LogUtil;
+
+import androidx.annotation.StringRes;
 
 public abstract class BaseCreatePostPresenter<V extends BaseCreatePostView> extends PickImagePresenter<V> implements OnPostCreatedListener {
     protected boolean creatingPost = false;

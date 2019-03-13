@@ -1,13 +1,14 @@
 package com.apexsoftware.quotable.main.editProfile.createProfile;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.main.editProfile.EditProfileActivity;
+
+import androidx.annotation.NonNull;
 
 
 public class CreateProfileActivity extends EditProfileActivity<CreateProfileView, CreateProfilePresenter> implements CreateProfileView {

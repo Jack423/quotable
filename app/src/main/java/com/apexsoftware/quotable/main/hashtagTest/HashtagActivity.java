@@ -1,7 +1,6 @@
 package com.apexsoftware.quotable.main.hashtagTest;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.main.base.BaseActivity;
@@ -10,6 +9,8 @@ import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 public class HashtagActivity extends BaseActivity<HashtagView, HastagPresenter> implements HashtagView {
 

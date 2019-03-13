@@ -1,7 +1,6 @@
 package com.apexsoftware.quotable.util;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Registry;
@@ -11,6 +10,8 @@ import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.InputStream;
+
+import androidx.annotation.NonNull;
 
 @GlideModule
 public final class CustomAppGlideModule extends AppGlideModule {

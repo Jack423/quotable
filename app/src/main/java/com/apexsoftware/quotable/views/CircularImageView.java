@@ -11,14 +11,16 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.apexsoftware.quotable.R;
 
+import androidx.appcompat.widget.AppCompatImageView;
+
 public class CircularImageView extends AppCompatImageView {
-    private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
+    private static final ImageView.ScaleType SCALE_TYPE = ImageView.ScaleType.CENTER_CROP;
 
     // Default Values
     private static final float DEFAULT_BORDER_WIDTH = 4;

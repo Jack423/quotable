@@ -1,6 +1,5 @@
 package com.apexsoftware.quotable.adapters;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,8 @@ import com.apexsoftware.quotable.model.Comment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentViewHolder> {
     private List<Comment> list = new ArrayList<>();

@@ -2,10 +2,9 @@ package com.apexsoftware.quotable.main.postDetails;
 // Created by Jack Butler on 10/9/2018.
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import com.apexsoftware.quotable.R;
@@ -20,6 +19,8 @@ import com.apexsoftware.quotable.model.Post;
 import com.apexsoftware.quotable.model.Profile;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import androidx.annotation.NonNull;
 
 public class PostDetailsPresenter extends BasePresenter<PostDetailsView> {
     private static final int TIME_OUT_LOADING_COMMENTS = 30000;

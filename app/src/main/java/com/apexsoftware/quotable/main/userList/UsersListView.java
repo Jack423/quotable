@@ -1,10 +1,10 @@
 package com.apexsoftware.quotable.main.userList;
 
-import android.support.annotation.StringRes;
-
 import com.apexsoftware.quotable.main.base.BaseView;
 
 import java.util.List;
+
+import androidx.annotation.StringRes;
 
 public interface UsersListView extends BaseView {
 

@@ -1,7 +1,6 @@
 package com.apexsoftware.quotable.adapters.holders;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -28,6 +27,8 @@ import com.hootsuite.nachos.NachoTextView;
 
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
     public static final String TAG = PostViewHolder.class.getSimpleName();

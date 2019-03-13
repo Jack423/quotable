@@ -2,8 +2,6 @@ package com.apexsoftware.quotable.main.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.main.base.BaseActivity;
@@ -18,6 +16,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> implements LoginView, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = LoginActivity.class.getSimpleName();

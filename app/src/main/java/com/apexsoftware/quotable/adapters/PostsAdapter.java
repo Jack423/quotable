@@ -1,7 +1,5 @@
 package com.apexsoftware.quotable.adapters;
 
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +17,9 @@ import com.apexsoftware.quotable.model.PostListResult;
 import com.apexsoftware.quotable.util.PreferencesUtil;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class PostsAdapter extends BasePostsAdapter {
     public static final String TAG = PostsAdapter.class.getSimpleName();

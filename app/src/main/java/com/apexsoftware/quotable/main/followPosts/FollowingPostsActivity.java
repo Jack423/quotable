@@ -1,15 +1,8 @@
 package com.apexsoftware.quotable.main.followPosts;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,6 +15,12 @@ import com.apexsoftware.quotable.main.profile.ProfileActivity;
 import com.apexsoftware.quotable.model.FollowingPost;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class FollowingPostsActivity extends BaseActivity<FollowPostsView, FollowingPostsPresenter> implements FollowPostsView {
 

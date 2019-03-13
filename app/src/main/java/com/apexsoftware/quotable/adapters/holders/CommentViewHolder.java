@@ -1,8 +1,6 @@
 package com.apexsoftware.quotable.adapters.holders;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -20,6 +18,9 @@ import com.apexsoftware.quotable.util.FormatterUtil;
 import com.apexsoftware.quotable.util.GlideApp;
 import com.apexsoftware.quotable.util.ImageUtil;
 import com.apexsoftware.quotable.views.ExpandableTextView;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CommentViewHolder extends RecyclerView.ViewHolder {
 

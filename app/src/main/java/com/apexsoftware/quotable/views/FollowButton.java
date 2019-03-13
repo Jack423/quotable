@@ -1,15 +1,17 @@
 package com.apexsoftware.quotable.views;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.enums.FollowState;
 import com.apexsoftware.quotable.util.LogUtil;
 
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.ContextCompat;
 
-public class FollowButton extends android.support.v7.widget.AppCompatButton {
+
+public class FollowButton extends AppCompatButton {
     public static final String TAG = FollowButton.class.getSimpleName();
 
     public static final int FOLLOW_STATE = 1;

@@ -3,8 +3,6 @@ package com.apexsoftware.quotable.main.post.editPost;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,6 +11,9 @@ import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.main.main.MainActivity;
 import com.apexsoftware.quotable.main.post.BaseCreatePostActivity;
 import com.apexsoftware.quotable.model.Post;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class EditPostActivity extends BaseCreatePostActivity<EditPostView, EditPostPresenter> implements EditPostView {
     private static final String TAG = EditPostActivity.class.getSimpleName();

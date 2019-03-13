@@ -3,7 +3,6 @@ package com.apexsoftware.quotable.util;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.apexsoftware.quotable.R;
@@ -13,6 +12,8 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.Date;
+
+import androidx.annotation.Nullable;
 
 public class ImageUtil {
 

@@ -1,15 +1,12 @@
 package com.apexsoftware.quotable.main.base;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -18,7 +15,12 @@ import android.widget.Toast;
 import com.apexsoftware.quotable.Constants;
 import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.main.login.LoginActivity;
+import com.google.android.material.snackbar.Snackbar;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.ActionBar;
 
 public abstract class BaseActivity<V extends BaseView, P extends BasePresenter<V>> extends MvpActivity<V, P> implements BaseView {
     public final String TAG = this.getClass().getSimpleName();
@@ -30,7 +32,6 @@ public abstract class BaseActivity<V extends BaseView, P extends BasePresenter<V
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         actionBar = getSupportActionBar();
-
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.apexsoftware.quotable.main.interactors;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 
 import com.apexsoftware.quotable.ApplicationHelper;
 import com.apexsoftware.quotable.enums.UploadImagePrefix;
@@ -37,6 +36,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 import static com.apexsoftware.quotable.managers.DatabaseHelper.IMAGES_STORAGE_KEY;
 
@@ -271,8 +272,8 @@ public class ProfileInteractor {
 
     private Query getSearchQuery(DatabaseReference databaseReference, String childOrderBy, String searchText) {
         return databaseReference
-                .orderByChild(childOrderBy)
-                .startAt(searchText)
-                .endAt(searchText + "\uf8ff");
+                .orderByChild(childOrderBy.toLowerCase())
+                .startAt(searchText.toLowerCase())
+                .endAt(searchText.toLowerCase() + "\uf8ff");
     }
 }

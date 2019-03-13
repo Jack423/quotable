@@ -1,10 +1,9 @@
 package com.apexsoftware.quotable.main.base;
 
 import android.content.DialogInterface;
-import android.support.annotation.StringRes;
 import android.view.View;
-
 import com.hannesdorfmann.mosby3.mvp.MvpView;
+import androidx.annotation.StringRes;
 
 public interface BaseView extends MvpView {
 

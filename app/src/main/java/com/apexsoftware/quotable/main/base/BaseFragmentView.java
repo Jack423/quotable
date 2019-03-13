@@ -1,7 +1,8 @@
 package com.apexsoftware.quotable.main.base;
 
-import android.support.annotation.StringRes;
 import android.view.View;
+
+import androidx.annotation.StringRes;
 
 public interface BaseFragmentView extends BaseView {
 
