@@ -28,7 +28,10 @@ const ALGOLIA_INDEX_POSTS = 'posts';
 const ALGOLIA_INDEX_PROFILES = 'profiles';
 const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
 
-exports.onPostWrite = functions.database.ref('/posts/{postId}').onWrite((snapshot, context) => {
+const postIndex = client.initIndex(ALGOLIA_INDEX_POSTS);
+const profileIndex = client.initIndex(ALGOLIA_INDEX_PROFILES);
+
+/*exports.onPostWrite = functions.database.ref('/posts/{postId}').onWrite((snapshot, context) => {
   const index = client.initIndex(ALGOLIA_INDEX_POSTS);
   //When the data is first created...
   if (snapshot.before.exists()) {
@@ -49,7 +52,7 @@ exports.onPostWrite = functions.database.ref('/posts/{postId}').onWrite((snapsho
     return index.deleteObject(post.objectID);
   }
 
-  if (!snapshot.before.exists()) {
+  if (!snapshot.exists()) {
     const post = snapshot.after.val();
 
     post.objectID = context.params.postId;
@@ -57,6 +60,53 @@ exports.onPostWrite = functions.database.ref('/posts/{postId}').onWrite((snapsho
     console.log('Created post ', post.objectID);
     return index.saveObject(post);
   }
+});*/
+
+exports.onPostCreated = functions.database.ref('/posts/{postId}').onCreate((snapshot, context) => {
+  const post = snapshot.val();
+  post.objectID = context.params.postId;
+
+  console.log('Added new post to Algolia: ', post.objectID);
+  return postIndex.addObject(post);
+});
+
+exports.onPostUpdated = functions.database.ref('/posts/{postId}').onUpdate((snapshot, context) => {
+  const post = snapshot.after.val();
+  post.objectID = context.params.postId;
+
+  console.log('Updated post ', post.objectID);
+  return postIndex.saveObject(post);
+});
+
+exports.onPostDeleted = functions.database.ref('/posts/{postId}').onDelete((snapshot, context) => {
+  const post = snapshot.val();
+  post.objectID = context.params.postId;
+
+  console.log('Delted post ', post.objectID);
+  return postIndex.deleteObject(post.objectID);
+});
+
+exports.onProfileCreated = functions.database.ref('/profiles/{profileId}').onCreate((snapshot, context) => {
+  const profile = snapshot.val();
+  profile.objectID = context.params.profileId;
+
+  console.log('New profile created ', profile.objectID);
+  return profileIndex.addObject(profile);
+});
+
+exports.onProfileUpdate = functions.database.ref('/profiles/{profileId}').onUpdate((snapshot, context) => {
+  const profile = snapshot.after.val();
+  profile.objectID = context.params.profileId;
+
+  console.log('Profile updated ', profile.objectID);
+  return profileIndex.saveObject(profile);
+});
+
+exports.onProfileDeleted = functions.database.ref('/profiles/{profileId}').onDelete((snapshot, context) => {
+  const profile = snapshot.val();
+  profile.objectID = context.params.profileId;
+
+  console.log('Profile delted ', profile.objectID);
 });
 
 exports.pushNotificationLikes = functions.database.ref('/post-likes/{postId}/{authorId}/{likeId}').onCreate((snap, context)  => {
