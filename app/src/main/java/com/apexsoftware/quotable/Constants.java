@@ -11,7 +11,6 @@ public class Constants {
 
     public static class Post {
         public static final int MAX_TEXT_LENGTH_IN_LIST = 300; //characters
-        public static final int MAX_POST_TITLE_LENGTH = 255; //characters
         public static final int POST_AMOUNT_ON_PAGE = 10;
     }
 
@@ -25,5 +24,11 @@ public class Constants {
 
     public static class General {
         public static final long DOUBLE_CLICK_TO_EXIT_INTERVAL = 3000; // in milliseconds
+    }
+
+    public static class Algolia {
+        public static final String APPLICATION_ID = "K8DB4XKE4D";
+        public static final String SEARCH_KEY = "0ee1cee2b4a5c45657a2165ced5d210d";
+        public static final String ADMIN_KEY = "a2d20c8f4645f8925e6529b76a874668";
     }
 }

@@ -38,6 +38,8 @@ android {
     lintOptions {
         checkReleaseBuilds false
     }
+
+    dataBinding.enabled true
 }
 
 dependencies {
@@ -72,7 +74,12 @@ dependencies {
     //nachos
     implementation 'com.hootsuite.android:nachos:1.1.1'
     //Algolia
-    implementation 'com.algolia:algoliasearch-android:3.+'
+    implementation 'com.algolia:algoliasearch-android:3.27.0'
+    implementation 'com.algolia:instantsearch-android:1.15.2'
+    //MaterialSearchBar
+    implementation 'com.github.mancj:MaterialSearchBar:0.8.2'
+
+    implementation 'com.teamwork:android-multiautocomplete:0.2.6'
 }
 
 apply plugin: 'com.google.gms.google-services'

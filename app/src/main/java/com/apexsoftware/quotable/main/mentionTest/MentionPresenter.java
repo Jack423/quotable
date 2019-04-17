@@ -10,29 +10,10 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MentionPresenter extends BasePresenter<MentionView> {
 
-    private ProfileManager profileManager;
+    private Activity activity;
 
     public MentionPresenter(Activity activity) {
         super(activity);
-        profileManager = ProfileManager.getInstance(context.getApplicationContext());
-    }
-
-    public void autoCompleteHandle(String text) {
-        if (checkInternetConnection()) {
-            profileManager.searchHandle(text, list -> {
-                ifViewAttached(view -> {
-                    view.onHandleListReady(list);
-
-                    if (list.isEmpty()) {
-                        view.showEmptyListLayout();
-                    }
-                });
-
-                LogUtil.logDebug(TAG, "handle search: " + text);
-                LogUtil.logDebug(TAG, "found items count: " + list.size());
-            });
-        } else {
-
-        }
+        this.activity = activity;
     }
 }

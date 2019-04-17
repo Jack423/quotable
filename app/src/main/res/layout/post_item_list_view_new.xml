@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:algolia="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -34,7 +35,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/tv_name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/avatars" />
+                tools:srcCompat="@tools:sample/avatars"
+                algolia:attribute='@{"author_image"}'/>
 
             <TextView
                 android:id="@+id/tv_name"
@@ -50,7 +52,8 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_author_post"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                algolia:attribute='@{"author_image"}' />
 
             <TextView
                 android:id="@+id/tv_handle"
@@ -97,30 +100,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_quote" />
-
-            <!--<com.greenfrvr.hashtagview.HashtagView
-                android:id="@+id/namesView"
-                style="@style/HashtagView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:gravity="start"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@+id/countersContainer"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_description"
-                app:rowGravity="left"
-                app:rowMode="wrap"
-                app:tagBackground="@drawable/hashtag_bg_1"
-                app:tagPaddingBottom="@dimen/small_intrinsic_padding"
-                app:tagPaddingLeft="6dp"
-                app:tagPaddingRight="6dp"
-                app:tagPaddingTop="8dp"
-                app:tagTextColor="#E5E5E5"></com.greenfrvr.hashtagview.HashtagView>-->
 
             <com.hootsuite.nachos.NachoTextView
                 android:id="@+id/tagsEditText"

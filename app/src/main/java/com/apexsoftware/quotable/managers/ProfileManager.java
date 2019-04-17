@@ -10,14 +10,20 @@ import com.apexsoftware.quotable.managers.listeners.OnDataChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
 import com.apexsoftware.quotable.managers.listeners.OnProfileCreatedListener;
+import com.apexsoftware.quotable.managers.listeners.OnProfileListChangedListener;
 import com.apexsoftware.quotable.model.Mention;
 import com.apexsoftware.quotable.model.Profile;
+import com.apexsoftware.quotable.model.ProfileListResult;
 import com.apexsoftware.quotable.util.PreferencesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.linkedin.android.spyglass.tokenization.QueryToken;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileManager extends FirebaseListenersManager{
     private static final String TAG = ProfileManager.class.getSimpleName();
@@ -80,6 +86,10 @@ public class ProfileManager extends FirebaseListenersManager{
         profileInteractor.getProfileSingleValue(id, listener);
     }
 
+    public void getProfiles(final OnObjectChangedListener<Profile> listener) {
+
+    }
+
     public ProfileStatus checkProfile() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -98,6 +108,10 @@ public class ProfileManager extends FirebaseListenersManager{
         addListenerToMap(context, valueEventListener);
     }
 
+    /*public void getProfiles(OnProfileListChangedListener<Profile> onDataChangedListener) {
+        profileInteractor.getProfilesList(onDataChangedListener);
+    }*/
+
     public void searchHandle(String handleText, OnDataChangedListener<Mention> onDataChangedListener) {
         closeListeners(context);
         ValueEventListener valueEventListener = profileInteractor.searchHandles(handleText, onDataChangedListener);
@@ -106,5 +120,27 @@ public class ProfileManager extends FirebaseListenersManager{
 
     public void addRegistrationToken(String token, String userId) {
         profileInteractor.addRegistrationToken(token, userId);
+    }
+
+    public List<Profile> getSuggestions(QueryToken queryToken) {
+        String prefix = queryToken.getKeywords().toLowerCase();
+        List<Profile> suggestions = new ArrayList<>();
+
+        profileInteractor.getProfilesList(list -> {
+            if (list != null) {
+                for (Profile profile : list) {
+                    String handle = profile.getHandle().toLowerCase();
+                    if (prefix.length() == 2) {
+                        if (handle.startsWith(prefix)) {
+                            suggestions.add(profile);
+                        }
+                    } else {
+                        suggestions.addAll(list);
+                    }
+                }
+            }
+        });
+
+        return suggestions;
     }
 }

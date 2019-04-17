@@ -33,6 +33,19 @@ public class Post implements Serializable, LazyLoading {
         setId(itemType.toString());
     }
 
+    public Post(String id, String quote, String description, String tags, long createdDate, String authorId, long commentsCount, long likesCount, long watchersCount, boolean hasReport) {
+        this.id = id;
+        this.quote = quote;
+        this.description = description;
+        this.tags = tags;
+        this.createdDate = createdDate;
+        this.authorId = authorId;
+        this.commentsCount = commentsCount;
+        this.likesCount = likesCount;
+        this.watchersCount = watchersCount;
+        this.hasReport = hasReport;
+    }
+
     public String getId() {
         return id;
     }

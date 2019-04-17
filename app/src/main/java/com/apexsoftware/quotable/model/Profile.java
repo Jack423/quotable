@@ -2,12 +2,18 @@ package com.apexsoftware.quotable.model;
 
 // Created by Jack Butler on 10/2/2018.
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.apexsoftware.quotable.util.FormatterUtil;
+import com.linkedin.android.spyglass.mentions.Mentionable;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class Profile implements Serializable {
+import androidx.annotation.NonNull;
+
+public class Profile implements Serializable, Mentionable {
     private String id;
     private String username;
     private String handle;
@@ -23,6 +29,14 @@ public class Profile implements Serializable {
         //Default constructor required for calls to DataSnapshot.getValue(Profile.class)
         this.createdDate = new Date().getTime();
         dateJoined = FormatterUtil.getMonthYear(new Date(createdDate));
+    }
+
+    public Profile(Parcel in) {
+        id = in.readString();
+        username = in.readString();
+        email = in.readString();
+        handle = in.readString();
+        photoUrl = in.readString();
     }
 
     public Profile(String id) {
@@ -100,4 +114,62 @@ public class Profile implements Serializable {
     public void setRegistrationToken(String registrationToken) {
         this.registrationToken = registrationToken;
     }
+
+    @NonNull
+    @Override
+    public String getTextForDisplayMode(MentionDisplayMode mode) {
+        switch (mode) {
+            case FULL:
+                return getHandle();
+            case PARTIAL:
+                String[] words = getHandle().split(" ");
+                return (words.length > 1) ? words[0] : "";
+            case NONE:
+            default:
+                return "";
+        }
+    }
+
+    @Override
+    public MentionDeleteStyle getDeleteStyle() {
+        return MentionDeleteStyle.FULL_DELETE;
+    }
+
+    @Override
+    public int getSuggestibleId() {
+        return getId().hashCode();
+    }
+
+    @Override
+    public String getSuggestiblePrimaryText() {
+        return getHandle();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(username);
+        dest.writeString(handle);
+        dest.writeString(email);
+        dest.writeString(bio);
+        dest.writeString(photoUrl);
+    }
+
+    public static final Parcelable.Creator<Profile> CREATOR
+            = new Parcelable.Creator<Profile>() {
+        @Override
+        public Profile createFromParcel(Parcel source) {
+            return new Profile(source);
+        }
+
+        @Override
+        public Profile[] newArray(int size) {
+            return new Profile[size];
+        }
+    };
 }

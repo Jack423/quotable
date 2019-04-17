@@ -5,16 +5,22 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.apexsoftware.quotable.ApplicationHelper;
+import com.apexsoftware.quotable.Constants;
+import com.apexsoftware.quotable.R;
 import com.apexsoftware.quotable.enums.UploadImagePrefix;
 import com.apexsoftware.quotable.managers.DatabaseHelper;
 import com.apexsoftware.quotable.managers.listeners.OnDataChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnObjectChangedListenerSimple;
 import com.apexsoftware.quotable.managers.listeners.OnObjectExistListener;
+import com.apexsoftware.quotable.managers.listeners.OnPostListChangedListener;
 import com.apexsoftware.quotable.managers.listeners.OnProfileCreatedListener;
+import com.apexsoftware.quotable.managers.listeners.OnProfileListChangedListener;
 import com.apexsoftware.quotable.model.Mention;
 import com.apexsoftware.quotable.model.Post;
+import com.apexsoftware.quotable.model.PostListResult;
 import com.apexsoftware.quotable.model.Profile;
+import com.apexsoftware.quotable.model.ProfileListResult;
 import com.apexsoftware.quotable.util.ImageUtil;
 import com.apexsoftware.quotable.util.LogUtil;
 import com.google.android.gms.tasks.Continuation;
@@ -22,6 +28,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,11 +40,15 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.linkedin.android.spyglass.tokenization.QueryToken;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import static com.apexsoftware.quotable.managers.DatabaseHelper.IMAGES_STORAGE_KEY;
 
@@ -140,6 +151,55 @@ public class ProfileInteractor {
         });
         databaseHelper.addActiveListener(valueEventListener, databaseReference);
         return valueEventListener;
+    }
+
+    /*public void getProfileList(final OnProfileListChangedListener<Profile> onDataChangedListener) {
+        DatabaseReference databaseReference = databaseHelper.getDatabaseReference().child(DatabaseHelper.PROFILES_DB_KEY);
+        Query profileQuery;
+        profileQuery = databaseReference.limitToLast(20).orderByChild("handle");
+
+        profileQuery.keepSynced(true);
+        profileQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Profile> profiles = new ArrayList<>();
+
+                Map<String, Object> objectMap = (Map<String, Object>) dataSnapshot.getValue();
+                ProfileListResult result = parseProfileList(objectMap);
+
+                if (result.getProfiles().isEmpty() && result.isMoreDataAvailable()) {
+                    getProfileList(onDataChangedListener);
+                } else {
+                    onDataChangedListener.onListChanged(parseProfileList(objectMap));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                LogUtil.logError(TAG, "getPostList(), onCancelled", new Exception(databaseError.getMessage()));
+                onDataChangedListener.onCanceled(context.getString(R.string.permission_denied_error));
+            }
+        });
+    }*/
+
+    public void getProfilesList(OnDataChangedListener<Profile> onDataChangedListener) {
+        DatabaseReference reference = databaseHelper.getDatabaseReference().child(DatabaseHelper.PROFILES_DB_KEY);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Profile> list = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Profile profile = snapshot.getValue(Profile.class);
+                    list.add(profile);
+                }
+                onDataChangedListener.onListChanged(list);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                LogUtil.logError(TAG, "searchProfiles(), onCancelled", new Exception(databaseError.getMessage()));
+            }
+        });
     }
 
     public void getProfileSingleValue(String id, final OnObjectChangedListener<Profile> listener) {
@@ -276,4 +336,44 @@ public class ProfileInteractor {
                 .startAt(searchText.toLowerCase())
                 .endAt(searchText.toLowerCase() + "\uf8ff");
     }
+
+    private ProfileListResult parseProfileList(Map<String, Object> objectMap) {
+        ProfileListResult result = new ProfileListResult();
+        List<Profile> list = new ArrayList<>();
+        boolean isMoreDataAvailable = true;
+
+        if (objectMap != null) {
+            isMoreDataAvailable = 20 == objectMap.size();
+
+            for (String key : objectMap.keySet()) {
+                Object obj = objectMap.get(key);
+
+                if (obj instanceof Map) {
+                    Profile profile = new Profile();
+                    profile.setId(key);
+                    profile.setUsername((String) objectMap.get("username"));
+                    profile.setHandle((String) objectMap.get("handle"));
+                    profile.setEmail((String) objectMap.get("email"));
+                    profile.setBio((String) objectMap.get("bio"));
+                    profile.setPhotoUrl((String) objectMap.get("photoUrl"));
+
+                    list.add(profile);
+                }
+            }
+
+            result.setProfiles(list);
+            result.setMoreDataAvailable(isMoreDataAvailable);
+        }
+
+        return result;
+    }
+
+    /*private boolean isProfileValid(Map<String, Object> profile) {
+        return profile.containsKey("id")
+                && profile.containsKey("username")
+                && profile.containsKey("handle")
+                && profile.containsKey("photoUrl")
+                && profile.containsKey("registrationToken")
+                && profile.containsKey("bio");
+    }*/
 }

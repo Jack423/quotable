@@ -284,10 +284,7 @@ public class PostInteractor {
     private boolean isPostValid(Map<String, Object> post) {
         return post.containsKey("quote")
                 && post.containsKey("description")
-                //&& post.containsKey("imagePath")
-                //&& post.containsKey("imageTitle")
                 && post.containsKey("authorId");
-                //&& post.containsKey("description");
     }
 
     public void addComplainToPost(Post post) {
