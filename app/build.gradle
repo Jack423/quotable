@@ -44,33 +44,33 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
+    testImplementation 'junit:junit:4.13-beta-2'
+    androidTestImplementation 'androidx.test:runner:1.2.0-alpha04'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha04'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha04'
     //Images
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
-    implementation 'androidx.annotation:annotation:1.0.0-beta01'
-    annotationProcessor 'androidx.annotation:annotation:1.0.0-beta01'
+    implementation 'androidx.annotation:annotation:1.1.0-beta01'
+    annotationProcessor 'androidx.annotation:annotation:1.1.0-beta01'
     //MVP
-    implementation 'com.hannesdorfmann.mosby3:mvp:3.1.0'
+    implementation 'com.hannesdorfmann.mosby3:mvp:3.1.1'
     //Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.7'
-    implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-auth:16.2.1'
     implementation 'com.google.firebase:firebase-database:16.1.0'
     implementation 'com.google.firebase:firebase-storage:16.1.0'
-    implementation 'com.google.firebase:firebase-messaging:17.4.0'
+    implementation 'com.google.firebase:firebase-messaging:17.6.0'
     //Firebase UI
     implementation 'com.firebaseui:firebase-ui-database:4.2.0'
     implementation 'com.firebaseui:firebase-ui-auth:4.2.0'
     implementation 'com.firebaseui:firebase-ui-storage:4.2.0'
     //Spyglass
-    implementation 'com.linkedin.android.spyglass:spyglass:2.0.0'
+    //implementation 'com.linkedin.android.spyglass:spyglass:2.0.0'
     //nachos
     implementation 'com.hootsuite.android:nachos:1.1.1'
     //Algolia
@@ -79,7 +79,10 @@ dependencies {
     //MaterialSearchBar
     implementation 'com.github.mancj:MaterialSearchBar:0.8.2'
 
-    implementation 'com.teamwork:android-multiautocomplete:0.2.6'
+    //implementation 'com.teamwork:android-multiautocomplete:0.2.6'
+    implementation 'com.google.android.material:material:1.1.0-alpha05'
+
+    implementation 'com.github.percolate:mentions:0.1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
